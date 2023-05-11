@@ -80,7 +80,7 @@ func (s *authService) RegisterUser(registerDto dto.Register) (dto.Register, e.Ap
 
 	// 👇 Send Email
 	emailData := email.EmailData{
-		URL:       os.Getenv("CLIENT_ORIGIN") + "/verifyemail/" + code,
+		URL:       os.Getenv("CLIENT_ORIGIN") + "/auth/verifyemail/" + code,
 		FirstName: firstName,
 		Subject:   "Your account verification code",
 	}
@@ -184,7 +184,7 @@ func (s *authService) ResetPassword(dtoResetPass dto.ResetPassword) (dto.ResetPa
 
 	// 👇 Send Email
 	emailData := email.EmailData{
-		URL:       os.Getenv("CLIENT_ORIGIN") + "/reset-pass/" + code,
+		URL:       os.Getenv("CLIENT_ORIGIN") + "/auth/reset-pass/" + code,
 		FirstName: firstName,
 		Subject:   "Your code to reset password",
 	}
