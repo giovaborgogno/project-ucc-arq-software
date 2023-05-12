@@ -7,8 +7,8 @@ import (
 
 type Amenitie struct {
 	AmenitieID  uuid.UUID `gorm:"type:char(36);primary_key"`
+	Title       string    `gorm:"type:varchar(255);not null"`
 	Description string    `gorm:"type:varchar(255);not null"`
-	HotelID     uuid.UUID `gorm:"type:char(36);not null"`
 }
 
 type Amenities []Amenitie
