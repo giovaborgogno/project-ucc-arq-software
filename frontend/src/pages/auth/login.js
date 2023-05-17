@@ -1,10 +1,11 @@
 
 import MainLayout from '@/layouts/MainLayout'
-export default function Login() {
+import Login from '@/components/auth/Login'
+export default function LoginPage() {
   return (
     <>
       <MainLayout title={"Login"}>
-        Login
+        <Login />
       </MainLayout>
     </>
   )
