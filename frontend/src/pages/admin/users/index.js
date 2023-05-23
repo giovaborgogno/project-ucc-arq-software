@@ -1,13 +1,12 @@
+import UsersList from "@/components/admin/UsersList"
 import DashboardAdmin from "@/layouts/DashboardAdmin"
 
 const Dashboard = () => {
   return (
-      <DashboardAdmin title={"Dashboard"}>
+      <DashboardAdmin title={"Users List"} current={"/admin/users"}>
 
         {/* Replace with your content */}
-        <div className="p-4">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
-        </div>
+          <UsersList />
         {/* /End replace */}
         
       </DashboardAdmin>

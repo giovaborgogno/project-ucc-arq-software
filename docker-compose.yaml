@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  backend:
+    container_name: hotels_backend
+    restart: always
+    links:
+      - db
+    build: 
+      context: ./backend
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  frontend:
+    container_name: hotels_frontend
+    links:
+      - backend
+    build: 
+      context: ./frontend
+    ports:
+      - 3000:3000
+
+  db:
+    image: mysql
+    container_name: hotels_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: hotels_booking
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3307:3306
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:

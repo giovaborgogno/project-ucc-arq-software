@@ -10,11 +10,10 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-  { name: 'Reports', href: '#', current: false },
+  { name: 'Users', href: '/admin/users', current: true },
+  { name: 'Hotels', href: '/admin/hotels', current: false },
+  { name: 'New hotel', href: '/admin/hotels/create', current: false },
+  { name: 'Bookings', href: '/admin/bookings', current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
@@ -26,7 +25,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function DashboardAdmin({children, title}) {
+export default function DashboardAdmin({children, title, current}) {
   return (
     <>
       {/*
@@ -60,12 +59,12 @@ export default function DashboardAdmin({children, title}) {
                             key={item.name}
                             href={item.href}
                             className={classNames(
-                              item.current
+                              item.href === current
                                 ? 'bg-gray-900 text-white'
                                 : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                               'rounded-md px-3 py-2 text-sm font-medium'
                             )}
-                            aria-current={item.current ? 'page' : undefined}
+                            aria-current={item.href === current ? 'page' : undefined}
                           >
                             {item.name}
                           </a>
@@ -145,10 +144,10 @@ export default function DashboardAdmin({children, title}) {
                       as="a"
                       href={item.href}
                       className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        item.href === current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'block rounded-md px-3 py-2 text-base font-medium'
                       )}
-                      aria-current={item.current ? 'page' : undefined}
+                      aria-current={item.href === current ? 'page' : undefined}
                     >
                       {item.name}
                     </Disclosure.Button>
@@ -194,8 +193,8 @@ export default function DashboardAdmin({children, title}) {
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">{title}</h1>
           </div>
         </header>
-        <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
+        <main className=''>
+          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 container px-4">{children}</div>
         </main>
       </div>
     </>
