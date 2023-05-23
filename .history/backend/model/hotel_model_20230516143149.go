@@ -13,7 +13,7 @@ type Hotel struct {
 	PricePerDay float64   `gorm:"not null"`
 	Bookings    Bookings  `gorm:"foreignKey:HotelID"`
 	Photos      Photos    `gorm:"foreignKey:HotelID"`
-	Amenities    Amenities `gorm:"many2many:hotel_amenities;"`
+	Amenitie    Amenities `gorm:"many2many:hotel_amenities;"`
 }
 
 type Hotels []Hotel

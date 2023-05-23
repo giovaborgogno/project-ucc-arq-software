@@ -1,4 +1,5 @@
 /*
+
 ***Tests for GetMe:
 TestGetMe
 TestGetMeErrorService
@@ -13,6 +14,7 @@ TestGetUserByIdErrorService
 TestGetUsers
 TestGetUsersErrorNotAdmin
 TestGetUsersErrorService
+
 */
 package userController
 
@@ -133,7 +135,7 @@ func TestGetMeErrorService(t *testing.T) {
 	assert.Contains(t, resp.Body.String(), "User not found")
 }
 
-// Tests for GetUserById
+//  Tests for GetUserById
 func TestGetUserById(t *testing.T) {
 	initTestClient()
 	mockUserService := userService.UserService.(*userService.UserMockService)
@@ -239,7 +241,7 @@ func TestGetUserByIdErrorInvalidUUID(t *testing.T) {
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, 400, resp.Code)
-	assert.Contains(t, resp.Body.String(), "userID must be a uuid")
+	assert.Contains(t, resp.Body.String(), "userID must be an uuid")
 }
 func TestGetUserByIdErrorService(t *testing.T) {
 	initTestClient()
@@ -404,7 +406,7 @@ func TestGetUsersErrorService(t *testing.T) {
 	assert.Contains(t, resp.Body.String(), "Error geting users from database")
 }
 
-// Tests for DeleteUser
+//  Tests for DeleteUser
 func TestDeleteUser(t *testing.T) {
 	initTestClient()
 	mockUserService := userService.UserService.(*userService.UserMockService)
@@ -499,7 +501,7 @@ func TestDeleteUserErrorInvalidUUID(t *testing.T) {
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, 400, resp.Code)
-	assert.Contains(t, resp.Body.String(), "userID must be a uuid")
+	assert.Contains(t, resp.Body.String(), "userID must be an uuid")
 }
 func TestDeleteUserErrorService(t *testing.T) {
 	initTestClient()
@@ -716,7 +718,7 @@ func TestUpdateUserErrorInvalidUUID(t *testing.T) {
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, 400, resp.Code)
-	assert.Contains(t, resp.Body.String(), "userID must be a uuid")
+	assert.Contains(t, resp.Body.String(), "userID must be an uuid")
 }
 func TestUpdateUserErrorNotAdmin(t *testing.T) {
 	initTestClient()
@@ -927,7 +929,7 @@ func TestMakeAdminUserErrorInvalidUUID(t *testing.T) {
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, 400, resp.Code)
-	assert.Contains(t, resp.Body.String(), "userID must be a uuid")
+	assert.Contains(t, resp.Body.String(), "userID must be an uuid")
 }
 func TestMakeAdminUserErrorService(t *testing.T) {
 	initTestClient()

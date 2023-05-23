@@ -1,0 +1,19 @@
+package dto
+
+import (
+	"github.com/google/uuid"
+)
+
+type Hotel struct {
+	HotelID     uuid.UUID `json:"hotel_id"`
+	Title       string    `json:"title" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	Rooms       uint      `json:"rooms"`
+	PricePerDay float64   `json:"price_per_day"`
+
+	Bookings  Bookings  `json:"bookings"`
+	Photos    Photos    `json:"photos"`
+	Amenities Amenities `json:"amenities"`
+}
+
+type Hotels []Hotel
