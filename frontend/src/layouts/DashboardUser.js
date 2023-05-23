@@ -30,12 +30,12 @@ import {
 import { SearchIcon } from '@heroicons/react/solid'
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+  { name: 'User Information', href: '/dashboard', icon: UsersIcon, current: true },
+  { name: 'Bookings', href: '/dashboard/bookings', icon: CalendarIcon, current: false },
+  // { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+  // { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+  // { name: 'Documents', href: '#', icon: InboxIcon, current: false },
+  // { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
@@ -47,13 +47,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function DashboardUser({children, title}) {
+export default function DashboardUser({ children, title, current }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <>
 
-      <div>
+      <div className=''>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -105,7 +105,7 @@ export default function DashboardUser({children, title}) {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current
+                          item.href === current
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center px-2 py-2 text-base font-medium rounded-md'
@@ -113,7 +113,7 @@ export default function DashboardUser({children, title}) {
                       >
                         <item.icon
                           className={classNames(
-                            item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                            item.href === current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
                             'mr-4 flex-shrink-0 h-6 w-6'
                           )}
                           aria-hidden="true"
@@ -131,7 +131,7 @@ export default function DashboardUser({children, title}) {
           </Dialog>
         </Transition.Root>
 
-        <div className='md:flex container'>
+        <div className='md:flex '>
 
 
           {/* Static sidebar for desktop */}
@@ -147,13 +147,13 @@ export default function DashboardUser({children, title}) {
                       key={item.name}
                       href={item.href}
                       className={classNames(
-                        item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                        item.href === current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                         'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                       )}
                     >
                       <item.icon
                         className={classNames(
-                          item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                          item.href === current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
                           'mr-3 flex-shrink-0 h-6 w-6'
                         )}
                         aria-hidden="true"
@@ -179,7 +179,7 @@ export default function DashboardUser({children, title}) {
                   <h1 className="text-2xl font-semibold text-gray-900">{title}</h1>
                   <button
                     type="button"
-                    className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+                    className="px-4  text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
                     onClick={() => setSidebarOpen(true)}
                   >
                     <span className="sr-only">Open sidebar</span>

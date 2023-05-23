@@ -28,7 +28,7 @@ func GetUserById(c *gin.Context) {
 
 	uuid, err := uuid.Parse(c.Param("userID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be an uuid"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be a uuid"})
 		return
 	}
 
@@ -56,7 +56,7 @@ func DeleteUser(c *gin.Context) {
 
 	uuid, err := uuid.Parse(c.Param("userID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be an uuid"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be a uuid"})
 		return
 	}
 
@@ -98,7 +98,7 @@ func UpdateUser(c *gin.Context) {
 	log.Debug("User id to load: " + c.Param("userID"))
 	uuid, err := uuid.Parse(c.Param("userID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be an uuid"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be a uuid"})
 		return
 	}
 
@@ -125,7 +125,7 @@ func MakeAdminUser(c *gin.Context) {
 	log.Debug("User id to load: " + c.Param("userID"))
 	uuid, err := uuid.Parse(c.Param("userID"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be an uuid"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "userID must be a uuid"})
 		return
 	}
 
