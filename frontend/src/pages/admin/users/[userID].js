@@ -1,15 +1,27 @@
 import UserDetail from "@/components/admin/UserDetail"
 import DashboardAdmin from "@/layouts/DashboardAdmin"
 
-const DashboardUserDetail = () => {
-  return (
-      <DashboardAdmin title={"User Detail"} current={"/admin/users"}>
+import { UserContext } from "@/layouts/LayoutContext"
+import { useRouter } from "next/router"
+import { useContext, useEffect } from "react"
 
-        {/* Replace with your content */}
-          <UserDetail />
-        {/* /End replace */}
-        
-      </DashboardAdmin>
+const DashboardUserDetail = () => {
+  const [user, setUser] = useContext(UserContext);
+  const router = useRouter()
+
+  useEffect(() => {
+
+    if (user === null || user.role !== "admin")
+      router.push("/auth/login")
+  }, [])
+  return (
+    <DashboardAdmin title={"User Detail"} current={"/admin/users"}>
+
+      {/* Replace with your content */}
+      <UserDetail />
+      {/* /End replace */}
+
+    </DashboardAdmin>
   )
 }
 
