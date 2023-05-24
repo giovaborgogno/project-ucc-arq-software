@@ -2,6 +2,7 @@ package email
 
 import (
 	"bytes"
+	"crypto/tls"
 	"html/template"
 	"log"
 	"os"
@@ -66,7 +67,7 @@ func (c *emailClient) SendEmail(email string, data *EmailData, dir string, htmlT
 
 	template, err := ParseTemplateDir(dir)
 	if err != nil {
-		log.Fatal("Could not parse template", err)
+		log.Print("Could not parse template", err)
 	}
 
 	template.ExecuteTemplate(&body, htmlTemplate, &data)
@@ -81,11 +82,11 @@ func (c *emailClient) SendEmail(email string, data *EmailData, dir string, htmlT
 	// m.AddAlternative("text/plain", html2text.HTML2Text(body.String()))
 
 	d := gomail.NewDialer(smtpHost, smtpPort, smtpUser, smtpPass)
-	// d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Send Email
 	if err := d.DialAndSend(m); err != nil {
-		log.Fatal("Could not send email: ", err)
+		log.Print("Could not send email: ", err)
 	}
 
 }

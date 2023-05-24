@@ -11,6 +11,8 @@ services:
       - 8080:8080
     depends_on:
       - db
+    volumes:
+      - go_modules:/go/pkg/mod
 
   frontend:
     container_name: hotels_frontend
@@ -20,6 +22,8 @@ services:
       context: ./frontend
     ports:
       - 3000:3000
+    volumes:
+      - node_modules:/app/node_modules
 
   db:
     image: mysql
@@ -35,3 +39,5 @@ services:
 
 volumes:
   dbdata:
+  go_modules:
+  node_modules:
