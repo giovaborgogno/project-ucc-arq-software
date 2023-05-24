@@ -19,11 +19,10 @@ func HotelRoute(hotel *gin.RouterGroup) {
 	hotel.DELETE("/:hotelID", middlewareController.CheckAdmin(), hotelController.DeleteHotel)
 
 	photo := hotel.Group("/photo")
-	photo.GET("/", hotelController.GetPhotos)
+	photo.GET("/hotel/:hotelID", hotelController.GetPhotosByHotelId)
 
 	// Only admin:
-	photo.POST("/", middlewareController.CheckAdmin(), hotelController.InsertPhoto)
-	photo.PUT("/:photoID", middlewareController.CheckAdmin(), hotelController.ChangePhoto)
+	photo.POST("/:hotelID", middlewareController.CheckAdmin(), hotelController.InsertPhoto)
 	photo.DELETE("/:photoID", middlewareController.CheckAdmin(), hotelController.DeletePhoto)
 
 	amenitie := hotel.Group("/amenitie")

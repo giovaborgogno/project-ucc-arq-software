@@ -1,5 +1,11 @@
-import { alert } from "@/lib/utils/alert";
+import { login } from "@/lib/api/auth";
+import { getMe } from "@/lib/api/user";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Navigate } from 'react-router'
+import { useContext } from 'react';
+import { UserContext } from '../../layouts/LayoutContext';
+
 
 /*
   This example requires some changes to your config:
@@ -17,14 +23,42 @@ import { useRouter } from "next/router";
 */
 export default function Login() {
   const router = useRouter()
-  const notify = (type, message) => {
-    alert(type, message)
-    if (type === "success") {
+  const [navigate, setNavigate] = useState(false)
+  const [userPage, setUserPage] = useState(null)
 
-      router.push("/")
-    }
+  const [ user, setUser ] = useContext(UserContext);
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
+
+  const {
+    email,
+    password,
+  } = formData;
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
+    e.preventDefault();
+    await login(email, password);
+    await getme()
+  }
+
+  
+   const getme = async () => {
+    const userMe = await getMe()
+    setUser(userMe)
+    setUserPage(userMe)
 
   }
+
+  if (userPage != null){
+    router.push("/");
+  }
+    
+
   return (
     <>
       {/*
@@ -48,7 +82,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form onSubmit={e=>onSubmit(e)} className="space-y-6" action="#" method="POST">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
@@ -57,10 +91,12 @@ export default function Login() {
                 <input
                   id="email"
                   name="email"
+                  value={email}
+                  onChange={e => onChange(e)}
                   type="email"
                   autoComplete="email"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -80,10 +116,12 @@ export default function Login() {
                 <input
                   id="password"
                   name="password"
+                  value={password}
+                  onChange={e => onChange(e)}
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
