@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	authUtils "mvc-go/utils/auth"
 	e "mvc-go/utils/errors"
 
@@ -85,6 +87,7 @@ func (s *authService) RegisterUser(registerDto dto.Register) (dto.Register, e.Ap
 		Subject:   "Your account verification code",
 	}
 
+	log.Debug("Email debug: url to verify your account: ", emailData.URL)
 	email.EmailClient.SendEmail(registerDto.Email, &emailData, "templates/verificateAccount", "verificateAccountLink.html")
 
 	return registerDto, nil
