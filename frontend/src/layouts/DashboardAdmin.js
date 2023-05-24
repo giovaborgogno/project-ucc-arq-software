@@ -55,7 +55,7 @@ export default function DashboardAdmin({children, title, current}) {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
                             href={item.href}
                             className={classNames(
@@ -67,7 +67,7 @@ export default function DashboardAdmin({children, title, current}) {
                             aria-current={item.href === current ? 'page' : undefined}
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -103,7 +103,7 @@ export default function DashboardAdmin({children, title, current}) {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
+                                  <Link
                                     href={item.href}
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
@@ -111,7 +111,7 @@ export default function DashboardAdmin({children, title, current}) {
                                     )}
                                   >
                                     {item.name}
-                                  </a>
+                                  </Link>
                                 )}
                               </Menu.Item>
                             ))}

@@ -1,15 +1,27 @@
 import HotelDetail from "@/components/admin/HotelDetail"
 import DashboardAdmin from "@/layouts/DashboardAdmin"
 
-const DashboardHotelsDetail = () => {
-  return (
-      <DashboardAdmin title={"Hotels Detail"} current={"/admin/hotels"}>
+import { UserContext } from "@/layouts/LayoutContext"
+import { useRouter } from "next/router"
+import { useContext, useEffect } from "react"
 
-        {/* Replace with your content */}
-          <HotelDetail />
-        {/* /End replace */}
-        
-      </DashboardAdmin>
+const DashboardHotelsDetail = () => {
+  const [user, setUser] = useContext(UserContext);
+  const router = useRouter()
+
+  useEffect(() => {
+
+    if (user === null || user.role !== "admin")
+      router.push("/auth/login")
+  }, [])
+  return (
+    <DashboardAdmin title={"Hotels Detail"} current={"/admin/hotels"}>
+
+      {/* Replace with your content */}
+      <HotelDetail />
+      {/* /End replace */}
+
+    </DashboardAdmin>
   )
 }
 

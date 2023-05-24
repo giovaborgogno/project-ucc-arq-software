@@ -12,7 +12,7 @@ type photoClient struct{}
 
 type photoClientInterface interface {
 	GetPhotoById(id string) model.Photo
-	GetPhotos() model.Photos
+	GetPhotosByHotelId(hotelId string) model.Photos
 	InsertPhoto(photo model.Photo) model.Photo
 	UpdatePhoto(photo model.Photo) model.Photo
 	DeletePhoto(id string) error
@@ -37,9 +37,9 @@ func (c *photoClient) GetPhotoById(id string) model.Photo {
 	return photo
 }
 
-func (c *photoClient) GetPhotos() model.Photos {
+func (c *photoClient) GetPhotosByHotelId(hotelId string) model.Photos {
 	var photos model.Photos
-	result := Db.Find(&photos)
+	result := Db.Find(&photos, "hotel_id = ?", hotelId)
 	if result.Error != nil {
 		log.Error("")
 		return model.Photos{}
