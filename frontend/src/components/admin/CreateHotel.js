@@ -27,19 +27,18 @@ export default function CreateHotel() {
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="sm:col-span-4">
-                <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                  Username
+                <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+                  Title
                 </label>
                 <div className="mt-2">
                   <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                    <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">workcation.com/</span>
                     <input
                       type="text"
-                      name="username"
-                      id="username"
-                      autoComplete="username"
+                      name="title"
+                      id="title"
+                      autoComplete="title"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                      placeholder="janesmith"
+                      placeholder="Hotel Title"
                     />
                   </div>
                 </div>
@@ -47,7 +46,7 @@ export default function CreateHotel() {
 
               <div className="col-span-full">
                 <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                  About
+                  Description
                 </label>
                 <div className="mt-2">
                   <textarea
@@ -61,17 +60,44 @@ export default function CreateHotel() {
                 <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
               </div>
 
-              <div className="col-span-full">
-                <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
-                  Photo
+              <div className="sm:col-span-2 sm:col-start-1">
+                <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
+                  Price per day
                 </label>
+                <div className="mt-2">
+                  <input
+                    type="number"
+                    name="price"
+                    id="price"
+                    autoComplete="address-level2"
+                    className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label htmlFor="rooms" className="block text-sm font-medium leading-6 text-gray-900">
+                  Rooms
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="number"
+                    name="rooms"
+                    id="rooms"
+                    autoComplete="address-level1"
+                    className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              
+
+              <div className="col-span-full">
                 <div className="mt-2 flex items-center gap-x-3">
-                  {/* <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" /> */}
                   <button
                     type="button"
                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   >
-                    Change
+                    Create Hotel
                   </button>
                 </div>
               </div>
