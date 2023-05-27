@@ -52,7 +52,7 @@ func InsertPhoto(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"photo": photo})
+	c.JSON(http.StatusCreated, gin.H{"photo": photo})
 }
 
 func ChangePhoto(c *gin.Context) {
