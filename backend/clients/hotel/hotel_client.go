@@ -3,7 +3,7 @@ package hotelClient
 import (
 	"errors"
 	"mvc-go/model"
-
+	"time"
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 )
@@ -78,4 +78,9 @@ func (c *hotelClient) DeleteHotel(id string) error {
 		return errors.New(result.Error.Error())
 	}
 	return nil
+}
+
+func (c *hotelClient) GetAvailableRoomsByHotel(booking model.Booking) int{
+	result := Db.Exec("SELECT avg(h.rooms) - sum(b.rooms) as availableRooms FROM hotels h LEFT JOIN bookings b ON h.hotel_id = b.hotel_id WHERE (b.date_in >= ? OR b.date_out <= ?)  AND h.hotel_id = ? GROUP BY h.hotel_id;", time.Format("YYYY-MM-DD", booking.DateIn), booking.DateOut, booking.HotelID)
+	return result
 }
