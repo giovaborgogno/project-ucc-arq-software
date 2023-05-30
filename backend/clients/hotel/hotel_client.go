@@ -16,6 +16,7 @@ type hotelClientInterface interface {
 	InsertHotel(hotel model.Hotel) model.Hotel
 	UpdateHotel(hotel model.Hotel) model.Hotel
 	DeleteHotel(id string) error
+	GetAvailableRooms(booking model.Booking) float64
 }
 
 var (
@@ -31,7 +32,7 @@ var Db *gorm.DB
 func (c *hotelClient) GetHotelById(id string) model.Hotel {
 	var hotel model.Hotel
 
-	Db.First(&hotel, "hotel_id = ?", id)
+	Db.Preload("Photos").Preload("Amenities").First(&hotel, "hotel_id = ?", id)
 	log.Debug("Hotel: ", hotel)
 
 	return hotel
@@ -39,7 +40,7 @@ func (c *hotelClient) GetHotelById(id string) model.Hotel {
 
 func (c *hotelClient) GetHotels() model.Hotels {
 	var hotels model.Hotels
-	result := Db.Find(&hotels)
+	result := Db.Preload("Photos").Preload("Amenities").Find(&hotels)
 	if result.Error != nil {
 		log.Error("")
 		return model.Hotels{}
@@ -78,4 +79,25 @@ func (c *hotelClient) DeleteHotel(id string) error {
 		return errors.New(result.Error.Error())
 	}
 	return nil
+}
+
+func (c *hotelClient) GetAvailableRooms(booking model.Booking) float64 {
+	type Result struct {
+		AvailableRooms float64
+	}
+	var result Result
+	Db.Raw(`
+	SELECT AVG(h.rooms) - SUM(b.rooms) - 1 AS available_rooms
+	FROM hotels h
+	LEFT JOIN bookings b ON h.hotel_id = b.hotel_id
+	WHERE b.date_in >= ? OR b.date_out <= ?
+	GROUP BY h.hotel_id
+	HAVING h.hotel_id = ?;
+`, booking.DateIn.Format("2006-01-02"), booking.DateOut.Format("2006-01-02"), booking.HotelID).Scan(&result)
+
+	if result.AvailableRooms != 0 {
+		return result.AvailableRooms + 1
+	} else {
+		return float64(c.GetHotelById(booking.HotelID.String()).Rooms)
+	}
 }
