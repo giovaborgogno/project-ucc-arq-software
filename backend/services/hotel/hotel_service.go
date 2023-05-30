@@ -32,44 +32,44 @@ func init() {
 }
 
 func (s *hotelService) InsertHotel(hotelDto dto.Hotel) (dto.Hotel, e.ApiError) {
-hotel := model.Hotel{
-	Title:       hotelDto.Title,
-	Description: hotelDto.Description,
-	Rooms:       hotelDto.Rooms,
-	PricePerDay: hotelDto.PricePerDay,
-}
+	hotel := model.Hotel{
+		Title:       hotelDto.Title,
+		Description: hotelDto.Description,
+		Rooms:       hotelDto.Rooms,
+		PricePerDay: hotelDto.PricePerDay,
+	}
 
-hotel = hotelClient.HotelClient.InsertHotel(hotel)
-if hotel.HotelID == uuid.Nil {
-	return dto.Hotel{}, e.NewInternalServerApiError("Error trying insert new hotel", errors.New(""))
-}
+	hotel = hotelClient.HotelClient.InsertHotel(hotel)
+	if hotel.HotelID == uuid.Nil {
+		return dto.Hotel{}, e.NewInternalServerApiError("Error trying insert new hotel", errors.New(""))
+	}
 
-hotelDto.HotelID = hotel.HotelID
+	hotelDto.HotelID = hotel.HotelID
 
-return hotelDto, nil
+	return hotelDto, nil
 }
 
 func (s *hotelService) UpdateHotel(hotelDto dto.Hotel) (dto.Hotel, e.ApiError) {
 
-hotel := model.Hotel{
-	HotelID:	 hotelDto.HotelID,
-	Title:       hotelDto.Title,
-	Description: hotelDto.Description,
-	Rooms:       hotelDto.Rooms,
-	PricePerDay: hotelDto.PricePerDay,
+	hotel := model.Hotel{
+		HotelID:     hotelDto.HotelID,
+		Title:       hotelDto.Title,
+		Description: hotelDto.Description,
+		Rooms:       hotelDto.Rooms,
+		PricePerDay: hotelDto.PricePerDay,
+	}
+
+	hotel = hotelClient.HotelClient.UpdateHotel(hotel)
+	if hotel.HotelID == uuid.Nil {
+		return dto.Hotel{}, e.NewInternalServerApiError("Error trying update hotel", errors.New(""))
+	}
+
+	hotelDto.HotelID = hotel.HotelID
+
+	return hotelDto, nil
 }
 
-hotel = hotelClient.HotelClient.UpdateHotel(hotel)
-if hotel.HotelID == uuid.Nil {
-	return dto.Hotel{}, e.NewInternalServerApiError("Error trying update hotel", errors.New(""))
-}
-
-hotelDto.HotelID = hotel.HotelID
-
-return hotelDto, nil
-}
-
-func (s *hotelService) DeleteHotel(id uuid.UUID) e.ApiError{
+func (s *hotelService) DeleteHotel(id uuid.UUID) e.ApiError {
 	idString := id.String()
 
 	err := hotelClient.HotelClient.DeleteHotel(idString)
@@ -81,7 +81,7 @@ func (s *hotelService) DeleteHotel(id uuid.UUID) e.ApiError{
 
 }
 
-func (s *hotelService) GetHotels() ([]dto.Hotel, e.ApiError){
+func (s *hotelService) GetHotels() ([]dto.Hotel, e.ApiError) {
 	hotels := hotelClient.HotelClient.GetHotels()
 	if len(hotels) == 0 {
 		return []dto.Hotel{}, e.NewInternalServerApiError("Error geting hotels from database", errors.New("Error in database"))
@@ -96,6 +96,23 @@ func (s *hotelService) GetHotels() ([]dto.Hotel, e.ApiError){
 		hotelDto.Description = hotel.Description
 		hotelDto.Rooms = hotel.Rooms
 		hotelDto.PricePerDay = hotel.PricePerDay
+		for _, photo := range hotel.Photos {
+			var dtoPhoto dto.Photo
+
+			dtoPhoto.PhotoID = photo.PhotoID
+			dtoPhoto.Url = photo.Url
+			dtoPhoto.HotelID = photo.HotelID
+
+			hotelDto.Photos = append(hotelDto.Photos, dtoPhoto)
+		}
+		for _, amenity := range hotel.Amenities {
+			var dtoAmenity dto.Amenitie
+
+			dtoAmenity.AmenitieID = amenity.AmenitieID
+			dtoAmenity.Title = amenity.Title
+
+			hotelDto.Amenities = append(hotelDto.Amenities, dtoAmenity)
+		}
 
 		hotelsDto = append(hotelsDto, hotelDto)
 	}
@@ -103,7 +120,7 @@ func (s *hotelService) GetHotels() ([]dto.Hotel, e.ApiError){
 	return hotelsDto, nil
 }
 
-func (s *hotelService) GetHotelById(id uuid.UUID) (dto.Hotel, e.ApiError){
+func (s *hotelService) GetHotelById(id uuid.UUID) (dto.Hotel, e.ApiError) {
 	idString := id.String()
 
 	hotel := hotelClient.HotelClient.GetHotelById(idString)
@@ -113,11 +130,28 @@ func (s *hotelService) GetHotelById(id uuid.UUID) (dto.Hotel, e.ApiError){
 	}
 
 	hotelDto := dto.Hotel{
-		HotelID: hotel.HotelID,
-		Title: hotel.Title,
+		HotelID:     hotel.HotelID,
+		Title:       hotel.Title,
 		Description: hotel.Description,
-		Rooms: hotel.Rooms,
+		Rooms:       hotel.Rooms,
 		PricePerDay: hotel.PricePerDay,
+	}
+	for _, photo := range hotel.Photos {
+		var dtoPhoto dto.Photo
+
+		dtoPhoto.PhotoID = photo.PhotoID
+		dtoPhoto.Url = photo.Url
+		dtoPhoto.HotelID = photo.HotelID
+
+		hotelDto.Photos = append(hotelDto.Photos, dtoPhoto)
+	}
+	for _, amenity := range hotel.Amenities {
+		var dtoAmenity dto.Amenitie
+
+		dtoAmenity.AmenitieID = amenity.AmenitieID
+		dtoAmenity.Title = amenity.Title
+
+		hotelDto.Amenities = append(hotelDto.Amenities, dtoAmenity)
 	}
 
 	return hotelDto, nil
