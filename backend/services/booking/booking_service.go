@@ -37,6 +37,10 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 		HotelID: bookingDto.HotelID,
 	}
 
+	if booking.Total <= 0 {
+		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You cannot have a zero or negative amount for Total value")
+	}
+
 	if booking.DateIn.Before(time.Now()){
 		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn earlier than the current date")
 	}
