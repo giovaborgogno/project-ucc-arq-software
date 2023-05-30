@@ -16,6 +16,7 @@ type hotelClientInterface interface {
 	InsertHotel(hotel model.Hotel) model.Hotel
 	UpdateHotel(hotel model.Hotel) model.Hotel
 	DeleteHotel(id string) error
+	GetAvailableRooms(booking model.Booking) float64
 }
 
 var (
@@ -78,4 +79,25 @@ func (c *hotelClient) DeleteHotel(id string) error {
 		return errors.New(result.Error.Error())
 	}
 	return nil
+}
+
+func (c *hotelClient) GetAvailableRooms(booking model.Booking) float64 {
+	type Result struct {
+		AvailableRooms float64
+	}
+	var result Result
+	Db.Raw(`
+	SELECT AVG(h.rooms) - SUM(b.rooms) - 1 AS available_rooms
+	FROM hotels h
+	LEFT JOIN bookings b ON h.hotel_id = b.hotel_id
+	WHERE b.date_in >= ? OR b.date_out <= ?
+	GROUP BY h.hotel_id
+	HAVING h.hotel_id = ?;
+`, booking.DateIn.Format("2006-01-02"), booking.DateOut.Format("2006-01-02"), booking.HotelID).Scan(&result)
+
+	if result.AvailableRooms != 0 {
+		return result.AvailableRooms + 1
+	} else {
+		return float64(c.GetHotelById(booking.HotelID.String()).Rooms)
+	}
 }
