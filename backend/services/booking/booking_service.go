@@ -6,8 +6,7 @@ import (
 	hotelClient "mvc-go/clients/hotel"
 	"mvc-go/dto"
 	"mvc-go/model"
-
-	// "time"
+	"time"
 
 	e "mvc-go/utils/errors"
 
@@ -38,11 +37,18 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 		HotelID: bookingDto.HotelID,
 	}
 
+	if booking.DateIn.Before(time.Now()){
+		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn earlier than the current date")
+	}
+
 	if booking.DateIn.After(booking.DateOut) || booking.DateIn.Equal(booking.DateOut) {
 		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn greater or equal than the DateOut")
 	}
 
-	
+	availableRooms := hotelClient.HotelClient.GetAvailableRooms(booking)
+	if booking.Rooms > uint(availableRooms) {
+		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You cannot book more rooms than the ones currently available")
+	}
 
 	booking = bookingClient.BookingClient.InsertBooking(booking)
 	if booking.BookingID == uuid.Nil {
