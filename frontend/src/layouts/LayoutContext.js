@@ -1,5 +1,6 @@
 import { useEffect, useState, createContext } from 'react';
 import { getMe } from '@/lib/api/user';
+import { refresh } from '@/lib/api/auth';
 
 const UserContext = createContext(null);
 
@@ -9,8 +10,7 @@ export default function LayoutContext({ title, children }) {
         const getUser = async () => {
             const currentUser = await getMe()
             setUser(currentUser)
-            console.log(user)
-            console.log("ejecutando...")
+            await refresh()
         }
 
         getUser()
@@ -19,8 +19,7 @@ export default function LayoutContext({ title, children }) {
         const getUser = async () => {
             const currentUser = await getMe()
             setUser(currentUser)
-            console.log(user)
-            console.log("ejecutando...")
+            await refresh()
         }
 
         getUser()
