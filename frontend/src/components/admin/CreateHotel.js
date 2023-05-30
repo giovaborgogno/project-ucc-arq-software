@@ -1,23 +1,63 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-// */
-// import { Photo, UserCircleIcon } from '@heroicons/react/solid'
+import { createHotel, insertPhoto } from "@/lib/api/hotel";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function CreateHotel() {
+
+  // Create hotel
+  const [hotel, setHotel] = useState(null)
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
+
+  const {
+    title,
+    description,
+    price,
+    rooms
+  } = formData;
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onSubmit = async e => {
+    e.preventDefault();
+    const newHotel = await createHotel(title, description, price, rooms)
+    setHotel(newHotel)
+  }
+  useEffect(() => {
+    // Este efecto secundario se ejecutará cuando el valor de 'hotel' cambie
+    console.log("hotel", hotel);
+  }, [hotel]);
+
+  // Add File
+  const [file, setFile] = useState(null);
+
+  const handleChangeFile = (e) => {
+    const addFile = e.target.files[0];
+    setFile(addFile);
+    if (addFile) {
+      const reader = new FileReader();
+  
+      reader.onload = function (e) {
+        const imagePreview = document.getElementById('image-preview');
+        imagePreview.src = e.target.result;
+      };
+  
+      reader.readAsDataURL(addFile);
+    }
+  };
+  const handleSubmitFile = async (e) => {
+    e.preventDefault();
+  
+    if (file) {
+      await insertPhoto(hotel.hotel_id, file)
+    }
+  };
+
+
   return (
     <div className="container">
-      <form className="">
+      <div className="">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2>
@@ -25,84 +65,159 @@ export default function CreateHotel() {
               This information will be displayed publicly so be careful what you share.
             </p>
 
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-4">
-                <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                  Username
-                </label>
-                <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                    <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">workcation.com/</span>
+            <form onSubmit={e => onSubmit(e)} className="">
+              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="sm:col-span-4">
+                  <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+                    Title
+                  </label>
+                  <div className="mt-2">
+                    <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                      <input
+                        type="text"
+                        name="title"
+                        value={title}
+                        onChange={e => onChange(e)}
+                        id="title"
+                        autoComplete="title"
+                        className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        placeholder="Hotel Title"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-span-full">
+                  <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                    Description
+                  </label>
+                  <div className="mt-2">
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={description}
+                      onChange={e => onChange(e)}
+                      rows={3}
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      defaultValue={''}
+                    />
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+                </div>
+
+                <div className="sm:col-span-2 sm:col-start-1">
+                  <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
+                    Price per day
+                  </label>
+                  <div className="mt-2">
                     <input
                       type="text"
-                      name="username"
-                      id="username"
-                      autoComplete="username"
-                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                      placeholder="janesmith"
+                      name="price"
+                      value={price}
+                      onChange={e => onChange(e)}
+                      id="price"
+                      autoComplete="address-level2"
+                      className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label htmlFor="rooms" className="block text-sm font-medium leading-6 text-gray-900">
+                    Rooms
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="number"
+                      name="rooms"
+                      value={rooms}
+                      onChange={e => onChange(e)}
+                      id="rooms"
+                      autoComplete="address-level1"
+                      className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="col-span-full">
-                <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                  About
-                </label>
-                <div className="mt-2">
-                  <textarea
-                    id="about"
-                    name="about"
-                    rows={3}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    defaultValue={''}
-                  />
-                </div>
-                <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+              <div className="mt-6 flex items-center justify-end gap-x-6">
+                <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Save
+                </button>
               </div>
 
-              <div className="col-span-full">
-                <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
-                  Photo
-                </label>
-                <div className="mt-2 flex items-center gap-x-3">
-                  {/* <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" /> */}
-                  <button
-                    type="button"
-                    className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  >
-                    Change
-                  </button>
-                </div>
-              </div>
 
-              <div className="col-span-full">
+            </form>
+          </div>
+
+          {hotel != null ?
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+              <form className="col-span-full" onSubmit={e => handleSubmitFile(e)}>
                 <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
                   Cover photo
                 </label>
                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <div className="text-center">
                     {/* <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" /> */}
+                    {file === null ?
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mx-auto h-12 w-12 text-gray-300" aria-hidden="true">
-                      <path fillRule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clipRule="evenodd" />
-                    </svg>
-
+                    <path fillRule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clipRule="evenodd" />
+                  </svg>
+                    :
+                    <div className="d-flex justify-center">
+                      
+                    <Image src="" alt="Preview" id="image-preview" height={100} width={100} />
+                    </div>
+                    }
+                    
                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
                       <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                        htmlFor="file"
+                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600  hover:text-indigo-500"
                       >
-                        <span>Upload a file</span>
-                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                        <span>Upload a image</span>
+                        <input 
+                        id="file" 
+                        name="file"
+                        onChange={e => handleChangeFile(e)}
+                        type="file" 
+                        className="sr-only" 
+                        accept="image/*"
+                        multiple
+                        />
                       </label>
                       <p className="pl-1">or drag and drop</p>
                     </div>
-                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, JPEG, WEBP, SVG up to 10MB</p>
                   </div>
                 </div>
-              </div>
+                <div className="mt-6 flex items-center justify-end gap-x-6">
+                  <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+
             </div>
-          </div>
+            :
+            <>
+              Crea el hotel para agregarle fotos bro</>
+          }
+
+
 
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
@@ -348,8 +463,8 @@ export default function CreateHotel() {
             Save
           </button>
         </div>
-      </form>
-    </div>
+      </div >
+    </div >
 
   )
 }
