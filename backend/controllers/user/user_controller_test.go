@@ -391,7 +391,7 @@ func TestGetUsersErrorService(t *testing.T) {
 	}
 	mockMiddleware.On("CheckAdmin").Return(handlerFunc)
 
-	mockUserService.On("GetUsers").Return(dto.UserResponses{}, e.NewInternalServerApiError("Error geting users from database", errors.New("Error in database")))
+	mockUserService.On("GetUsers").Return(dto.UserResponses{}, e.NewInternalServerApiError("Error getting users from database", errors.New("Error in database")))
 
 	router := gin.Default()
 	router.GET("/test/user/", middlewareController.CheckAdmin(), GetUsers)
@@ -401,7 +401,7 @@ func TestGetUsersErrorService(t *testing.T) {
 	router.ServeHTTP(resp, req)
 
 	assert.Equal(t, 500, resp.Code)
-	assert.Contains(t, resp.Body.String(), "Error geting users from database")
+	assert.Contains(t, resp.Body.String(), "Error getting users from database")
 }
 
 // Tests for DeleteUser

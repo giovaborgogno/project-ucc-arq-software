@@ -17,3 +17,12 @@ type Booking struct {
 }
 
 type Bookings []Booking
+
+type CheckAvailability struct {
+	HotelID uuid.UUID
+	Rooms   uint
+	DateIn  time.Time `json:"date_in" binding:"required"`
+	DateOut time.Time `json:"date_out" binding:"required"`
+}
+
+type CheckAvailabilities []CheckAvailability

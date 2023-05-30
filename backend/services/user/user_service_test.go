@@ -22,7 +22,6 @@ TestUpdateUserError500
 TestMakeAdminUser
 TestMakeAdminUserErrorUserNotFound
 TestMakeAdminUserError500
-
 */
 package userService
 
@@ -186,7 +185,7 @@ func TestGetUsersErrorDataBase(t *testing.T) {
 	assert.Equal(t, 0, len(users))
 	assert.NotNil(t, err)
 	assert.Equal(t, 500, err.Status())
-	assert.Equal(t, "Error geting users from database", err.Message())
+	assert.Equal(t, "Error getting users from database", err.Message())
 }
 
 // DeleteUser
