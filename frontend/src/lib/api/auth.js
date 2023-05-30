@@ -56,3 +56,21 @@ export async function logout() {
     }
 
 }
+
+export async function refresh() {
+
+    try {
+        const res = await axios.get('/api/auth/refresh',{withCredentials: true})
+        if (res.status === 200) {
+            Cookies.set("token", res.data.token.toString());
+        }
+        else{
+            console.log("res: " + res)
+            Cookies.remove("token");
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        Cookies.remove("token");
+    }
+
+}

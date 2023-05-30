@@ -32,7 +32,7 @@ var Db *gorm.DB
 func (c *hotelClient) GetHotelById(id string) model.Hotel {
 	var hotel model.Hotel
 
-	Db.First(&hotel, "hotel_id = ?", id)
+	Db.Preload("Photos").Preload("Amenities").First(&hotel, "hotel_id = ?", id)
 	log.Debug("Hotel: ", hotel)
 
 	return hotel
@@ -40,7 +40,7 @@ func (c *hotelClient) GetHotelById(id string) model.Hotel {
 
 func (c *hotelClient) GetHotels() model.Hotels {
 	var hotels model.Hotels
-	result := Db.Find(&hotels)
+	result := Db.Preload("Photos").Preload("Amenities").Find(&hotels)
 	if result.Error != nil {
 		log.Error("")
 		return model.Hotels{}
