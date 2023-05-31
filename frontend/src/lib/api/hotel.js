@@ -1,6 +1,5 @@
 import { alert } from "../utils/alert";
 const { default: axios } = require("axios");
-import { generateFileName } from "../utils/generateFileName";
 
 export async function createHotel(title, description, price_per_day, rooms) {
 
@@ -28,7 +27,7 @@ export async function createHotel(title, description, price_per_day, rooms) {
             return res.data.hotel
 
         }
-        else{
+        else {
             console.log("res: " + res)
             alert('error', res.data.error.toString())
             return null
@@ -42,7 +41,7 @@ export async function createHotel(title, description, price_per_day, rooms) {
 
 }
 
-export async function insertPhoto(hotelID, file){
+export async function insertPhoto(hotelID, file) {
 
     const config = {
         headers: {
@@ -65,7 +64,7 @@ export async function insertPhoto(hotelID, file){
             alert('success', 'Photo added successfully')
 
         }
-        else{
+        else {
             console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
@@ -73,5 +72,77 @@ export async function insertPhoto(hotelID, file){
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
         console.log(error)
         alert('error', String(errorMessage));
+    }
+}
+
+export async function getAmenities() {
+    try {
+        const res = await axios.get('/api/hotel/amenity', { withCredentials: true })
+        if (res.status === 200) {
+            return res.data.amenities
+        }
+        else {
+            console.log("res: " + res)
+            return null
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        console.log(errorMessage)
+        return null
+    }
+}
+
+export async function associateAmenities(hotel_id, array_amenity_id) {
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    };
+
+    let amenities = []
+    array_amenity_id.forEach(amenity_id => {
+        let amenitie_id = {
+            amenitie_id: amenity_id
+        }
+
+        amenities.push(amenitie_id)
+    });
+
+    const body = JSON.stringify(amenities);
+
+    try {
+        const res = await axios.post(`/api/hotel/amenity/associate/${hotel_id}`, body, config)
+        if (res.status === 200) {
+            alert('success', 'Amenities associated successfully')
+
+        }
+        else {
+            console.log("res: " + res)
+            alert('error', res.data.error.toString())
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        console.log(error)
+        alert('error', String(errorMessage));
+    }
+
+}
+
+export async function getHotels(){
+    try {
+        const res = await axios.get('/api/hotel', { withCredentials: true })
+        if (res.status === 200) {
+            return res.data.hotels
+        }
+        else {
+            console.log("res: " + res)
+            return null
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        console.log(errorMessage)
+        return null
     }
 }

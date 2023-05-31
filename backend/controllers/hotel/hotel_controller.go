@@ -20,7 +20,7 @@ func GetHotels(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"hotels": hotels})
+	c.JSON(http.StatusOK, gin.H{"hotels": hotels})
 }
 
 func GetHotelById(c *gin.Context) {
@@ -36,7 +36,7 @@ func GetHotelById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"hotel": hotel})
+	c.JSON(http.StatusOK, gin.H{"hotel": hotel})
 
 }
 
@@ -91,7 +91,7 @@ func UpdateHotel(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"hotel": hotel})
+	c.JSON(http.StatusOK, gin.H{"hotel": hotel})
 }
 
 func DeleteHotel(c *gin.Context) {
@@ -107,5 +107,7 @@ func DeleteHotel(c *gin.Context) {
 		c.JSON(er.Status(), gin.H{"error": er.Message()})
 		return
 	}
+
+	c.JSON(http.StatusOK, gin.H{"success": "Hotel deleted successfully"})
 
 }
