@@ -1,4 +1,6 @@
 import { useEffect, useState, createContext } from 'react';
+import { useRouter } from 'next/router';
+
 import { getMe } from '@/lib/api/user';
 import { refresh } from '@/lib/api/auth';
 
@@ -6,22 +8,22 @@ const UserContext = createContext(null);
 
 export default function LayoutContext({ title, children }) {
     const [user, setUser] = useState(null);
-    useEffect(() => {
-        const getUser = async () => {
-            const currentUser = await getMe()
-            setUser(currentUser)
-            await refresh()
-        }
+    const router = useRouter();
 
-        getUser()
-    }, [])
-    useEffect(() => {
-        const getUser = async () => {
-            const currentUser = await getMe()
-            setUser(currentUser)
-            await refresh()
-        }
+    const getUser = async () => {
+        const currentUser = await getMe()
+        setUser(currentUser)
+        await refresh()
+    }
 
+    useEffect(() => {
+      router.events.on('routeChangeStart', getUser);
+  
+      return () => {
+        router.events.off('routeChangeStart', getUser);
+      };
+    }, []);
+    useEffect(() => {
         getUser()
     }, user)
     return (

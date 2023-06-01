@@ -96,7 +96,7 @@ export default function Header() {
   const logoutHandler = () => {
     logout()
     setUser(null)
-    router.push("/")
+    router.push("/auth/login")
   }
   return (
     <Popover className="relative bg-white">
