@@ -48,7 +48,7 @@ func (s *amenitieService) GetAmenitieById(id uuid.UUID) (dto.Amenitie, e.ApiErro
 func (s *amenitieService) GetAmenities() (dto.Amenities, e.ApiError) {
 	amenities := amenitieClient.AmenitieClient.GetAmenities()
 	if len(amenities) == 0 {
-		return dto.Amenities{}, e.NewInternalServerApiError("Error geting amenities from database", errors.New("error in database"))
+		return dto.Amenities{}, e.NewInternalServerApiError("Error getting amenities from database", errors.New("error in database"))
 	}
 
 	var amenitiesDto []dto.Amenitie
@@ -66,7 +66,7 @@ func (s *amenitieService) GetAmenities() (dto.Amenities, e.ApiError) {
 
 func (s *amenitieService) InsertAmenitie(amenitieDto dto.Amenitie) (dto.Amenitie, e.ApiError) {
 	amenitie := model.Amenitie{
-		Title:     amenitieDto.Title,
+		Title: amenitieDto.Title,
 	}
 
 	amenitie = amenitieClient.AmenitieClient.InsertAmenitie(amenitie)
@@ -112,7 +112,7 @@ func (s *amenitieService) UpdateAmenitie(amenitieDto dto.Amenitie) (dto.Amenitie
 	return amenitieDto, nil
 }
 
-func (s* amenitieService) LoadAmenities(id uuid.UUID, amenitiesDto dto.Amenities) e.ApiError{
+func (s *amenitieService) LoadAmenities(id uuid.UUID, amenitiesDto dto.Amenities) e.ApiError {
 	idString := id.String()
 
 	var amenities model.Amenities
@@ -126,10 +126,10 @@ func (s* amenitieService) LoadAmenities(id uuid.UUID, amenitiesDto dto.Amenities
 		amenities = append(amenities, model)
 	}
 
-	err:= amenitieClient.AmenitieClient.LoadAmenities(idString, amenities)
+	err := amenitieClient.AmenitieClient.LoadAmenities(idString, amenities)
 	if err != nil {
 		return e.NewInternalServerApiError("Something went wrong load amenities", nil)
 	}
 
-	return nil	
+	return nil
 }

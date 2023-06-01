@@ -41,15 +41,49 @@ func GetHotelById(c *gin.Context) {
 }
 
 func GetAvailableHotels(c *gin.Context) {
+	var payload dto.CheckAvailability
+	err := c.BindJSON(&payload)
+	if err != nil {
+		log.Error(err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
 
+	hotels, er := hotelService.HotelService.GetAvailableHotels(payload)
+	if er != nil {
+		c.JSON(er.Status(), gin.H{"error": er.Message()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"hotels": hotels})
 }
 
 func CheckAvailableHotelById(c *gin.Context) {
+	uuid, errr := uuid.Parse(c.Param("hotelID"))
+	if errr != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "HotelID must be a uuid"})
+		return
+	}
 
+	var payload dto.CheckAvailability
+	err := c.BindJSON(&payload)
+	if err != nil {
+		log.Error(err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	payload.HotelID = uuid
+
+	availableRooms, er := hotelService.HotelService.GetAvailableRooms(payload)
+	if er != nil {
+		c.JSON(er.Status(), gin.H{"error": er.Message()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"available_rooms": availableRooms})
 }
 
 func InsertHotel(c *gin.Context) {
-
 	var payload dto.Hotel
 	err := c.BindJSON(&payload)
 	if err != nil {

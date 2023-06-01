@@ -83,19 +83,19 @@ func (c *amenitieClient) DeleteAmenitie(id string) error {
 
 func (c *amenitieClient) LoadAmenities(id string, Amenities model.Amenities) error {
 	var hotel model.Hotel
-    result:= Db.First(&hotel, "hotel_id = ?", id)
+	result := Db.First(&hotel, "hotel_id = ?", id)
 	if result.Error != nil {
 		log.Error(result.Error.Error())
 		return errors.New(result.Error.Error())
 	}
 
-    for _, amenity := range Amenities {
-        result := Db.Model(&hotel).Association("Amenities").Append(&amenity)
+	for _, amenity := range Amenities {
+		result := Db.Model(&hotel).Association("Amenities").Append(&amenity)
 		if result.Error != nil {
 			log.Error(result.Error.Error())
 			return errors.New(result.Error.Error())
 		}
-    }
+	}
 
 	return nil
 }
