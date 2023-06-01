@@ -11,6 +11,7 @@ import (
 	e "mvc-go/utils/errors"
 
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 type hotelService struct{}
@@ -161,14 +162,19 @@ func (s *hotelService) GetHotelById(id uuid.UUID) (dto.Hotel, e.ApiError) {
 
 func (s *hotelService) GetAvailableRooms(booking dto.CheckAvailability) (float64, e.ApiError) {
 	if booking.DateIn.Before(time.Now()) {
-		return -1, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn earlier than the current date")
+		return 0, e.NewBadRequestApiError("You should not have a DateIn earlier than the current date")
 	}
 
 	if booking.DateIn.After(booking.DateOut) || booking.DateIn.Equal(booking.DateOut) {
-		return -1, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn greater or equal than the DateOut")
+		return 0, e.NewBadRequestApiError("You should not have a DateIn greater or equal than the DateOut")
 	}
 
-	return hotelClient.HotelClient.GetAvailableRooms(booking), nil
+	availableRooms := hotelClient.HotelClient.GetAvailableRooms(booking)
+	log.Debug("available rooms: ", availableRooms)
+	if availableRooms < 0 {
+		availableRooms = 0
+	}
+	return availableRooms, nil
 }
 
 func (s *hotelService) GetAvailableHotels(booking dto.CheckAvailability) (dto.Hotels, e.ApiError) {

@@ -4,6 +4,7 @@ import (
 	// "mvc-go/model"
 	// userService "mvc-go/services/user"
 	"net/http"
+	"time"
 
 	"mvc-go/dto"
 	hotelService "mvc-go/services/hotel"
@@ -59,20 +60,26 @@ func GetAvailableHotels(c *gin.Context) {
 }
 
 func CheckAvailableHotelById(c *gin.Context) {
-	uuid, errr := uuid.Parse(c.Param("hotelID"))
-	if errr != nil {
+	hotelID, err := uuid.Parse(c.Query("hotel_id"))
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "HotelID must be a uuid"})
+		return
+	}
+	dateIn, err := time.Parse("2006-01-02T15:04:05.000Z", c.Query("date_in"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "date_in must be a correct date"})
+		return
+	}
+	dateOut, err := time.Parse("2006-01-02T15:04:05.000Z", c.Query("date_out"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "date_in must be a correct date"})
 		return
 	}
 
 	var payload dto.CheckAvailability
-	err := c.BindJSON(&payload)
-	if err != nil {
-		log.Error(err.Error())
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-	payload.HotelID = uuid
+	payload.HotelID = hotelID
+	payload.DateIn = dateIn
+	payload.DateOut = dateOut
 
 	availableRooms, er := hotelService.HotelService.GetAvailableRooms(payload)
 	if er != nil {
@@ -80,7 +87,7 @@ func CheckAvailableHotelById(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"available_rooms": availableRooms})
+	c.JSON(http.StatusOK, gin.H{"available_rooms": uint(availableRooms)})
 }
 
 func InsertHotel(c *gin.Context) {
