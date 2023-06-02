@@ -17,6 +17,8 @@ type bookingService struct{}
 
 type bookingServiceInterface interface {
 	CreateBooking(bookingDto dto.Booking) (dto.Booking, e.ApiError)
+	GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError)
+	DeleteBooking(id uuid.UUID) e.ApiError
 }
 
 var (
@@ -62,4 +64,41 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 	bookingDto.BookingID = booking.BookingID
 
 	return bookingDto, nil
+}
+
+func (s *bookingService) GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError) {
+	idString := id.String()
+	bookings := bookingClient.BookingClient.GetBookingsByUserId(idString)
+	if len(bookings) == 0 {
+		return dto.Bookings{}, e.NewNotFoundApiError("Bookings not found")
+	}
+
+	var bookingsDto dto.Bookings
+
+	for _, booking := range bookings {
+		var bookingDto dto.Booking
+		bookingDto.BookingID = booking.BookingID
+		bookingDto.Rooms = booking.Rooms
+		bookingDto.Total = booking.Total
+		bookingDto.DateIn = booking.DateIn
+		bookingDto.DateOut = booking.DateOut
+		bookingDto.UserID = booking.UserID
+		bookingDto.HotelID = booking.HotelID
+
+		bookingsDto = append(bookingsDto, bookingDto)
+
+	}
+
+	return bookingsDto, nil
+}
+
+func (s *bookingService) DeleteBooking(id uuid.UUID) e.ApiError {
+	idString := id.String()
+
+	err := bookingClient.BookingClient.DeleteBooking(idString)
+	if err != nil {
+		return e.NewInternalServerApiError("Something went wrong deleting booking", nil)
+	}
+
+	return nil
 }
