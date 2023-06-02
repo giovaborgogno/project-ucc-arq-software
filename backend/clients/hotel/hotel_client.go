@@ -90,14 +90,18 @@ func (c *hotelClient) GetAvailableRooms(booking dto.CheckAvailability) float64 {
 
 	var result Result
 
+	dateIn := booking.DateIn.Format("2006-01-02")
+	dateOut := booking.DateOut.Format("2006-01-02")
+	hotelID := booking.HotelID
+
 	Db.Raw(`
 	SELECT AVG(h.rooms) - COALESCE(SUM(b.rooms), 0) AS available_rooms
 	FROM hotels h
 	LEFT JOIN bookings b ON h.hotel_id = b.hotel_id
-	WHERE b.date_in >= ? OR b.date_out <= ? OR b.hotel_id IS NULL
+	WHERE (b.date_in < ? AND b.date_out > ?) OR (b.date_in >= ? AND b.date_in <= ?) OR b.hotel_id IS NULL
 	GROUP BY h.hotel_id
 	HAVING h.hotel_id = ?;
-`, booking.DateIn.Format("2006-01-02"), booking.DateOut.Format("2006-01-02"), booking.HotelID).Scan(&result)
+`, dateIn, dateIn, dateIn, dateOut, hotelID).Scan(&result)
 
 	return result.AvailableRooms
 }
@@ -105,18 +109,22 @@ func (c *hotelClient) GetAvailableRooms(booking dto.CheckAvailability) float64 {
 func (c *hotelClient) GetAvailableHotels(booking dto.CheckAvailability) model.Hotels {
 	var hotels model.Hotels
 
+	dateIn := booking.DateIn.Format("2006-01-02")
+	dateOut := booking.DateOut.Format("2006-01-02")
+	rooms := booking.Rooms
+
 	Db.Raw(`
 	SELECT h.*
 	FROM (
 		SELECT h.hotel_id AS H_ID, AVG(h.rooms) - COALESCE(SUM(b.rooms), 0) AS availableRooms
 		FROM hotels h
 		LEFT JOIN bookings b ON h.hotel_id = b.hotel_id
-		WHERE b.date_in >= ? OR b.date_out <= ? OR b.hotel_id IS NULL
+		WHERE (b.date_in < ? AND b.date_out > ?) OR (b.date_in >= ? AND b.date_in <= ?) OR b.hotel_id IS NULL
 		GROUP BY h.hotel_id
 	) AS AvailableRoomsByHotel
 	JOIN hotels h ON AvailableRoomsByHotel.H_ID = h.hotel_id
 	WHERE AvailableRoomsByHotel.availableRooms >= ?;
-`, booking.DateIn.Format("2006-01-02"), booking.DateOut.Format("2006-01-02"), booking.Rooms).Scan(&hotels)
+`, dateIn, dateIn, dateIn, dateOut, rooms).Scan(&hotels)
 
 	return hotels
 }
