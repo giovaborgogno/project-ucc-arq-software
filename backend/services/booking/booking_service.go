@@ -17,8 +17,13 @@ type bookingService struct{}
 
 type bookingServiceInterface interface {
 	CreateBooking(bookingDto dto.Booking) (dto.Booking, e.ApiError)
+
 	GetBookings() (dto.Bookings, e.ApiError)
 	SearchBookings(search string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError)
+
+	GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError)
+	DeleteBooking(id uuid.UUID) e.ApiError
+
 }
 
 var (
@@ -72,10 +77,18 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 	return bookingDto, nil
 }
 
+
 func (s *bookingService) GetBookings() (dto.Bookings, e.ApiError) {
 	bookings := bookingClient.BookingClient.GetBookings()
 	if len(bookings) == 0 {
 		return dto.Bookings{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("Error in database"))
+
+func (s *bookingService) GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError) {
+	idString := id.String()
+	bookings := bookingClient.BookingClient.GetBookingsByUserId(idString)
+	if len(bookings) == 0 {
+		return dto.Bookings{}, e.NewNotFoundApiError("Bookings not found")
+
 	}
 
 	var bookingsDto dto.Bookings
@@ -124,4 +137,15 @@ func (s *bookingService) SearchBookings(search string, dateIn time.Time, dateOut
 	}
 
 	return bookingsDto, nil
+
+func (s *bookingService) DeleteBooking(id uuid.UUID) e.ApiError {
+	idString := id.String()
+
+	err := bookingClient.BookingClient.DeleteBooking(idString)
+	if err != nil {
+		return e.NewInternalServerApiError("Something went wrong deleting booking", nil)
+	}
+
+	return nil
+  
 }
