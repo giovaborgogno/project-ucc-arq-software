@@ -148,96 +148,51 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                             Product options
                                                         </h3>
 
-                                                        <form>
-                                                            <BookForm />
-                                                            {/* Colors */}
-                                                            {/* <div>
-                                                        <h4 className="text-sm font-medium text-gray-900">Color</h4>
+                                                        <BookForm hotel={hotel}/>
 
-                                                        <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-4">
-                                                            <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
-                                                            <span className="flex items-center space-x-3">
-                                                                {product.colors.map((color) => (
-                                                                    <RadioGroup.Option
-                                                                        key={color.name}
-                                                                        value={color}
-                                                                        className={({ active, checked }) =>
-                                                                            classNames(
-                                                                                color.selectedClass,
-                                                                                active && checked ? 'ring ring-offset-1' : '',
-                                                                                !active && checked ? 'ring-2' : '',
-                                                                                'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        <RadioGroup.Label as="span" className="sr-only">
-                                                                            {color.name}
-                                                                        </RadioGroup.Label>
-                                                                        <span
-                                                                            aria-hidden="true"
-                                                                            className={classNames(
-                                                                                color.class,
-                                                                                'h-8 w-8 rounded-full border border-black border-opacity-10'
-                                                                            )}
-                                                                        />
-                                                                    </RadioGroup.Option>
-                                                                ))}
-                                                            </span>
-                                                        </RadioGroup>
-                                                    </div> */}
-
-                                                            {/* Sizes */}
-                                                            <div className="mt-10">
-                                                                <div className="flex items-center justify-between">
-                                                                    <h4 className="text-sm font-medium text-gray-900">Amenities</h4>
-                                                                    <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                                                                        Size guide
-                                                                    </a>
-                                                                </div>
-
-                                                                <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
-                                                                    <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                                                                    <div className="grid grid-cols-4 gap-4">
-                                                                        {hotel.amenities.map((amenity) => (
-                                                                            <RadioGroup.Option
-                                                                                key={amenity.amenitie_id}
-                                                                                value={amenity.title}
-                                                                                disabled={!amenity}
-                                                                                className={({ active }) =>
-                                                                                    classNames(
-                                                                                        amenity
-                                                                                            ? ' bg-white text-gray-900 shadow-sm'
-                                                                                            : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                                                                                        'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50  sm:flex-1'
-                                                                                    )
-                                                                                }
-                                                                            >
-
-                                                                                <RadioGroup.Label as="span">{amenity.title.toUpperCase()}</RadioGroup.Label>
-                                                                                {amenity ? (
-                                                                                    <span
-                                                                                        className={classNames(
-                                                                                        )}
-                                                                                        aria-hidden="true"
-                                                                                    />
-                                                                                ) : (
-                                                                                    <>
-                                                                                    </>
-                                                                                )}
-
-                                                                            </RadioGroup.Option>
-                                                                        ))}
-                                                                    </div>
-                                                                </RadioGroup>
+                                                        <div className="mt-10">
+                                                            <div className="flex items-center justify-between">
+                                                                <h4 className="text-sm font-medium text-gray-900">Amenities</h4>
+                                                                <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                                                    Size guide
+                                                                </a>
                                                             </div>
 
-                                                            <button
-                                                                type="submit"
-                                                                className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                                            >
-                                                                Add to bag
-                                                            </button>
-                                                        </form>
+                                                            <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
+                                                                <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                                                                <div className="grid grid-cols-4 gap-4">
+                                                                    {hotel.amenities && hotel.amenities.map((amenity) => (
+                                                                        <RadioGroup.Option
+                                                                            key={amenity.amenitie_id}
+                                                                            value={amenity.title}
+                                                                            disabled={!amenity}
+                                                                            className={({ active }) =>
+                                                                                classNames(
+                                                                                    amenity
+                                                                                        ? ' bg-white text-gray-900 shadow-sm'
+                                                                                        : 'cursor-not-allowed bg-gray-50 text-gray-200',
+                                                                                    'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50  sm:flex-1'
+                                                                                )
+                                                                            }
+                                                                        >
+
+                                                                            <RadioGroup.Label as="span">{amenity.title.toUpperCase()}</RadioGroup.Label>
+                                                                            {amenity ? (
+                                                                                <span
+                                                                                    className={classNames(
+                                                                                    )}
+                                                                                    aria-hidden="true"
+                                                                                />
+                                                                            ) : (
+                                                                                <>
+                                                                                </>
+                                                                            )}
+
+                                                                        </RadioGroup.Option>
+                                                                    ))}
+                                                                </div>
+                                                            </RadioGroup>
+                                                        </div>
                                                     </section>
                                                 </div>
                                                 <Tab.Group as="div" className="flex flex-col-reverse order-last md:order-first">
@@ -276,7 +231,7 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                                     src={`/${photo.url}`}
                                                                     alt={photo.url}
                                                                     className="w-full h-full object-center object-cover sm:rounded-lg"
-                                                                    style={{height: "30rem"}}
+                                                                    style={{ height: "30rem" }}
                                                                 />
                                                             </Tab.Panel>
                                                         ))}

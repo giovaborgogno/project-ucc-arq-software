@@ -7,8 +7,10 @@ export default function CreateHotel() {
   // Create hotel
   const [hotel, setHotel] = useState(null)
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    title: '',
+    description: '',
+    price: 0,
+    rooms: 0
   })
 
   const {

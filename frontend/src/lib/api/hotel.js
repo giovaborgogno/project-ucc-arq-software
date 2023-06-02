@@ -146,3 +146,33 @@ export async function getHotels(){
         return null
     }
 }
+
+export async function checkAvailability(rooms, date_in, date_out, hotel_id) {
+
+    rooms = parseInt(rooms)
+
+    const config = {
+        withCredentials: true
+    };
+
+    let availableRooms
+
+    try {
+        const res = await axios.get(`/api/hotel/check?hotel_id=${hotel_id}&date_in=${date_in}&date_out=${date_out}`, config)
+        if (res.status === 200) {
+            availableRooms = res.data.available_rooms
+        }
+        else {
+            console.log("res: " + res)
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        console.log(error)
+    }
+
+    if(availableRooms < rooms){
+        return false
+    }
+    return true
+
+}
