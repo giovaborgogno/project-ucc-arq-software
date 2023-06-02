@@ -16,4 +16,5 @@ func BookingRoute(booking *gin.RouterGroup) {
 
 	// Only admin:
 	booking.GET("/", middlewareController.CheckAdmin(), bookingController.GetBookings)
+	booking.GET("/search", middlewareController.CheckAdmin(), bookingController.SearchBookings)
 }
