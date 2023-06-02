@@ -105,7 +105,7 @@ func DeleteAmenitie(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"success": "Amenitie deleted successfully"})
 }
 
-func LoadAmenities(c *gin.Context){
+func LoadAmenities(c *gin.Context) {
 	uuid, err := uuid.Parse(c.Param("HotelID"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "HotelID must be a uuid"})
@@ -126,7 +126,5 @@ func LoadAmenities(c *gin.Context){
 		c.JSON(er.Status(), gin.H{"error": er.Message()})
 		return
 	}
-
-
 
 }
