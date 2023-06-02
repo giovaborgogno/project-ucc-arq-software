@@ -11,7 +11,7 @@ func HotelRoute(hotel *gin.RouterGroup) {
 	hotel.GET("/", hotelController.GetHotels)
 	hotel.GET("/:hotelID", hotelController.GetHotelById)
 	hotel.GET("/available", hotelController.GetAvailableHotels)
-	hotel.GET("/availableRooms", hotelController.CheckAvailableHotelById)
+	hotel.GET("/availableRooms", hotelController.GetAvailableRooms)
 
 	// Only admin:
 	hotel.POST("/", middlewareController.CheckAdmin(), hotelController.InsertHotel)

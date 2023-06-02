@@ -11,7 +11,6 @@ import (
 	e "mvc-go/utils/errors"
 
 	"github.com/google/uuid"
-	log "github.com/sirupsen/logrus"
 )
 
 type hotelService struct{}
@@ -87,7 +86,7 @@ func (s *hotelService) DeleteHotel(id uuid.UUID) e.ApiError {
 func (s *hotelService) GetHotels() ([]dto.Hotel, e.ApiError) {
 	hotels := hotelClient.HotelClient.GetHotels()
 	if len(hotels) == 0 {
-		return []dto.Hotel{}, e.NewInternalServerApiError("Error getting hotels from database", errors.New("Error in database"))
+		return []dto.Hotel{}, e.NewInternalServerApiError("Error getting hotels from database", errors.New("error in database"))
 	}
 
 	var hotelsDto []dto.Hotel
@@ -170,17 +169,19 @@ func (s *hotelService) GetAvailableRooms(booking dto.CheckAvailability) (float64
 	}
 
 	availableRooms := hotelClient.HotelClient.GetAvailableRooms(booking)
-	log.Debug("available rooms: ", availableRooms)
-	if availableRooms < 0 {
-		availableRooms = 0
-	}
+
 	return availableRooms, nil
 }
 
 func (s *hotelService) GetAvailableHotels(booking dto.CheckAvailability) (dto.Hotels, e.ApiError) {
 	hotels := hotelClient.HotelClient.GetAvailableHotels(booking)
-	if len(hotels) == 0 {
-		return []dto.Hotel{}, e.NewInternalServerApiError("Error getting hotels from database", errors.New("Error in database"))
+
+	if booking.DateIn.Before(time.Now()) {
+		return []dto.Hotel{}, e.NewBadRequestApiError("You should not have a DateIn earlier than the current date")
+	}
+
+	if booking.DateIn.After(booking.DateOut) || booking.DateIn.Equal(booking.DateOut) {
+		return []dto.Hotel{}, e.NewBadRequestApiError("You should not have a DateIn greater or equal than the DateOut")
 	}
 
 	if booking.Rooms == 0 {
