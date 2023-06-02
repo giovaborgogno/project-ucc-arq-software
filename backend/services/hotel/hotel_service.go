@@ -6,11 +6,12 @@ import (
 	"mvc-go/dto"
 	"mvc-go/model"
 
-	// "time"
+	"time"
 
 	e "mvc-go/utils/errors"
 
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 type hotelService struct{}
@@ -21,6 +22,8 @@ type hotelServiceInterface interface {
 	DeleteHotel(id uuid.UUID) e.ApiError
 	GetHotels() ([]dto.Hotel, e.ApiError)
 	GetHotelById(id uuid.UUID) (dto.Hotel, e.ApiError)
+	GetAvailableRooms(booking dto.CheckAvailability) (float64, e.ApiError)
+	GetAvailableHotels(booking dto.CheckAvailability) (dto.Hotels, e.ApiError)
 }
 
 var (
@@ -84,7 +87,7 @@ func (s *hotelService) DeleteHotel(id uuid.UUID) e.ApiError {
 func (s *hotelService) GetHotels() ([]dto.Hotel, e.ApiError) {
 	hotels := hotelClient.HotelClient.GetHotels()
 	if len(hotels) == 0 {
-		return []dto.Hotel{}, e.NewInternalServerApiError("Error geting hotels from database", errors.New("Error in database"))
+		return []dto.Hotel{}, e.NewInternalServerApiError("Error getting hotels from database", errors.New("Error in database"))
 	}
 
 	var hotelsDto []dto.Hotel
@@ -155,4 +158,64 @@ func (s *hotelService) GetHotelById(id uuid.UUID) (dto.Hotel, e.ApiError) {
 	}
 
 	return hotelDto, nil
+}
+
+func (s *hotelService) GetAvailableRooms(booking dto.CheckAvailability) (float64, e.ApiError) {
+	if booking.DateIn.Before(time.Now()) {
+		return 0, e.NewBadRequestApiError("You should not have a DateIn earlier than the current date")
+	}
+
+	if booking.DateIn.After(booking.DateOut) || booking.DateIn.Equal(booking.DateOut) {
+		return 0, e.NewBadRequestApiError("You should not have a DateIn greater or equal than the DateOut")
+	}
+
+	availableRooms := hotelClient.HotelClient.GetAvailableRooms(booking)
+	log.Debug("available rooms: ", availableRooms)
+	if availableRooms < 0 {
+		availableRooms = 0
+	}
+	return availableRooms, nil
+}
+
+func (s *hotelService) GetAvailableHotels(booking dto.CheckAvailability) (dto.Hotels, e.ApiError) {
+	hotels := hotelClient.HotelClient.GetAvailableHotels(booking)
+	if len(hotels) == 0 {
+		return []dto.Hotel{}, e.NewInternalServerApiError("Error getting hotels from database", errors.New("Error in database"))
+	}
+
+	if booking.Rooms == 0 {
+		return []dto.Hotel{}, e.NewBadRequestApiError("Error getting hotels from database: You must provide a 'rooms' value")
+	}
+
+	var hotelsDto []dto.Hotel
+
+	for _, hotel := range hotels {
+		var hotelDto dto.Hotel
+		hotelDto.HotelID = hotel.HotelID
+		hotelDto.Title = hotel.Title
+		hotelDto.Description = hotel.Description
+		hotelDto.Rooms = hotel.Rooms
+		hotelDto.PricePerDay = hotel.PricePerDay
+		for _, photo := range hotel.Photos {
+			var dtoPhoto dto.Photo
+
+			dtoPhoto.PhotoID = photo.PhotoID
+			dtoPhoto.Url = photo.Url
+			dtoPhoto.HotelID = photo.HotelID
+
+			hotelDto.Photos = append(hotelDto.Photos, dtoPhoto)
+		}
+		for _, amenity := range hotel.Amenities {
+			var dtoAmenity dto.Amenitie
+
+			dtoAmenity.AmenitieID = amenity.AmenitieID
+			dtoAmenity.Title = amenity.Title
+
+			hotelDto.Amenities = append(hotelDto.Amenities, dtoAmenity)
+		}
+
+		hotelsDto = append(hotelsDto, hotelDto)
+	}
+
+	return hotelsDto, nil
 }

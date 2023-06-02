@@ -37,11 +37,17 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 		HotelID: bookingDto.HotelID,
 	}
 
+	bookingData := dto.CheckAvailability{
+		HotelID: booking.HotelID,
+		DateIn:  booking.DateIn,
+		DateOut: booking.DateOut,
+	}
+
 	if booking.Total <= 0 {
 		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You cannot have a zero or negative amount for Total value")
 	}
 
-	if booking.DateIn.Before(time.Now()){
+	if booking.DateIn.Before(time.Now()) {
 		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn earlier than the current date")
 	}
 
@@ -49,7 +55,7 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn greater or equal than the DateOut")
 	}
 
-	availableRooms := hotelClient.HotelClient.GetAvailableRooms(booking)
+	availableRooms := hotelClient.HotelClient.GetAvailableRooms(bookingData)
 	if booking.Rooms > uint(availableRooms) {
 		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You cannot book more rooms than the ones currently available")
 	}
