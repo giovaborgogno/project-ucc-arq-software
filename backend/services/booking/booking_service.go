@@ -17,6 +17,8 @@ type bookingService struct{}
 
 type bookingServiceInterface interface {
 	CreateBooking(bookingDto dto.Booking) (dto.Booking, e.ApiError)
+	GetBookings() (dto.Bookings, e.ApiError)
+	SearchBookings(search string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError)
 }
 
 var (
@@ -68,4 +70,58 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 	bookingDto.BookingID = booking.BookingID
 
 	return bookingDto, nil
+}
+
+func (s *bookingService) GetBookings() (dto.Bookings, e.ApiError) {
+	bookings := bookingClient.BookingClient.GetBookings()
+	if len(bookings) == 0 {
+		return dto.Bookings{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("Error in database"))
+	}
+
+	var bookingsDto dto.Bookings
+
+	for _, booking := range bookings {
+		var bookingDto dto.Booking
+		bookingDto.BookingID = booking.BookingID
+		bookingDto.UserID = booking.UserID
+		bookingDto.Rooms = booking.Rooms
+		bookingDto.Total = booking.Total
+		bookingDto.DateIn = booking.DateIn
+		bookingDto.DateOut = booking.DateOut
+		bookingDto.HotelID = booking.HotelID
+
+		bookingsDto = append(bookingsDto, bookingDto)
+	}
+
+	return bookingsDto, nil
+}
+
+func (s *bookingService) SearchBookings(search string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError) {
+	var bookings model.Bookings
+	if search == "" {
+		bookings = bookingClient.BookingClient.SearchBookingsByDates(dateIn, dateOut)
+	} else {
+
+		bookings = bookingClient.BookingClient.SearchBookingsByDatesAndHotel(search, dateIn, dateOut)
+	}
+	// if len(bookings) == 0 {
+	// 	return dto.Bookings{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("Error in database"))
+	// }
+
+	var bookingsDto dto.Bookings
+
+	for _, booking := range bookings {
+		var bookingDto dto.Booking
+		bookingDto.BookingID = booking.BookingID
+		bookingDto.UserID = booking.UserID
+		bookingDto.Rooms = booking.Rooms
+		bookingDto.Total = booking.Total
+		bookingDto.DateIn = booking.DateIn
+		bookingDto.DateOut = booking.DateOut
+		bookingDto.HotelID = booking.HotelID
+
+		bookingsDto = append(bookingsDto, bookingDto)
+	}
+
+	return bookingsDto, nil
 }
