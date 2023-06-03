@@ -88,7 +88,7 @@ export default function HotelsList({ hotels }) {
                                         <li key={hotel.hotel_id} className="flex py-6 sm:py-10">
                                             <div className="flex-shrink-0">
                                                 <img
-                                                    src={`/${hotel.photos[0].url}`}
+                                                    src={`${hotel.photos != null ? hotel.photos[0].url : "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg"}`}
                                                     alt={hotel.title}
                                                     className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                                                 />

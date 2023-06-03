@@ -17,6 +17,11 @@ type bookingService struct{}
 
 type bookingServiceInterface interface {
 	CreateBooking(bookingDto dto.Booking) (dto.Booking, e.ApiError)
+	GetBookingById(booking_id uuid.UUID) (dto.Booking, e.ApiError)
+	GetBookings() (dto.Bookings, e.ApiError)
+	SearchBookings(hotel string, user string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError)
+	GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError)
+	DeleteBooking(id uuid.UUID) e.ApiError
 }
 
 var (
@@ -68,4 +73,116 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 	bookingDto.BookingID = booking.BookingID
 
 	return bookingDto, nil
+}
+
+func (s *bookingService) GetBookingById(booking_id uuid.UUID) (dto.Booking, e.ApiError) {
+
+	booking := bookingClient.BookingClient.GetBookingById(booking_id.String())
+	if booking.BookingID == uuid.Nil {
+		return dto.Booking{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("error in database"))
+	}
+
+	bookingDto := dto.Booking{
+		BookingID: booking.BookingID,
+		Total:     booking.Total,
+		Rooms:     booking.Rooms,
+		UserID:    booking.UserID,
+		HotelID:   booking.HotelID,
+		DateIn:    booking.DateIn,
+		DateOut:   booking.DateOut,
+	}
+
+	return bookingDto, nil
+}
+
+func (s *bookingService) GetBookings() (dto.Bookings, e.ApiError) {
+	bookings := bookingClient.BookingClient.GetBookings()
+	if len(bookings) == 0 {
+		return dto.Bookings{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("error in database"))
+	}
+
+	var bookingsDto dto.Bookings
+
+	for _, booking := range bookings {
+		var bookingDto dto.Booking
+		bookingDto.BookingID = booking.BookingID
+		bookingDto.UserID = booking.UserID
+		bookingDto.Rooms = booking.Rooms
+		bookingDto.Total = booking.Total
+		bookingDto.DateIn = booking.DateIn
+		bookingDto.DateOut = booking.DateOut
+		bookingDto.HotelID = booking.HotelID
+
+		bookingsDto = append(bookingsDto, bookingDto)
+	}
+
+	return bookingsDto, nil
+}
+
+func (s *bookingService) GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError) {
+	idString := id.String()
+	bookings := bookingClient.BookingClient.GetBookingsByUserId(idString)
+	if len(bookings) == 0 {
+		return dto.Bookings{}, e.NewNotFoundApiError("Bookings not found")
+
+	}
+
+	var bookingsDto dto.Bookings
+
+	for _, booking := range bookings {
+		var bookingDto dto.Booking
+		bookingDto.BookingID = booking.BookingID
+		bookingDto.UserID = booking.UserID
+		bookingDto.Rooms = booking.Rooms
+		bookingDto.Total = booking.Total
+		bookingDto.DateIn = booking.DateIn
+		bookingDto.DateOut = booking.DateOut
+		bookingDto.HotelID = booking.HotelID
+
+		bookingsDto = append(bookingsDto, bookingDto)
+	}
+
+	return bookingsDto, nil
+}
+
+func (s *bookingService) SearchBookings(hotel string, user string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError) {
+	var bookings model.Bookings
+	// if hotel == "" {
+	// 	bookings = bookingClient.BookingClient.SearchBookingsByDates(dateIn, dateOut)
+	// } else {
+
+	bookings = bookingClient.BookingClient.SearchBookingsByDatesAndHotelAndUser(hotel, user, dateIn, dateOut)
+	// }
+	// if len(bookings) == 0 {
+	// 	return dto.Bookings{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("Error in database"))
+	// }
+
+	var bookingsDto dto.Bookings
+
+	for _, booking := range bookings {
+		var bookingDto dto.Booking
+		bookingDto.BookingID = booking.BookingID
+		bookingDto.UserID = booking.UserID
+		bookingDto.Rooms = booking.Rooms
+		bookingDto.Total = booking.Total
+		bookingDto.DateIn = booking.DateIn
+		bookingDto.DateOut = booking.DateOut
+		bookingDto.HotelID = booking.HotelID
+
+		bookingsDto = append(bookingsDto, bookingDto)
+	}
+
+	return bookingsDto, nil
+}
+
+func (s *bookingService) DeleteBooking(id uuid.UUID) e.ApiError {
+	idString := id.String()
+
+	err := bookingClient.BookingClient.DeleteBooking(idString)
+	if err != nil {
+		return e.NewInternalServerApiError("Something went wrong deleting booking", nil)
+	}
+
+	return nil
+
 }
