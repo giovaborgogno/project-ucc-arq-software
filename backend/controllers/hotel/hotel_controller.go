@@ -45,7 +45,7 @@ func GetHotelById(c *gin.Context) {
 func GetAvailableHotels(c *gin.Context) {
 
 	rooms, err := strconv.ParseUint(c.Query("rooms"), 10, 32)
-	if err != nil{
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "rooms must be a correct value"})
 	}
 
@@ -71,7 +71,7 @@ func GetAvailableHotels(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"hotels": hotels})
+	c.JSON(http.StatusOK, gin.H{"hotels": hotels})
 }
 
 func GetAvailableRooms(c *gin.Context) {

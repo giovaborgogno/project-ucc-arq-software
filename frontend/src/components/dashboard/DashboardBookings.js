@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react"
 import BookingCard from "./BookingCard"
+import SearchBar from "./SearchBar"
 
 /*
   This example requires Tailwind CSS v2.0+ 
@@ -61,8 +63,15 @@ function classNames(...classes) {
 }
 
 export default function DashboardBookings() {
+  const [bookings, setBookings] = useState(null)
+
+  useEffect(()=>{
+    console.log(bookings)
+  },[bookings])
+
   return (
     <>
+      <SearchBar setBookings={setBookings} />
       {products.map((product) => (
         <BookingCard product={product}/>
 
