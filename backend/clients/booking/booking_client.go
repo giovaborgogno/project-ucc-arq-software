@@ -109,7 +109,13 @@ func (c *bookingClient) DeleteBooking(id string) error {
 
 func (c *bookingClient) SearchBookingsByDatesAndHotel(search string, dateIn time.Time, dateOut time.Time) model.Bookings {
 	var bookings model.Bookings
-	result := Db.Where("hotel_id = ? AND date_in >= ? AND date_out <= ?", search, dateIn, dateOut).Find(&bookings)
+	result := Db.Joins("JOIN hotels ON hotels.hotel_id = bookings.hotel_id").
+		Where(`(hotels.hotel_id = ? OR hotels.title LIKE ?) 
+		AND ((date_in >= ? AND date_in <= ?)
+		OR (date_out >= ? AND date_out <= ?)
+		OR (date_in < ? AND date_out > ?))`,
+			search, "%"+search+"%", dateIn, dateOut, dateIn, dateOut, dateIn, dateOut).
+		Order("date_in").Find(&bookings)
 	if result.Error != nil {
 		log.Error("")
 		return model.Bookings{}
@@ -120,7 +126,10 @@ func (c *bookingClient) SearchBookingsByDatesAndHotel(search string, dateIn time
 }
 func (c *bookingClient) SearchBookingsByDates(dateIn time.Time, dateOut time.Time) model.Bookings {
 	var bookings model.Bookings
-	result := Db.Where("date_in >= ? AND date_out <= ?", dateIn, dateOut).Find(&bookings)
+	result := Db.Where(`(date_in >= ? AND date_in <= ?) 
+	OR (date_out >= ? AND date_out <= ?) 
+	OR (date_in < ? AND date_out > ?)`,
+		dateIn, dateOut, dateIn, dateOut, dateIn, dateOut).Order("date_in").Find(&bookings)
 	if result.Error != nil {
 		log.Error("")
 		return model.Bookings{}
