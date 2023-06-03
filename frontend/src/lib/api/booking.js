@@ -40,3 +40,42 @@ export async function createBooking(rooms, total, date_in, date_out, hotel_id, u
 
 }
 
+export async function searchBookingsMe(hotel, date_in, date_out){
+    const config = {
+        headers:{
+            'Cache-Control': 'no-cache'
+        }
+    }
+
+    try {
+        const res = await axios.get(`/api/booking/search/me?hotel=${hotel}&date_in=${date_in}&date_out=${date_out}`,{withCredentials: true})
+        if (res.status === 200) {
+            return res.data.bookings
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        return null
+    }
+}
+
+export async function searchBookings(hotel, date_in, date_out){
+    const config = {
+        headers:{
+            'Cache-Control': 'no-cache'
+        }
+    }
+
+    try {
+        const res = await axios.get(`/api/booking/search?hotel=${hotel}&date_in=${date_in}&date_out=${date_out}`,{withCredentials: true})
+        if (res.status === 200) {
+            return res.data.bookings
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        return null
+    }
+}

@@ -17,10 +17,9 @@ type bookingService struct{}
 
 type bookingServiceInterface interface {
 	CreateBooking(bookingDto dto.Booking) (dto.Booking, e.ApiError)
-
+	GetBookingById(booking_id uuid.UUID) (dto.Booking, e.ApiError)
 	GetBookings() (dto.Bookings, e.ApiError)
-	SearchBookings(search string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError)
-
+	SearchBookings(hotel string, user string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError)
 	GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError)
 	DeleteBooking(id uuid.UUID) e.ApiError
 }
@@ -76,6 +75,26 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 	return bookingDto, nil
 }
 
+func (s *bookingService) GetBookingById(booking_id uuid.UUID) (dto.Booking, e.ApiError) {
+
+	booking := bookingClient.BookingClient.GetBookingById(booking_id.String())
+	if booking.BookingID == uuid.Nil {
+		return dto.Booking{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("error in database"))
+	}
+
+	bookingDto := dto.Booking{
+		BookingID: booking.BookingID,
+		Total:     booking.Total,
+		Rooms:     booking.Rooms,
+		UserID:    booking.UserID,
+		HotelID:   booking.HotelID,
+		DateIn:    booking.DateIn,
+		DateOut:   booking.DateOut,
+	}
+
+	return bookingDto, nil
+}
+
 func (s *bookingService) GetBookings() (dto.Bookings, e.ApiError) {
 	bookings := bookingClient.BookingClient.GetBookings()
 	if len(bookings) == 0 {
@@ -126,14 +145,14 @@ func (s *bookingService) GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiE
 	return bookingsDto, nil
 }
 
-func (s *bookingService) SearchBookings(search string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError) {
+func (s *bookingService) SearchBookings(hotel string, user string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError) {
 	var bookings model.Bookings
-	if search == "" {
-		bookings = bookingClient.BookingClient.SearchBookingsByDates(dateIn, dateOut)
-	} else {
+	// if hotel == "" {
+	// 	bookings = bookingClient.BookingClient.SearchBookingsByDates(dateIn, dateOut)
+	// } else {
 
-		bookings = bookingClient.BookingClient.SearchBookingsByDatesAndHotel(search, dateIn, dateOut)
-	}
+	bookings = bookingClient.BookingClient.SearchBookingsByDatesAndHotelAndUser(hotel, user, dateIn, dateOut)
+	// }
 	// if len(bookings) == 0 {
 	// 	return dto.Bookings{}, e.NewInternalServerApiError("Error getting bookings from database", errors.New("Error in database"))
 	// }

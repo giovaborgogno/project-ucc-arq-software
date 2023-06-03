@@ -15,15 +15,16 @@ const BookForm = ({ hotel }) => {
     const [rooms, setRooms] = useState(1)
     const [total, setTotal] = useState(null)
 
-    const nowDate = new Date();
-    const endDateInit = new Date(nowDate.setDate(nowDate.getDate() + 7));
     const [dates, setDates] = useState({
-        startDate: (new Date()).toISOString(),
-        endDate: endDateInit.toISOString()
+        startDate: null,
+        endDate: null
     });
 
     const check_availability = async () => {
-        const isAvailable = await checkAvailability(rooms, dates.startDate, dates.endDate, hotel.hotel_id)
+        const start_date= dates.startDate !== null ? new Date(dates.startDate).toISOString() : ""
+        const end_date= dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
+
+        const isAvailable = await checkAvailability(rooms, start_date, end_date, hotel.hotel_id)
         console.log("isAvailable: ", isAvailable)
         setAvailable(isAvailable)
     }
@@ -52,10 +53,7 @@ const BookForm = ({ hotel }) => {
     const handleChange = e => setRooms(e.target.value);
 
     const handleDatesChange = (newDates) => {
-        setDates({
-            startDate: new Date(newDates.startDate).toISOString(),
-            endDate: new Date(newDates.endDate).toISOString()
-        });
+        setDates(newDates);
     }
 
     const handleSubmit = e => {
@@ -65,7 +63,10 @@ const BookForm = ({ hotel }) => {
             return
         }
         const create_booking = async () => {
-            await createBooking(rooms, total, dates.startDate, dates.endDate, hotel.hotel_id, user.user_id)
+            const start_date= dates.startDate !== null ? new Date(dates.startDate).toISOString() : ""
+            const end_date= dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
+
+            await createBooking(rooms, total, start_date, end_date, hotel.hotel_id, user.user_id)
             // console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", dates.startDate,"\ndate_out: ", dates.endDate,"\nhotel_id: ", hotel.hotel_id,"\nuser_id: ", user.user_id)
         }
 

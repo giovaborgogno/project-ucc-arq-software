@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react"
+import SearchBar from "../dashboard/SearchBar"
 import BookingCard from "./BookingCard"
 
 /*
@@ -67,8 +69,15 @@ function classNames(...classes) {
 }
 
 export default function DashboardBookings() {
+  const [bookings, setBookings] = useState(null)
+
+  useEffect(()=>{
+    console.log(bookings)
+  },[bookings])
+
   return (
     <>
+    <SearchBar setBookings={setBookings} admin={true} />
       {products.map((product) => (
         <BookingCard product={product} person={person}/>
 

@@ -18,8 +18,7 @@ type bookingClientInterface interface {
 	InsertBooking(booking model.Booking) model.Booking
 	UpdateBooking(booking model.Booking) model.Booking
 	DeleteBooking(id string) error
-	SearchBookingsByDatesAndHotel(search string, dateIn time.Time, dateOut time.Time) model.Bookings
-	SearchBookingsByDates(dateIn time.Time, dateOut time.Time) model.Bookings
+	SearchBookingsByDatesAndHotelAndUser(hotel string, user string, dateIn time.Time, dateOut time.Time) model.Bookings
 }
 
 var (
@@ -107,34 +106,23 @@ func (c *bookingClient) DeleteBooking(id string) error {
 	return nil
 }
 
-func (c *bookingClient) SearchBookingsByDatesAndHotel(search string, dateIn time.Time, dateOut time.Time) model.Bookings {
+func (c *bookingClient) SearchBookingsByDatesAndHotelAndUser(hotel string, user string, dateIn time.Time, dateOut time.Time) model.Bookings {
 	var bookings model.Bookings
-	result := Db.Joins("JOIN hotels ON hotels.hotel_id = bookings.hotel_id").
-		Where(`(hotels.hotel_id = ? OR hotels.title LIKE ?) 
+
+	query := Db.Joins("LEFT JOIN hotels ON hotels.hotel_id = bookings.hotel_id").
+		Where(`(('' = ?) OR (hotels.hotel_id LIKE ? OR hotels.title LIKE ?))
+		AND (('' = ?) OR (bookings.user_id LIKE ?))
 		AND ((date_in >= ? AND date_in <= ?)
 		OR (date_out >= ? AND date_out <= ?)
 		OR (date_in < ? AND date_out > ?))`,
-			search, "%"+search+"%", dateIn, dateOut, dateIn, dateOut, dateIn, dateOut).
-		Order("date_in").Find(&bookings)
-	if result.Error != nil {
-		log.Error("")
-		return model.Bookings{}
-	}
-	log.Debug("bookings: ", bookings)
+			hotel, "%"+hotel+"%", "%"+hotel+"%", user, "%"+user+"%", dateIn, dateOut, dateIn, dateOut, dateIn, dateOut).
+		Order("date_in")
 
-	return bookings
-}
-func (c *bookingClient) SearchBookingsByDates(dateIn time.Time, dateOut time.Time) model.Bookings {
-	var bookings model.Bookings
-	result := Db.Where(`(date_in >= ? AND date_in <= ?) 
-	OR (date_out >= ? AND date_out <= ?) 
-	OR (date_in < ? AND date_out > ?)`,
-		dateIn, dateOut, dateIn, dateOut, dateIn, dateOut).Order("date_in").Find(&bookings)
+	result := query.Find(&bookings)
 	if result.Error != nil {
 		log.Error("")
 		return model.Bookings{}
 	}
-	log.Debug("bookings: ", bookings)
 
 	return bookings
 }

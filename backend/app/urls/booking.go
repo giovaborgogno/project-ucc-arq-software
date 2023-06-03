@@ -10,6 +10,7 @@ import (
 func BookingRoute(booking *gin.RouterGroup) {
 	booking.POST("/", bookingController.CreateBooking)
 	booking.GET("/me", bookingController.GetBookingsMe)
+	booking.GET("/search/me", bookingController.SearchBookingsMe)
 	booking.GET("/:bookingID", bookingController.GetBookingById)
 	booking.PUT("/:bookingID", bookingController.UpdateBooking)
 	booking.DELETE("/:bookingID", bookingController.DeleteBooking)
