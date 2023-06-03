@@ -24,3 +24,26 @@ export async function getMe() {
 
 
 }
+
+export async function getUsers() {
+
+    const config = {
+        headers: {
+            'Cache-Control': 'no-cache'
+        }
+    }
+
+    try {
+        const res = await axios.get('/api/user/', { withCredentials: true })
+        if (res.status === 200) {
+            return res.data.users
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        return null
+    }
+
+
+}
