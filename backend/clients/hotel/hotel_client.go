@@ -95,13 +95,16 @@ func (c *hotelClient) GetAvailableRooms(booking dto.CheckAvailability) float64 {
 	hotelID := booking.HotelID
 
 	Db.Raw(`
-	SELECT AVG(h.rooms) - COALESCE(SUM(b.rooms), 0) AS available_rooms
-	FROM hotels h
-	LEFT JOIN bookings b ON h.hotel_id = b.hotel_id
-	WHERE (b.date_in < ? AND b.date_out > ?) OR (b.date_in >= ? AND b.date_in <= ?) OR b.hotel_id IS NULL
-	GROUP BY h.hotel_id
-	HAVING h.hotel_id = ?;
-`, dateIn, dateIn, dateIn, dateOut, hotelID).Scan(&result)
+	SELECT (rooms - 
+		(SELECT COALESCE(SUM(rooms), 0) FROM bookings
+		WHERE ((date_in >= ? AND date_in < ?)
+		OR (date_out > ? AND date_out <= ?)
+		OR (date_in < ? AND date_out > ?))
+		AND hotel_id = ?)) 
+	AS available_rooms
+	FROM hotels WHERE hotel_id = ?;
+`, dateIn, dateOut, dateIn, dateOut, dateIn, dateOut, hotelID, hotelID).Scan(&result)
+	log.Debug("available rooms: ", result)
 
 	return result.AvailableRooms
 }
@@ -114,17 +117,17 @@ func (c *hotelClient) GetAvailableHotels(booking dto.CheckAvailability) model.Ho
 	rooms := booking.Rooms
 
 	Db.Raw(`
-	SELECT h.*
-	FROM (
-		SELECT h.hotel_id AS H_ID, AVG(h.rooms) - COALESCE(SUM(b.rooms), 0) AS availableRooms
-		FROM hotels h
-		LEFT JOIN bookings b ON h.hotel_id = b.hotel_id
-		WHERE (b.date_in < ? AND b.date_out > ?) OR (b.date_in >= ? AND b.date_in <= ?) OR b.hotel_id IS NULL
-		GROUP BY h.hotel_id
-	) AS AvailableRoomsByHotel
-	JOIN hotels h ON AvailableRoomsByHotel.H_ID = h.hotel_id
-	WHERE AvailableRoomsByHotel.availableRooms >= ?;
-`, dateIn, dateIn, dateIn, dateOut, rooms).Scan(&hotels)
+	SELECT h.*, h.rooms - COALESCE((
+		SELECT SUM(b.rooms) FROM bookings b
+		WHERE (b.date_in >= ? AND b.date_in < ?)
+			OR (b.date_out > ? AND b.date_out <= ?)
+			OR (b.date_in < ? AND b.date_out > ?)
+			AND h.hotel_id = b.hotel_id
+	), 0) AS available_rooms
+	FROM hotels h
+	GROUP BY h.hotel_id
+	HAVING available_rooms >= ?
+`, dateIn, dateOut, dateIn, dateOut, dateIn, dateOut, rooms).Preload("Photos").Preload("Amenities").Find(&hotels)
 
 	return hotels
 }
