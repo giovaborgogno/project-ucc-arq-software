@@ -4,14 +4,15 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { useContext } from 'react';
 import { UserContext } from '../../layouts/LayoutContext';
 import { checkAvailability } from "@/lib/api/hotel";
-
+import { useRouter } from "next/router";
 
 const BookForm = ({ hotel }) => {
 
     const [available, setAvailable] = useState(false)
 
     const [user, setUser] = useContext(UserContext);
-  
+    const router = useRouter()
+
     const [rooms, setRooms] = useState(1)
     const [total, setTotal] = useState(null)
 
@@ -21,22 +22,23 @@ const BookForm = ({ hotel }) => {
     });
 
     const check_availability = async () => {
-        const start_date= dates.startDate !== null ? new Date(dates.startDate).toISOString() : ""
-        const end_date= dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
+
+        const start_date = dates.startDate !== null ? new Date(dates.startDate).toISOString() : ""
+        const end_date = dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
 
         const isAvailable = await checkAvailability(rooms, start_date, end_date, hotel.hotel_id)
         console.log("isAvailable: ", isAvailable)
         setAvailable(isAvailable)
     }
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         check_availability()
-    },[])
+    }, [])
 
     useEffect(() => {
 
-         check_availability()
-    
+        check_availability()
+
         const fechaInicio = new Date(dates.startDate);
         const fechaFin = new Date(dates.endDate);
 
@@ -57,15 +59,26 @@ const BookForm = ({ hotel }) => {
     }
 
     const handleSubmit = e => {
+        const start_date = dates.startDate !== null ? new Date(dates.startDate).toISOString() : ""
+            const end_date = dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
+
         e.preventDefault()
         if (user === null) {
-            console.log("logueate bro")
+            const booking = {
+                rooms,
+                total,
+                start_date,
+                end_date,
+                hotel_id:hotel.hotel_id,
+                user,
+                hotel_title: hotel.title
+            }
+            sessionStorage.setItem('booking', JSON.stringify(booking));
+            router.push("/auth/login")
+
             return
         }
         const create_booking = async () => {
-            const start_date= dates.startDate !== null ? new Date(dates.startDate).toISOString() : ""
-            const end_date= dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
-
             await createBooking(rooms, total, start_date, end_date, hotel.hotel_id, user.user_id)
             // console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", dates.startDate,"\ndate_out: ", dates.endDate,"\nhotel_id: ", hotel.hotel_id,"\nuser_id: ", user.user_id)
         }
@@ -124,12 +137,24 @@ const BookForm = ({ hotel }) => {
 
             {
                 available ?
-                    <button
-                        type="submit"
-                        className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Book Now!
-                    </button>
+                    <>
+                        {user != null ?
+                            <button
+                                type="submit"
+                                className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                                Book Now!
+                            </button>
+                            :
+                            <button
+                                type="submit"
+                                className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                                Sign In & Book Now!
+                            </button>
+                        }
+                    </>
+
                     :
                     <button
                         type=""

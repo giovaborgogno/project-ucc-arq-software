@@ -32,7 +32,7 @@ export default function HotelsList() {
                                         <li key={hotel.hotel_id} className="flex py-6 sm:py-10">
                                             <div className="flex-shrink-0">
                                                 <img
-                                                    src={`/${hotel.photos[0].url}`}
+                                                    src={`/${hotel.photos != null ? hotel.photos[0].url : ""}`}
                                                     alt={hotel.title}
                                                     className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                                                 />

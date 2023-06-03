@@ -54,7 +54,7 @@ export default function DashboardUser({ children, title, current }) {
   return (
     <>
 
-      <div className=''>
+      <div className='container mx-auto'>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
             <Transition.Child
