@@ -17,6 +17,7 @@ import { Dialog, RadioGroup, Transition, Tab, Disclosure } from '@headlessui/rea
 import { XIcon } from '@heroicons/react/outline'
 import { StarIcon } from '@heroicons/react/solid'
 import BookForm from './BookForm'
+import Image from 'next/image'
 
 const product = {
     name: 'Basic Tee 6-Pack ',
@@ -199,7 +200,7 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                     {/* Image selector */}
                                                     <div className=" mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                                                         <Tab.List className="grid grid-cols-4 gap-6">
-                                                            {hotel.photos.map((photo) => (
+                                                            {hotel.photos != null && hotel.photos.map((photo) => (
                                                                 <Tab
                                                                     key={photo.photo_id}
                                                                     className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
@@ -225,12 +226,14 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                     </div>
 
                                                     <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
-                                                        {hotel.photos.map((photo) => (
+                                                        {hotel.photos != null && hotel.photos.map((photo) => (
                                                             <Tab.Panel key={photo.photo_id}>
-                                                                <img
+                                                                <Image
                                                                     src={`/${photo.url}`}
                                                                     alt={photo.url}
                                                                     className="w-full h-full object-center object-cover sm:rounded-lg"
+                                                                    width={1000}
+                                                                    height={1000}
                                                                     style={{ height: "30rem" }}
                                                                 />
                                                             </Tab.Panel>
