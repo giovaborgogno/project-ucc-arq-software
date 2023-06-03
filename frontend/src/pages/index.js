@@ -6,14 +6,14 @@ import MainLayout from '@/layouts/MainLayout'
 import { getHotels } from '@/lib/api/hotel'
 import { useEffect, useState } from 'react'
 
-export async function getServerSideProps(context) {
-  const hotels = await getHotels()
-  return {
-    props: {
-      hotels,
-    },
-  };
-}
+// export async function getServerSideProps(context) {
+//   const hotels = await getHotels()
+//   return {
+//     props: {
+//       hotels,
+//     },
+//   };
+// }
 
 export default function Home() {
 
