@@ -110,12 +110,13 @@ func (c *bookingClient) SearchBookingsByDatesAndHotelAndUser(hotel string, user 
 	var bookings model.Bookings
 
 	query := Db.Joins("LEFT JOIN hotels ON hotels.hotel_id = bookings.hotel_id").
-		Where(`(('' = ?) OR (hotels.hotel_id LIKE ? OR hotels.title LIKE ?))
-		AND (('' = ?) OR (bookings.user_id LIKE ?))
+		Joins("LEFT JOIN users ON users.user_id = bookings.user_id").
+		Where(`(('' = ?) OR (bookings.hotel_id LIKE ? OR hotels.title LIKE ?))
+		AND (('' = ?) OR (bookings.user_id LIKE ? OR users.user_name LIKE ?))
 		AND ((date_in >= ? AND date_in <= ?)
 		OR (date_out >= ? AND date_out <= ?)
 		OR (date_in < ? AND date_out > ?))`,
-			hotel, "%"+hotel+"%", "%"+hotel+"%", user, "%"+user+"%", dateIn, dateOut, dateIn, dateOut, dateIn, dateOut).
+			hotel, "%"+hotel+"%", "%"+hotel+"%", user, "%"+user+"%", "%"+user+"%", dateIn, dateOut, dateIn, dateOut, dateIn, dateOut).
 		Order("date_in")
 
 	result := query.Find(&bookings)

@@ -75,6 +75,22 @@ export async function insertPhoto(hotelID, file) {
     }
 }
 
+export async function insertAmenitie(amenitieData) {
+    try {
+      const res = await axios.post('/api/hotel/amenity/insert', amenitieData, { withCredentials: true });
+      if (res.status === 201) {
+        return res.data.amenitie;
+      } else {
+        console.log("res: " + res);
+        return null;
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+      console.log(errorMessage);
+      return null;
+    }
+  }
+
 export async function getAmenities() {
     try {
         const res = await axios.get('/api/hotel/amenity', { withCredentials: true })
@@ -91,6 +107,23 @@ export async function getAmenities() {
         return null
     }
 }
+
+export async function deleteAmenitie(amenitieID) {
+    try {
+      const res = await axios.delete(`/api/hotel/amenity/${amenitieID}`, { withCredentials: true });
+      if (res.status === 200) {
+        console.log('Amenitie deleted successfully');
+        return true;
+      } else {
+        console.log('Failed to delete amenitie');
+        return false;
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+      console.log(errorMessage);
+      return false;
+    }
+  }
 
 export async function associateAmenities(hotel_id, array_amenity_id) {
 

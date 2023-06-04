@@ -12,7 +12,7 @@
   }
   ```
 */
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { Dialog, RadioGroup, Transition, Tab, Disclosure } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { StarIcon } from '@heroicons/react/solid'
@@ -62,6 +62,8 @@ function classNames(...classes) {
 }
 
 export default function HotelDetail({ open, setOpen, hotel }) {
+
+
     const [selectedColor, setSelectedColor] = useState(product.colors[0])
     const [selectedSize, setSelectedSize] = useState(product.sizes[2])
 

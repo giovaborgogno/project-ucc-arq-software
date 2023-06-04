@@ -9,6 +9,9 @@ export default function SearchBar({ setBookings, admin=false }) {
   const [hotel, setHotel] = useState('')
   const OnChange = e => setHotel(e.target.value)
 
+  const [user, setUser] = useState('')
+  const OnUserChange = e => setUser(e.target.value)
+
   const [dates, setDates] = useState({
     startDate: null,
     endDate: null
@@ -26,7 +29,7 @@ export default function SearchBar({ setBookings, admin=false }) {
   const search_bookings = async () => {
     const start_date = dates.startDate !== null ? new Date(dates.startDate).toISOString() : ""
     const end_date = dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
-    const bookings = await searchBookings(hotel, start_date, end_date)
+    const bookings = await searchBookings(hotel, user, start_date, end_date)
     setBookings(bookings)
   }
 
@@ -46,7 +49,7 @@ export default function SearchBar({ setBookings, admin=false }) {
       search_bookings_me()
     }
 
-  }, [hotel, dates])
+  }, [hotel, user, dates])
 
 
 
@@ -72,6 +75,26 @@ export default function SearchBar({ setBookings, admin=false }) {
             placeholder="Hotel ID, Hotel Name"
           />
         </div>
+        {
+          admin &&
+          <>
+          <div className="relative flex items-stretch flex-grow focus-within:z-10">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <UsersIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          </div>
+          <input
+            type="text"
+            name="text"
+            id="text"
+            value={user}
+            onChange={e => OnUserChange(e)}
+            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-10 sm:text-sm border-gray-300"
+            placeholder="User ID, User Name"
+          />
+        </div>
+        
+          </>
+        }
         <div className="m-2">
           <Datepicker
             value={dates}
