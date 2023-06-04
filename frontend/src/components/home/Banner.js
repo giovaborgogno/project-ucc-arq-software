@@ -1,4 +1,18 @@
 export default function Banner() {
+  const handleScroll = (event, id) => {
+    event.preventDefault(); // Evitar el comportamiento predeterminado del enlace
+    
+    const element = document.getElementById(id);
+    
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth", // Desplazamiento suave
+        block: "start" // Desplazamiento al inicio del elemento
+      });
+    }
+  };
+
+  
     return (
       <div className="relative overflow-hidden bg-white">
         <div className="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
@@ -8,8 +22,7 @@ export default function Banner() {
                 Hotels are finally here.
               </h1>
               <p className="mt-4 text-xl text-gray-500">
-                This year, our new summer collection will shelter you from the harsh elements of a world that doesn't care
-                if you live or die.
+              Experience a haven in our new summer hotel collection, shielding you from the unforgiving world outside.
               </p>
             </div>
             <div>
@@ -81,7 +94,8 @@ export default function Banner() {
                 </div>
   
                 <a
-                  href="#"
+                  href="#hotels-list"
+                  onClick={e => handleScroll(e, "hotels-list")}
                   className="inline-block rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-center font-medium text-white hover:bg-indigo-700"
                 >
                   Book Now

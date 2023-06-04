@@ -180,6 +180,23 @@ export async function getHotels(){
     }
 }
 
+export async function getAvailableHotels(rooms, date_in, date_out){
+    try {
+        const res = await axios.get(`/api/hotel/available?rooms=${rooms}&date_in=${date_in}&date_out=${date_out}`, { withCredentials: true })
+        if (res.status === 200) {
+            return res.data.hotels
+        }
+        else {
+            console.log("res: " + res)
+            return null
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        console.log(errorMessage)
+        return null
+    }
+}
+
 export async function getHotelById(id){
     try {
         const res = await axios.get(`/api/hotel/${id}`, { withCredentials: true })

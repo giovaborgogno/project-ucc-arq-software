@@ -6,7 +6,7 @@ import { UserContext } from '../../layouts/LayoutContext';
 import { checkAvailability } from "@/lib/api/hotel";
 import { useRouter } from "next/router";
 
-const BookForm = ({ hotel }) => {
+const BookForm = ({ hotel, setDataCheck }) => {
 
     const [available, setAvailable] = useState(false)
 
@@ -50,7 +50,7 @@ const BookForm = ({ hotel }) => {
         const totalPerRoom = hotel.price_per_day * days
         const newTotal = rooms * totalPerRoom
         setTotal(newTotal)
-    }, [rooms, dates])
+    }, [rooms, dates, hotel])
 
     const handleChange = e => setRooms(e.target.value);
 
@@ -85,6 +85,16 @@ const BookForm = ({ hotel }) => {
 
         create_booking()
     }
+
+    // set data to check availability to parent component
+    useEffect(()=>{
+        setDataCheck({
+            rooms: rooms,
+            date_in: dates.startDate !== null ? new Date(dates.startDate).toISOString() : "",
+            date_out: dates.startDate !== null ? new Date(dates.endDate).toISOString() : "",
+            currentHotelId: hotel.hotel_id
+        })
+    },[dates, rooms])
 
     return (
         <form onSubmit={e => handleSubmit(e)}>

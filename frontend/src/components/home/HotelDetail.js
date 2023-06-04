@@ -18,55 +18,15 @@ import { XIcon } from '@heroicons/react/outline'
 import { StarIcon } from '@heroicons/react/solid'
 import BookForm from './BookForm'
 import Image from 'next/image'
-
-const product = {
-    name: 'Basic Tee 6-Pack ',
-    price: '$192',
-    rating: 3.9,
-    reviewCount: 117,
-    href: '#',
-    images: [
-        {
-            id: 1,
-            name: 'Angled view',
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
-            alt: 'Angled front view with bag zipped and handles upright.',
-        },
-        {
-            id: 2,
-            name: 'Angled view',
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-02.jpg',
-            alt: 'Angled front view with bag zipped and handles upright.',
-        },
-        // More images...
-    ],
-    colors: [
-        { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-        { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-        { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-    ],
-    sizes: [
-        { name: 'XXS', inStock: true },
-        { name: 'XS', inStock: true },
-        { name: 'S', inStock: true },
-        { name: 'M', inStock: true },
-        { name: 'L', inStock: true },
-        { name: 'XL', inStock: true },
-        { name: 'XXL', inStock: true },
-        { name: 'XXXL', inStock: false },
-    ],
-}
+import SuggestedHotels from './SuggestedHotels'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function HotelDetail({ open, setOpen, hotel }) {
+export default function HotelDetail({ open, setOpen, hotel, setHotel }) {
 
-
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
-    const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-
+    const [dataCheck, setDataCheck] = useState(null)
 
     return (
         <>
@@ -112,7 +72,7 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                             <img src={product.imageSrc} alt={product.imageAlt} className="object-cover object-center" />
                                         </div> */}
 
-                                                <div className="sm:col-span-8 lg:col-span-1">
+                                                <div className="sm:col-span-8 lg:col-span-1 order-1">
                                                     <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{hotel.title.toUpperCase()}</h2>
 
                                                     <section aria-labelledby="information-heading" className="mt-2">
@@ -151,7 +111,7 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                             Product options
                                                         </h3>
 
-                                                        <BookForm hotel={hotel}/>
+                                                        <BookForm hotel={hotel} setDataCheck={setDataCheck} />
 
                                                         <div className="mt-10">
                                                             <div className="flex items-center justify-between">
@@ -161,7 +121,7 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                                 </a>
                                                             </div>
 
-                                                            <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
+                                                            <RadioGroup className="mt-4">
                                                                 <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
                                                                 <div className="grid grid-cols-4 gap-4">
                                                                     {hotel.amenities && hotel.amenities.map((amenity) => (
@@ -198,7 +158,7 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                         </div>
                                                     </section>
                                                 </div>
-                                                <Tab.Group as="div" className="flex flex-col-reverse order-last md:order-first">
+                                                <Tab.Group as="div" className="flex flex-col-reverse order-2 md:order-first">
                                                     {/* Image selector */}
                                                     <div className=" mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
                                                         <Tab.List className="grid grid-cols-4 gap-6">
@@ -236,12 +196,20 @@ export default function HotelDetail({ open, setOpen, hotel }) {
                                                                     className="w-full h-full object-center object-cover sm:rounded-lg"
                                                                     width={1000}
                                                                     height={1000}
-                                                                    style={{ height: "30rem" }}
+                                                                    // style={{ height: "30rem" }}
                                                                 />
                                                             </Tab.Panel>
                                                         ))}
                                                     </Tab.Panels>
                                                 </Tab.Group>
+                                                {/* aca va la lista de sugerencias */}
+                                                <div className='sm:col-span-8 lg:col-span-2 order-3'>
+                                                    {dataCheck !== null &&
+                                                        <SuggestedHotels dataCheck={dataCheck} setHotel={setHotel} />
+                                                    }
+                                                </div>
+                                                {/* aca finaliza la lista de sugerencias */}
+
                                             </div>
                                         </div>
                                     </Dialog.Panel>

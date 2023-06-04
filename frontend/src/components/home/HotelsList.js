@@ -72,7 +72,7 @@ export default function HotelsList({ hotels }) {
 
     return (
         <>
-            <div className="bg-white">
+            <div className="bg-white" id="hotels-list">
                 <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                     <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Hotels List</h1>
                     <form className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
@@ -88,7 +88,7 @@ export default function HotelsList({ hotels }) {
                                         <li key={hotel.hotel_id} className="flex py-6 sm:py-10">
                                             <div className="flex-shrink-0">
                                                 <img
-                                                    src={`${hotel.photos != null ? hotel.photos[0].url : "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg"}`}
+                                                    src={`${hotel.photos != null ? hotel.photos[0].url : "/missing_hotel.png"}`}
                                                     alt={hotel.title}
                                                     className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                                                 />
@@ -145,7 +145,7 @@ export default function HotelsList({ hotels }) {
                 </div>
             </div>
 
-            <HotelDetail open={open} setOpen={setOpen} hotel={hotelDetail} />
+            <HotelDetail open={open} setOpen={setOpen} hotel={hotelDetail} setHotel={setHotelDetail} />
 
         </>
     )

@@ -1,9 +1,12 @@
-import { Fragment } from 'react'
+import { Fragment, useContext } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import { MenuIcon, BellIcon, XIcon } from '@heroicons/react/outline'
+import { logout } from '@/lib/api/auth'
+import { useRouter } from 'next/router'
+import { UserContext } from './LayoutContext'
 
-const user = {
+const userDefault = {
   name: 'Tom Cook',
   email: 'tom@example.com',
   imageUrl:
@@ -17,8 +20,6 @@ const navigation = [
   { name: 'Amenities', href: '/admin/amenities', current: false },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
 
@@ -27,6 +28,14 @@ function classNames(...classes) {
 }
 
 export default function DashboardAdmin({children, title, current}) {
+  const [user, setUser] = useContext(UserContext);
+  const router = useRouter()
+
+  const logOut = ()=>{
+    logout()
+    setUser(null)
+    router.push("/auth/login")
+  }
   return (
     <>
       {/*
@@ -88,7 +97,7 @@ export default function DashboardAdmin({children, title, current}) {
                         <div>
                           <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                            <img className="h-8 w-8 rounded-full" src={userDefault.imageUrl} alt="" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -105,6 +114,7 @@ export default function DashboardAdmin({children, title, current}) {
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
                                   <Link
+                                  onClick={logOut}
                                     href={item.href}
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
@@ -157,11 +167,11 @@ export default function DashboardAdmin({children, title, current}) {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                      <img className="h-10 w-10 rounded-full" src={userDefault.imageUrl} alt="" />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                      <div className="text-base font-medium leading-none text-white">{userDefault.name}</div>
+                      <div className="text-sm font-medium leading-none text-gray-400">{userDefault.email}</div>
                     </div>
                     <button
                       type="button"
@@ -176,6 +186,7 @@ export default function DashboardAdmin({children, title, current}) {
                       <Disclosure.Button
                         key={item.name}
                         as="a"
+                        onClick={logOut}
                         href={item.href}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
