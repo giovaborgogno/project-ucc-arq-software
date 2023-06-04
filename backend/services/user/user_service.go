@@ -53,7 +53,7 @@ func (s *userService) GetUserById(id uuid.UUID) (dto.UserResponse, e.ApiError) {
 func (s *userService) GetUsers() (dto.UserResponses, e.ApiError) {
 	users := userClient.UserClient.GetUsers()
 	if len(users) == 0 {
-		return dto.UserResponses{}, e.NewInternalServerApiError("Error geting users from database", errors.New("Error in database"))
+		return dto.UserResponses{}, e.NewInternalServerApiError("Error getting users from database", errors.New("Error in database"))
 	}
 
 	var usersDto []dto.UserResponse

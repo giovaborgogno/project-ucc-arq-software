@@ -16,6 +16,7 @@ type amenitieClientInterface interface {
 	InsertAmenitie(amenitie model.Amenitie) model.Amenitie
 	UpdateAmenitie(amenitie model.Amenitie) model.Amenitie
 	DeleteAmenitie(id string) error
+	LoadAmenities(id string, Amenities model.Amenities) error
 }
 
 var (
@@ -44,7 +45,7 @@ func (c *amenitieClient) GetAmenities() model.Amenities {
 		log.Error("")
 		return model.Amenities{}
 	}
-	log.Debug("amenities: ", amenities)
+	log.Debug("Amenities: ", amenities)
 
 	return amenities
 }
@@ -77,5 +78,24 @@ func (c *amenitieClient) DeleteAmenitie(id string) error {
 		log.Error(result.Error.Error())
 		return errors.New(result.Error.Error())
 	}
+	return nil
+}
+
+func (c *amenitieClient) LoadAmenities(id string, Amenities model.Amenities) error {
+	var hotel model.Hotel
+	result := Db.First(&hotel, "hotel_id = ?", id)
+	if result.Error != nil {
+		log.Error(result.Error.Error())
+		return errors.New(result.Error.Error())
+	}
+
+	for _, amenity := range Amenities {
+		result := Db.Model(&hotel).Association("Amenities").Append(&amenity)
+		if result.Error != nil {
+			log.Error(result.Error.Error())
+			return errors.New(result.Error.Error())
+		}
+	}
+
 	return nil
 }

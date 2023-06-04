@@ -11,7 +11,7 @@ func HotelRoute(hotel *gin.RouterGroup) {
 	hotel.GET("/", hotelController.GetHotels)
 	hotel.GET("/:hotelID", hotelController.GetHotelById)
 	hotel.GET("/available", hotelController.GetAvailableHotels)
-	hotel.GET("/available/:hotelID", hotelController.CheckAvailableHotelById)
+	hotel.GET("/availableRooms", hotelController.GetAvailableRooms)
 
 	// Only admin:
 	hotel.POST("/", middlewareController.CheckAdmin(), hotelController.InsertHotel)
@@ -30,6 +30,7 @@ func HotelRoute(hotel *gin.RouterGroup) {
 
 	// Only admin:
 	amenitie.POST("/", middlewareController.CheckAdmin(), hotelController.InsertAmenitie)
-	amenitie.PUT("/:amenitieID", middlewareController.CheckAdmin(), hotelController.ChangeAmenitie)
+	amenitie.PUT("/:amenitieID", middlewareController.CheckAdmin(), hotelController.UpdateAmenitie)
 	amenitie.DELETE("/:amenitieID", middlewareController.CheckAdmin(), hotelController.DeleteAmenitie)
+	amenitie.POST("/loadamenities/:HotelID", middlewareController.CheckAdmin(), hotelController.LoadAmenities)
 }

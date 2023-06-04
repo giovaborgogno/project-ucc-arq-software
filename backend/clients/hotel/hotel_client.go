@@ -2,6 +2,7 @@ package hotelClient
 
 import (
 	"errors"
+	"mvc-go/dto"
 	"mvc-go/model"
 
 	"github.com/jinzhu/gorm"
@@ -16,6 +17,8 @@ type hotelClientInterface interface {
 	InsertHotel(hotel model.Hotel) model.Hotel
 	UpdateHotel(hotel model.Hotel) model.Hotel
 	DeleteHotel(id string) error
+	GetAvailableRooms(booking dto.CheckAvailability) float64
+	GetAvailableHotels(booking dto.CheckAvailability) model.Hotels
 }
 
 var (
@@ -31,7 +34,7 @@ var Db *gorm.DB
 func (c *hotelClient) GetHotelById(id string) model.Hotel {
 	var hotel model.Hotel
 
-	Db.First(&hotel, "hotel_id = ?", id)
+	Db.Preload("Photos").Preload("Amenities").First(&hotel, "hotel_id = ?", id)
 	log.Debug("Hotel: ", hotel)
 
 	return hotel
@@ -39,7 +42,7 @@ func (c *hotelClient) GetHotelById(id string) model.Hotel {
 
 func (c *hotelClient) GetHotels() model.Hotels {
 	var hotels model.Hotels
-	result := Db.Find(&hotels)
+	result := Db.Preload("Photos").Preload("Amenities").Find(&hotels)
 	if result.Error != nil {
 		log.Error("")
 		return model.Hotels{}
@@ -78,4 +81,53 @@ func (c *hotelClient) DeleteHotel(id string) error {
 		return errors.New(result.Error.Error())
 	}
 	return nil
+}
+
+func (c *hotelClient) GetAvailableRooms(booking dto.CheckAvailability) float64 {
+	type Result struct {
+		AvailableRooms float64
+	}
+
+	var result Result
+
+	dateIn := booking.DateIn.Format("2006-01-02")
+	dateOut := booking.DateOut.Format("2006-01-02")
+	hotelID := booking.HotelID
+
+	Db.Raw(`
+	SELECT (rooms - 
+		(SELECT COALESCE(SUM(rooms), 0) FROM bookings
+		WHERE ((date_in >= ? AND date_in < ?)
+		OR (date_out > ? AND date_out <= ?)
+		OR (date_in < ? AND date_out > ?))
+		AND hotel_id = ?)) 
+	AS available_rooms
+	FROM hotels WHERE hotel_id = ?;
+`, dateIn, dateOut, dateIn, dateOut, dateIn, dateOut, hotelID, hotelID).Scan(&result)
+	log.Debug("available rooms: ", result)
+
+	return result.AvailableRooms
+}
+
+func (c *hotelClient) GetAvailableHotels(booking dto.CheckAvailability) model.Hotels {
+	var hotels model.Hotels
+
+	dateIn := booking.DateIn.Format("2006-01-02")
+	dateOut := booking.DateOut.Format("2006-01-02")
+	rooms := booking.Rooms
+
+	Db.Raw(`
+	SELECT h.*, h.rooms - COALESCE((
+		SELECT SUM(b.rooms) FROM bookings b
+		WHERE (b.date_in >= ? AND b.date_in < ?)
+			OR (b.date_out > ? AND b.date_out <= ?)
+			OR (b.date_in < ? AND b.date_out > ?)
+			AND h.hotel_id = b.hotel_id
+	), 0) AS available_rooms
+	FROM hotels h
+	GROUP BY h.hotel_id
+	HAVING available_rooms >= ?
+`, dateIn, dateOut, dateIn, dateOut, dateIn, dateOut, rooms).Preload("Photos").Preload("Amenities").Find(&hotels)
+
+	return hotels
 }

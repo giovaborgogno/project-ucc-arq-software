@@ -8,7 +8,7 @@ import { useContext, useEffect } from "react"
 const DashboardBookingsPage = () => {
   const [user, setUser] = useContext(UserContext);  
   const router = useRouter()
-
+  
   useEffect(()=>{
 
     if(user === null)
