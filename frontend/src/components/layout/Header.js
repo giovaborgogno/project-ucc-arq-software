@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useState } from 'react'
-import { useContext } from 'react';
-import { UserContext } from '../../layouts/LayoutContext';
-import { Popover, Transition } from '@headlessui/react'
+import { Fragment, useEffect, useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "../../layouts/LayoutContext";
+import { Popover, Transition } from "@headlessui/react";
 import {
   BookmarkAltIcon,
   BriefcaseIcon,
@@ -20,87 +20,97 @@ import {
   UserGroupIcon,
   ViewGridIcon,
   XIcon,
-} from '@heroicons/react/outline'
-import { ChevronDownIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
-import { logout } from '@/lib/api/auth';
-import { useRouter } from 'next/router';
+} from "@heroicons/react/outline";
+import { ChevronDownIcon } from "@heroicons/react/solid";
+import Link from "next/link";
+import { logout } from "@/lib/api/auth";
+import { useRouter } from "next/router";
 
 const solutions = [
   {
-    name: 'Analytics',
-    description: 'Get a better understanding of where your traffic is coming from.',
-    href: '#',
+    name: "Analytics",
+    description:
+      "Get a better understanding of where your traffic is coming from.",
+    href: "#",
     icon: ChartBarIcon,
   },
   {
-    name: 'Engagement',
-    description: 'Speak directly to your customers in a more meaningful way.',
-    href: '#',
+    name: "Engagement",
+    description: "Speak directly to your customers in a more meaningful way.",
+    href: "#",
     icon: CursorClickIcon,
   },
-  { name: 'Security', description: "Your customers' data will be safe and secure.", href: '#', icon: ShieldCheckIcon },
   {
-    name: 'Integrations',
+    name: "Security",
+    description: "Your customers' data will be safe and secure.",
+    href: "#",
+    icon: ShieldCheckIcon,
+  },
+  {
+    name: "Integrations",
     description: "Connect with third-party tools that you're already using.",
-    href: '#',
+    href: "#",
     icon: ViewGridIcon,
   },
-]
+];
 const callsToAction = [
-  { name: 'Watch Demo', href: '#', icon: PlayIcon },
-  { name: 'View All Products', href: '#', icon: CheckCircleIcon },
-  { name: 'Contact Sales', href: '#', icon: PhoneIcon },
-]
+  { name: "Watch Demo", href: "#", icon: PlayIcon },
+  { name: "View All Products", href: "#", icon: CheckCircleIcon },
+  { name: "Contact Sales", href: "#", icon: PhoneIcon },
+];
 const company = [
-  { name: 'About', href: '#', icon: InformationCircleIcon },
-  { name: 'Customers', href: '#', icon: OfficeBuildingIcon },
-  { name: 'Press', href: '#', icon: NewspaperIcon },
-  { name: 'Careers', href: '#', icon: BriefcaseIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
+  { name: "About", href: "#", icon: InformationCircleIcon },
+  { name: "Customers", href: "#", icon: OfficeBuildingIcon },
+  { name: "Press", href: "#", icon: NewspaperIcon },
+  { name: "Careers", href: "#", icon: BriefcaseIcon },
+  { name: "Privacy", href: "#", icon: ShieldCheckIcon },
+];
 const resources = [
-  { name: 'Community', href: '#', icon: UserGroupIcon },
-  { name: 'Partners', href: '#', icon: GlobeAltIcon },
-  { name: 'Guides', href: '#', icon: BookmarkAltIcon },
-  { name: 'Webinars', href: '#', icon: DesktopComputerIcon },
-]
+  { name: "Community", href: "#", icon: UserGroupIcon },
+  { name: "Partners", href: "#", icon: GlobeAltIcon },
+  { name: "Guides", href: "#", icon: BookmarkAltIcon },
+  { name: "Webinars", href: "#", icon: DesktopComputerIcon },
+];
 const blogPosts = [
   {
     id: 1,
-    name: 'Boost your conversion rate',
-    href: '#',
-    preview: 'Eget ullamcorper ac ut vulputate fames nec mattis pellentesque elementum. Viverra tempor id mus.',
+    name: "Boost your conversion rate",
+    href: "#",
+    preview:
+      "Eget ullamcorper ac ut vulputate fames nec mattis pellentesque elementum. Viverra tempor id mus.",
     imageUrl:
-      'https://images.unsplash.com/photo-1558478551-1a378f63328e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2849&q=80',
+      "https://images.unsplash.com/photo-1558478551-1a378f63328e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2849&q=80",
   },
   {
     id: 2,
-    name: 'How to use search engine optimization to drive traffic to your site',
-    href: '#',
-    preview: 'Eget ullamcorper ac ut vulputate fames nec mattis pellentesque elementum. Viverra tempor id mus.',
+    name: "How to use search engine optimization to drive traffic to your site",
+    href: "#",
+    preview:
+      "Eget ullamcorper ac ut vulputate fames nec mattis pellentesque elementum. Viverra tempor id mus.",
     imageUrl:
-      'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2300&q=80',
+      "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2300&q=80",
   },
-]
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-
   const [user, setUser] = useContext(UserContext);
-  const router = useRouter()
+  const router = useRouter();
 
   const logoutHandler = () => {
-    logout()
-    setUser(null)
-    router.push("/auth/login")
-  }
+    logout();
+    setUser(null);
+    router.push("/auth/login");
+  };
   return (
     <Popover className="relative bg-white">
-      <div className="absolute inset-0 shadow z-30 pointer-events-none" aria-hidden="true" />
+      <div
+        className="absolute inset-0 shadow z-30 pointer-events-none"
+        aria-hidden="true"
+      />
       <div className="relative z-20">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-5 sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-10">
           <div>
@@ -196,15 +206,18 @@ export default function Header() {
                   </>
                 )}
               </Popover> */}
-              <Link href="/" className="text-base font-medium text-gray-500 hover:text-gray-900">
+              <Link
+                href="/"
+                className="text-base font-medium text-gray-500 hover:text-gray-900">
                 Home
               </Link>
-              <Link href="/dashboard" className="text-base font-medium text-gray-500 hover:text-gray-900">
+              <Link
+                href="/dashboard"
+                className="text-base font-medium text-gray-500 hover:text-gray-900">
                 Dashboard
               </Link>
               <div className="text-base font-medium text-gray-500 hover:text-gray-900">
                 {user != null ? <>{user.first_name}</> : <></>}
-
               </div>
               {/* <Popover>
                 {({ open }) => (
@@ -311,39 +324,38 @@ export default function Header() {
             </Popover.Group>
 
             <div className="flex items-center md:ml-12">
-              {user != null && user != undefined ?
+              {user != null && user != undefined ? (
                 <>
-                {user.role === "admin" ? 
-                <Link
-                href="/admin/users"
-                className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-              >
-                Admin Panel
-              </Link>
-              :
-              <></>
-                }
+                  {user.role === "admin" ? (
+                    <Link
+                      href="/admin/users"
+                      className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                      Admin Panel
+                    </Link>
+                  ) : (
+                    <></>
+                  )}
 
                   <button
                     onClick={logoutHandler}
-                    className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                  >
+                    className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                     Log out
                   </button>
-                </> :
+                </>
+              ) : (
                 <>
-                  <Link href="/auth/login" className="text-base font-medium text-gray-500 hover:text-gray-900">
+                  <Link
+                    href="/auth/login"
+                    className="text-base font-medium text-gray-500 hover:text-gray-900">
                     Sign in
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                  >
+                    className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                     Sign up
                   </Link>
                 </>
-              }
-
+              )}
             </div>
           </div>
         </div>
@@ -356,12 +368,10 @@ export default function Header() {
         enterTo="opacity-100 scale-100"
         leave="duration-100 ease-in"
         leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
+        leaveTo="opacity-0 scale-95">
         <Popover.Panel
           focus
-          className="absolute z-30 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
-        >
+          className="absolute z-30 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
           <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
             <div className="pt-5 pb-6 px-5 sm:pb-8">
               <div className="flex items-center justify-between">
@@ -386,18 +396,21 @@ export default function Header() {
                       <a
                         key={item.name}
                         href={item.href}
-                        className="-m-3 flex items-center p-3 rounded-lg hover:bg-gray-50"
-                      >
+                        className="-m-3 flex items-center p-3 rounded-lg hover:bg-gray-50">
                         <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-indigo-500 text-white sm:h-12 sm:w-12">
                           <item.icon className="h-6 w-6" aria-hidden="true" />
                         </div>
-                        <div className="ml-4 text-base font-medium text-gray-900">{item.name}</div>
+                        <div className="ml-4 text-base font-medium text-gray-900">
+                          {item.name}
+                        </div>
                       </a>
                     ))}
                   </div>
                   <div className="mt-8 text-base">
-                    <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                      {' '}
+                    <a
+                      href="#"
+                      className="font-medium text-indigo-600 hover:text-indigo-500">
+                      {" "}
                       View all products <span aria-hidden="true">&rarr;</span>
                     </a>
                   </div>
@@ -406,11 +419,15 @@ export default function Header() {
             </div>
             <div className="py-6 px-5">
               <div className="grid grid-cols-2 gap-4">
-                <Link href="/" className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700">
+                <Link
+                  href="/"
+                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700">
                   Home
                 </Link>
 
-                <Link href="/dashboard" className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700">
+                <Link
+                  href="/dashboard"
+                  className="rounded-md text-base font-medium text-gray-900 hover:text-gray-700">
                   Dashboard
                 </Link>
 
@@ -433,13 +450,14 @@ export default function Header() {
               <div className="mt-6">
                 <Link
                   href="/auth/register"
-                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                >
+                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                   Sign up
                 </Link>
                 <p className="mt-6 text-center text-base font-medium text-gray-500">
-                  Existing customer?{' '}
-                  <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-500">
+                  Existing customer?{" "}
+                  <Link
+                    href="/auth/login"
+                    className="text-indigo-600 hover:text-indigo-500">
                     Sign in
                   </Link>
                 </p>
@@ -449,5 +467,5 @@ export default function Header() {
         </Popover.Panel>
       </Transition>
     </Popover>
-  )
+  );
 }

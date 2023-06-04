@@ -1,6 +1,5 @@
-
-import MainLayout from '@/layouts/MainLayout'
-import Login from '@/components/auth/Login'
+import MainLayout from "@/layouts/MainLayout";
+import Login from "@/components/auth/Login";
 export default function LoginPage() {
   return (
     <>
@@ -8,5 +7,5 @@ export default function LoginPage() {
         <Login />
       </MainLayout>
     </>
-  )
+  );
 }

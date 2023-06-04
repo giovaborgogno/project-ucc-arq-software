@@ -1,6 +1,5 @@
-
-import ResetPassword from '@/components/auth/ResetPassword'
-import MainLayout from '@/layouts/MainLayout'
+import ResetPassword from "@/components/auth/ResetPassword";
+import MainLayout from "@/layouts/MainLayout";
 export default function ResetPass() {
   return (
     <>
@@ -8,5 +7,5 @@ export default function ResetPass() {
         <ResetPassword />
       </MainLayout>
     </>
-  )
+  );
 }

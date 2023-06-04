@@ -1,19 +1,25 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { PaperClipIcon } from '@heroicons/react/solid'
+import { PaperClipIcon } from "@heroicons/react/solid";
 
-export default function DashboardUserProfile({userdata}) {
+export default function DashboardUserProfile({ userdata }) {
   return (
     <>
       <div>
-        <h3 className="text-lg leading-6 font-medium text-gray-900">Applicant Information</h3>
-        <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+        <h3 className="text-lg leading-6 font-medium text-gray-900">
+          Applicant Information
+        </h3>
+        <p className="mt-1 max-w-2xl text-sm text-gray-500">
+          Personal details and application.
+        </p>
       </div>
       <div className="mt-5 border-t border-gray-200">
         <dl className="divide-y divide-gray-200">
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
             <dt className="text-sm font-medium text-gray-500">Full name</dt>
             <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <span className="flex-grow">{userdata.first_name} {userdata.last_name}</span>
+              <span className="flex-grow">
+                {userdata.first_name} {userdata.last_name}
+              </span>
             </dd>
           </div>
           <div className="py-4 sm:grid sm:py-5 sm:grid-cols-3 sm:gap-4">
@@ -43,5 +49,5 @@ export default function DashboardUserProfile({userdata}) {
         </dl>
       </div>
     </>
-  )
+  );
 }

@@ -1,6 +1,5 @@
-
-import ResetPasswordConfirm from '@/components/auth/ResetPasswordConfirm'
-import MainLayout from '@/layouts/MainLayout'
+import ResetPasswordConfirm from "@/components/auth/ResetPasswordConfirm";
+import MainLayout from "@/layouts/MainLayout";
 export default function ResetPassVerify() {
   return (
     <>
@@ -8,5 +7,5 @@ export default function ResetPassVerify() {
         <ResetPasswordConfirm />
       </MainLayout>
     </>
-  )
+  );
 }

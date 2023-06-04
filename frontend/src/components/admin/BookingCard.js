@@ -35,18 +35,15 @@
 //   ]
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function BookingCard({ product, person }) {
   return (
     <div className="bg-white">
       <div className="max-w-7xl mx-auto sm:px-6  lg:px-8">
-
         <div className="text-sm border-t pt-4 border-gray-200 mt-2 pb-5 sm:flex sm:justify-between sm:items-center">
           <div className="sm:flex items-center gap-4">
-
-
             <dl className="flex mb-2">
               <dt className="text-gray-500">Order number&nbsp;</dt>
               <dd className="font-medium text-gray-900">W086438695</dd>
@@ -61,15 +58,25 @@ export default function BookingCard({ product, person }) {
               </dd>
             </dl>
             <div className="flex gap-x-4">
-              <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={person.imageUrl} alt="" />
+              <img
+                className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                src={person.imageUrl}
+                alt=""
+              />
               <div className="min-w-0 flex-auto">
-                <p className="text-sm font-semibold leading-6 text-gray-900">{person.name}</p>
-                <p className="mt-1 truncate text-xs leading-5 text-gray-500">{person.email}</p>
+                <p className="text-sm font-semibold leading-6 text-gray-900">
+                  {person.name}
+                </p>
+                <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                  {person.email}
+                </p>
               </div>
             </div>
           </div>
           <div className="mt-4 sm:mt-0">
-            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <a
+              href="#"
+              className="font-medium text-indigo-600 hover:text-indigo-500">
               View invoice<span aria-hidden="true"> &rarr;</span>
             </a>
           </div>
@@ -81,24 +88,31 @@ export default function BookingCard({ product, person }) {
           <div className="space-y-24">
             <div
               key={product.id}
-              className="grid grid-cols-1 text-sm sm:grid-rows-1 sm:grid-cols-12 sm:gap-x-6 md:gap-x-8 lg:gap-x-8"
-            >
+              className="grid grid-cols-1 text-sm sm:grid-rows-1 sm:grid-cols-12 sm:gap-x-6 md:gap-x-8 lg:gap-x-8">
               <div className="sm:col-span-4 md:col-span-3 md:row-end-2 md:row-span-2">
                 <div className="aspect-w-1 aspect-h-1 bg-gray-50 rounded-lg overflow-hidden">
-                  <img src={product.imageSrc} alt={product.imageAlt} className="object-center object-cover" />
+                  <img
+                    src={product.imageSrc}
+                    alt={product.imageAlt}
+                    className="object-center object-cover"
+                  />
                 </div>
               </div>
               <div className="mt-6 sm:col-span-9 sm:mt-0 md:row-end-1">
                 <h3 className="text-lg font-medium text-gray-900">
                   <a href={product.href}>{product.name}</a>
                 </h3>
-                <p className="font-medium text-gray-900 mt-1">{product.price}</p>
+                <p className="font-medium text-gray-900 mt-1">
+                  {product.price}
+                </p>
                 <p className="text-gray-500 mt-3">{product.description}</p>
               </div>
               <div className="sm:col-span-12 md:col-span-9">
                 <dl className="grid grid-cols-1 gap-y-8  py-8 border-gray-200 sm:grid-cols-2 sm:gap-x-6 sm:py-6 md:py-10">
                   <div>
-                    <dt className="font-medium text-gray-900">Delivery address</dt>
+                    <dt className="font-medium text-gray-900">
+                      Delivery address
+                    </dt>
                     <dd className="mt-3 text-gray-500">
                       <span className="block">{product.address[0]}</span>
                       <span className="block">{product.address[1]}</span>
@@ -106,23 +120,25 @@ export default function BookingCard({ product, person }) {
                     </dd>
                   </div>
                   <div>
-                    <dt className="font-medium text-gray-900">Shipping updates</dt>
+                    <dt className="font-medium text-gray-900">
+                      Shipping updates
+                    </dt>
                     <dd className="mt-3 text-gray-500 space-y-3">
                       <p>{product.email}</p>
                       <p>{product.phone}</p>
-                      <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
+                      <button
+                        type="button"
+                        className="font-medium text-indigo-600 hover:text-indigo-500">
                         Edit
                       </button>
                     </dd>
                   </div>
                 </dl>
-
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,5 @@
-
-import Register from '@/components/auth/Register'
-import MainLayout from '@/layouts/MainLayout'
+import Register from "@/components/auth/Register";
+import MainLayout from "@/layouts/MainLayout";
 export default function RegisterPage() {
   return (
     <>
@@ -8,5 +7,5 @@ export default function RegisterPage() {
         <Register />
       </MainLayout>
     </>
-  )
+  );
 }

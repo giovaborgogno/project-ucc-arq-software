@@ -2,12 +2,11 @@ import { login } from "@/lib/api/auth";
 import { getMe } from "@/lib/api/user";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Navigate } from 'react-router'
-import { useContext } from 'react';
-import { UserContext } from '../../layouts/LayoutContext';
+import { Navigate } from "react-router";
+import { useContext } from "react";
+import { UserContext } from "../../layouts/LayoutContext";
 import Banner from "./Banner";
 import { createBooking } from "@/lib/api/booking";
-
 
 /*
   This example requires some changes to your config:
@@ -24,70 +23,67 @@ import { createBooking } from "@/lib/api/booking";
   ```
 */
 export default function Login() {
-
-  const [booking, setBooking] = useState(null)
+  const [booking, setBooking] = useState(null);
 
   useEffect(() => {
-    const booking_on_storage = JSON.parse(sessionStorage.getItem('booking'))
-    setBooking(booking_on_storage)
+    const booking_on_storage = JSON.parse(sessionStorage.getItem("booking"));
+    setBooking(booking_on_storage);
+  }, []);
 
-  }, [])
-
-  const router = useRouter()
-  const [navigate, setNavigate] = useState(false)
-  const [userPage, setUserPage] = useState(null)
+  const router = useRouter();
+  const [navigate, setNavigate] = useState(false);
+  const [userPage, setUserPage] = useState(null);
 
   const [user, setUser] = useContext(UserContext);
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  })
+    email: "",
+    password: "",
+  });
 
-  const {
-    email,
-    password,
-  } = formData;
+  const { email, password } = formData;
 
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     await login(email, password);
-    const userMe = await getme()
+    const userMe = await getme();
 
-    if (booking != null && userMe != null){
-      const {rooms, total, start_date, end_date, hotel_id} = booking
+    if (booking != null && userMe != null) {
+      const { rooms, total, start_date, end_date, hotel_id } = booking;
       const create_booking = async () => {
-        await createBooking(rooms, total, start_date, end_date, hotel_id, userMe.user_id)
+        await createBooking(
+          rooms,
+          total,
+          start_date,
+          end_date,
+          hotel_id,
+          userMe.user_id
+        );
         // console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", start_date,"\ndate_out: ", end_date,"\nhotel_id: ", hotel_id,"\nuser_id: ", userMe.user_id)
-        sessionStorage.removeItem('booking');
+        sessionStorage.removeItem("booking");
+      };
 
+      create_booking();
     }
-  
-    create_booking()
-    }
-    
-  }
-
+  };
 
   const getme = async () => {
-    const userMe = await getMe()
-    setUser(userMe)
-    setUserPage(userMe)
-    return userMe
-  }
+    const userMe = await getMe();
+    setUser(userMe);
+    setUserPage(userMe);
+    return userMe;
+  };
 
   if (userPage != null) {
     router.push("/");
   }
 
-
   return (
     <>
-    {booking !== null && 
-      <Banner booking={booking} setBooking={setBooking}/>
-    }
+      {booking !== null && <Banner booking={booking} setBooking={setBooking} />}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -101,9 +97,15 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={e => onSubmit(e)} className="space-y-6" action="#" method="POST">
+          <form
+            onSubmit={(e) => onSubmit(e)}
+            className="space-y-6"
+            action="#"
+            method="POST">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
               </label>
               <div className="mt-2">
@@ -111,7 +113,7 @@ export default function Login() {
                   id="email"
                   name="email"
                   value={email}
-                  onChange={e => onChange(e)}
+                  onChange={(e) => onChange(e)}
                   type="email"
                   autoComplete="email"
                   required
@@ -122,11 +124,15 @@ export default function Login() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium leading-6 text-gray-900">
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="/auth/reset-pass" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  <a
+                    href="/auth/reset-pass"
+                    className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Forgot password?
                   </a>
                 </div>
@@ -136,7 +142,7 @@ export default function Login() {
                   id="password"
                   name="password"
                   value={password}
-                  onChange={e => onChange(e)}
+                  onChange={(e) => onChange(e)}
                   type="password"
                   autoComplete="current-password"
                   required
@@ -148,16 +154,13 @@ export default function Login() {
             <div>
               <button
                 type="submit"
-
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Sign in
               </button>
             </div>
           </form>
-
         </div>
       </div>
     </>
-  )
+  );
 }

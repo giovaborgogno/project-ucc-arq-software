@@ -4,23 +4,26 @@ export default async function handler(req, res) {
   try {
     const { hotelID } = req.query;
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/api/hotel/amenitie/loadamenities/${hotelID}`, {
-      method: 'POST',
-      body: JSON.stringify(req.body),
-      headers: {
-        ...req.headers.JSON,
-        'Cookie': req.headers.cookie || ''
-      },
-      credentials: 'include',
-    });
-    let data
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL_API}/api/hotel/amenitie/loadamenities/${hotelID}`,
+      {
+        method: "POST",
+        body: JSON.stringify(req.body),
+        headers: {
+          ...req.headers.JSON,
+          Cookie: req.headers.cookie || "",
+        },
+        credentials: "include",
+      }
+    );
+    let data;
     try {
-      data = await response.json()
+      data = await response.json();
     } catch (error) {
-      data = ""
+      data = "";
     }
     res.status(response.status).json(data);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }

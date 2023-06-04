@@ -1,6 +1,6 @@
-import CustomToastContainer from '@/components/alert/Alert'
-import LayoutContext from '@/layouts/LayoutContext'
-import '@/styles/globals.css'
+import CustomToastContainer from "@/components/alert/Alert";
+import LayoutContext from "@/layouts/LayoutContext";
+import "@/styles/globals.css";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -8,5 +8,5 @@ export default function App({ Component, pageProps }) {
       <Component {...pageProps} />
       <CustomToastContainer />
     </LayoutContext>
-  )
+  );
 }

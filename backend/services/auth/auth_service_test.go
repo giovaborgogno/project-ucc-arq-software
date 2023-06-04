@@ -30,7 +30,6 @@ TestResetPasswordConfirmErrorPasswordsDontMatch
 TestResetPasswordConfirmErrorHashingPassword
 TestResetPasswordConfirmErrorInvalidCode
 TestResetPasswordConfirmErrorUpdatingUser
-
 */
 package authService
 
@@ -672,7 +671,7 @@ func TestResetPasswordErrorUpdatingUser(t *testing.T) {
 	assert.Equal(t, "Error generating reset code", err.Message())
 }
 
-//  Tests for ResetPasswordConfirm
+// Tests for ResetPasswordConfirm
 func TestResetPasswordConfirm(t *testing.T) {
 	initTestClient()
 	mockClient := userClient.UserClient.(*userClient.UserMockClient)
