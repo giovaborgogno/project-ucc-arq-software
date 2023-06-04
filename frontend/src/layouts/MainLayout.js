@@ -9,7 +9,7 @@ export default function MainLayout({title, children}){
 
             <CustomHead title={title} />
             <Header/>
-            <main className='container mx-auto'>
+            <main className=''>
                 {children}
             </main>
             <Footer/>

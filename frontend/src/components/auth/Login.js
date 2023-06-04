@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { Navigate } from 'react-router'
 import { useContext } from 'react';
 import { UserContext } from '../../layouts/LayoutContext';
+import Banner from "./Banner";
+import { createBooking } from "@/lib/api/booking";
 
 
 /*
@@ -22,11 +24,20 @@ import { UserContext } from '../../layouts/LayoutContext';
   ```
 */
 export default function Login() {
+
+  const [booking, setBooking] = useState(null)
+
+  useEffect(() => {
+    const booking_on_storage = JSON.parse(sessionStorage.getItem('booking'))
+    setBooking(booking_on_storage)
+
+  }, [])
+
   const router = useRouter()
   const [navigate, setNavigate] = useState(false)
   const [userPage, setUserPage] = useState(null)
 
-  const [ user, setUser ] = useContext(UserContext);
+  const [user, setUser] = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -43,32 +54,40 @@ export default function Login() {
   const onSubmit = async e => {
     e.preventDefault();
     await login(email, password);
-    await getme()
+    const userMe = await getme()
+
+    if (booking != null && userMe != null){
+      const {rooms, total, start_date, end_date, hotel_id} = booking
+      const create_booking = async () => {
+        await createBooking(rooms, total, start_date, end_date, hotel_id, userMe.user_id)
+        // console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", start_date,"\ndate_out: ", end_date,"\nhotel_id: ", hotel_id,"\nuser_id: ", userMe.user_id)
+        sessionStorage.removeItem('booking');
+
+    }
+  
+    create_booking()
+    }
+    
   }
 
-  
-   const getme = async () => {
+
+  const getme = async () => {
     const userMe = await getMe()
     setUser(userMe)
     setUserPage(userMe)
-
+    return userMe
   }
 
-  if (userPage != null){
+  if (userPage != null) {
     router.push("/");
   }
-    
+
 
   return (
     <>
-      {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-white">
-          <body class="h-full">
-          ```
-        */}
+    {booking !== null && 
+      <Banner booking={booking} setBooking={setBooking}/>
+    }
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -82,7 +101,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={e=>onSubmit(e)} className="space-y-6" action="#" method="POST">
+          <form onSubmit={e => onSubmit(e)} className="space-y-6" action="#" method="POST">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
