@@ -20,6 +20,14 @@ import { useEffect, useState } from "react"
       get_hotel_by_id()
     }, [])
 
+    useEffect(() => {
+      const get_hotel_by_id = async () => {
+        const data = await getHotelById(booking.hotel_id)
+        setHotel(data)
+      }
+      get_hotel_by_id()
+    }, [booking])
+
     return (
       <div className="bg-white rounded-md shadow-md p-4 mb-4">
         <div className="flex justify-between mb-4">
