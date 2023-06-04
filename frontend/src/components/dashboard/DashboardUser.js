@@ -3,7 +3,8 @@ import { PaperClipIcon } from '@heroicons/react/solid'
 
 export default function DashboardUserProfile({userdata}) {
   return (
-    <>
+    <>{userdata !== null && 
+      <>
       <div>
         <h3 className="text-lg leading-6 font-medium text-gray-900">Applicant Information</h3>
         <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
@@ -42,6 +43,9 @@ export default function DashboardUserProfile({userdata}) {
           </div>
         </dl>
       </div>
+      </>
+    }
+      
     </>
   )
 }

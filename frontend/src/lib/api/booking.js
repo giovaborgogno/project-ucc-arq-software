@@ -60,7 +60,7 @@ export async function searchBookingsMe(hotel, date_in, date_out){
     }
 }
 
-export async function searchBookings(hotel, date_in, date_out){
+export async function searchBookings(hotel,user, date_in, date_out){
     const config = {
         headers:{
             'Cache-Control': 'no-cache'
@@ -68,7 +68,7 @@ export async function searchBookings(hotel, date_in, date_out){
     }
 
     try {
-        const res = await axios.get(`/api/booking/search?hotel=${hotel}&date_in=${date_in}&date_out=${date_out}`,{withCredentials: true})
+        const res = await axios.get(`/api/booking/search?hotel=${hotel}&user=${user}&date_in=${date_in}&date_out=${date_out}`,{withCredentials: true})
         if (res.status === 200) {
             return res.data.bookings
         }
