@@ -98,11 +98,11 @@ export default function HotelsList({ hotels }) {
                                                 <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                                                     <div>
                                                         <div className="flex justify-between">
-                                                            <h3 className="text-lg font-bold text-gray-700 hover:text-gray-800">
+                                                            <h3 className="text-xl font-bold text-gray-700 hover:text-gray-800">
 
-                                                                Name: {hotel.title}
-                                                                <p className="font-medium text-gray-700 hover:text-gray-800">
-                                                                    Description: {hotel.description}
+                                                                {hotel.title.toUpperCase()}
+                                                                <p className="text-base font-medium text-gray-700 hover:text-gray-800">
+                                                                    {hotel.description}
                                                                 </p>
                                                             </h3>
                                                         </div>

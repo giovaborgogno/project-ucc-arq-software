@@ -21,12 +21,12 @@ import { useEffect } from "react"
                 </svg>
               </span>
               <div className="min-w-0 flex-auto">
-                <p className="text-sm font-semibold leading-6 text-gray-900">{user.first_name} {user.last_name}</p>
+                <p className="text-sm font-semibold leading-6 text-gray-900">{user.first_name.toUpperCase()} {user.last_name.toUpperCase()}</p>
                 <p className="mt-1 truncate text-xs leading-5 text-gray-500">{user.email}</p>
               </div>
             </div>
             <div className="hidden sm:flex sm:flex-col sm:items-end">
-              <p className="text-sm leading-6 text-gray-900">{user.role}</p>
+              <p className="text-sm leading-6 text-gray-900">{user.role.toUpperCase()}</p>
             </div>
           </li>
         ))}

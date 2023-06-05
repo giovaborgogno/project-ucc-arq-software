@@ -9,8 +9,8 @@ export default function CreateHotel() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    price: 0,
-    rooms: 0
+    price: '',
+    rooms: ''
   })
 
   const {
@@ -145,7 +145,7 @@ export default function CreateHotel() {
                 </label>
                 <div className="mt-2">
                   <input
-                    type="text"
+                    type="number"
                     name="price"
                     value={price}
                     onChange={e => onChange(e)}
