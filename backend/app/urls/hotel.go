@@ -33,4 +33,5 @@ func HotelRoute(hotel *gin.RouterGroup) {
 	amenitie.PUT("/:amenitieID", middlewareController.CheckAdmin(), hotelController.UpdateAmenitie)
 	amenitie.DELETE("/:amenitieID", middlewareController.CheckAdmin(), hotelController.DeleteAmenitie)
 	amenitie.POST("/loadamenities/:HotelID", middlewareController.CheckAdmin(), hotelController.LoadAmenities)
+	amenitie.PUT("/unloadamenities/:HotelID", middlewareController.CheckAdmin(), hotelController.UnloadAmenities)
 }
