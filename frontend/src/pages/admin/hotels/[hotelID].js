@@ -29,7 +29,7 @@ const DashboardHotelsDetail = () => {
     <DashboardAdmin title={"Hotels Detail"} current={"/admin/hotels"}>
 
       {/* Replace with your content */}
-      {hotel != null && <HotelDetail hotel = {hotel}/>}
+      {hotel != null && <HotelDetail hotel={hotel} setHotel={setHotel}/>}
       {/* /End replace */}
 
     </DashboardAdmin>

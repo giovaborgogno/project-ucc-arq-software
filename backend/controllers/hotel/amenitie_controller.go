@@ -127,4 +127,32 @@ func LoadAmenities(c *gin.Context) {
 		return
 	}
 
+	c.JSON(http.StatusOK, gin.H{"success": "Amenities loaded successfully"})
+
+}
+
+func UnloadAmenities(c *gin.Context) {
+	uuid, err := uuid.Parse(c.Param("HotelID"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "HotelID must be a uuid"})
+		return
+	}
+
+	var payload dto.Amenities
+
+	err = c.BindJSON(&payload)
+	if err != nil {
+		log.Error(err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	er := amenitieService.AmenitieService.UnloadAmenities(uuid, payload)
+	if er != nil {
+		c.JSON(er.Status(), gin.H{"error": er.Message()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"success": "Amenitie unloaded successfully"})
+
 }
