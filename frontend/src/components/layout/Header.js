@@ -199,11 +199,14 @@ export default function Header() {
               <Link href="/" className="text-base font-medium text-gray-500 hover:text-gray-900">
                 Home
               </Link>
-              <Link href="/dashboard" className="text-base font-medium text-gray-500 hover:text-gray-900">
+              {user != null ? <>
+                <Link href="/dashboard" className="text-base font-medium text-gray-500 hover:text-gray-900">
                 Dashboard
               </Link>
+              </> : <></>}
+              
               <div className="text-base font-medium text-gray-500 hover:text-gray-900">
-                {user != null ? <>{user.first_name}</> : <></>}
+                
 
               </div>
               {/* <Popover>
