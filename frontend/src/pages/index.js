@@ -20,7 +20,8 @@ export default function Home() {
   const [hotels, setHotels] = useState(null)
   const get_hotels = async () => {
   const data = await getHotels()
-  setHotels(data)
+  const filtered_hotels = data.filter(hotel => hotel.active == true) 
+  setHotels(filtered_hotels)
   }
 
 

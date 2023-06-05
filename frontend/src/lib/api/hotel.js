@@ -41,7 +41,7 @@ export async function createHotel(title, description, price_per_day, rooms) {
 
 }
 
-export async function updateHotel(hotelID, title, description, price_per_day, rooms) {
+export async function updateHotel(hotelID, title, description, price_per_day, rooms, active) {
     rooms = parseInt(rooms);
     price_per_day = parseFloat(price_per_day);
   
@@ -56,7 +56,8 @@ export async function updateHotel(hotelID, title, description, price_per_day, ro
       title,
       description,
       price_per_day,
-      rooms
+      rooms,
+      active
     });
   
     try {

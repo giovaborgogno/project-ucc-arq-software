@@ -61,6 +61,7 @@ func (s *authService) RegisterUser(registerDto dto.Register) (dto.Register, e.Ap
 		UserName:         strings.ToLower(registerDto.UserName),
 		Password:         hashedPassword,
 		Role:             "user",
+		Active:           true,
 		VerificationCode: verification_code,
 		Verified:         false,
 		CreatedAt:        now,
@@ -129,6 +130,9 @@ func (s *authService) LoginUser(loginDto dto.Login) (string, e.ApiError) {
 		if user.UserID == uuid.Nil {
 			return "", e.NewUnauthorizedApiError("Invalid user name or Password")
 		}
+	}
+	if !user.Active {
+		return "", e.NewForbiddenApiError("Your account has been desactivated")
 	}
 
 	if !user.Verified {

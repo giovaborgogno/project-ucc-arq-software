@@ -139,7 +139,7 @@ export default function HotelDetail({ hotel, setHotel }) {
 
   const handleEditClick = async () => {
     const { title, price_per_day, rooms, description } = editableFields;
-    const updatedHotel = await updateHotel(hotel.hotel_id, title, description, price_per_day, rooms);
+    const updatedHotel = await updateHotel(hotel.hotel_id, title, description, price_per_day, rooms, hotel.active);
 
     if (updatedHotel) {
       // Realizar acciones adicionales después de la actualización exitosa
