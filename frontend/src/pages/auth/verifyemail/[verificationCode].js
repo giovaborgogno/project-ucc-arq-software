@@ -1,10 +1,12 @@
 
 import MainLayout from '@/layouts/MainLayout'
-export default function VerifyEmail() {
+import VerifyEmail from '@/components/auth/VerifyEmail'
+
+export default function VerifyEmailPage() {
   return (
     <>
       <MainLayout title={"Verify Email"}>
-        Verify Email
+      <VerifyEmail />
       </MainLayout>
     </>
   )
