@@ -16,6 +16,7 @@
   ```
 */
 import { useState } from 'react'
+import { updateHotel } from "@/lib/api/hotel";
 import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/solid'
 import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
@@ -26,13 +27,41 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function HotelDetail({hotel}) {
-  const [selectedSize, setSelectedSize] = useState(null)
+export default function HotelDetail({ hotel }) {
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [editableFields, setEditableFields] = useState({
+    title: hotel.title,
+    price_per_day: hotel.price_per_day,
+    rooms: hotel.rooms,
+    description: hotel.description,
+  });
+
+  const handleFieldChange = (e) => {
+    const { name, value } = e.target;
+    setEditableFields((prevFields) => ({
+      ...prevFields,
+      [name]: value,
+    }));
+  };
+
+  const handleEditClick = async () => {
+    const { title, price_per_day, rooms, description } = editableFields;
+    const updatedHotel = await updateHotel(hotel.hotel_id, title, description, price_per_day, rooms);
+
+    if (updatedHotel) {
+      // Realizar acciones adicionales después de la actualización exitosa
+      console.log('Hotel actualizado:', updatedHotel);
+    } else {
+      // Manejar el error de actualización
+      console.error('Error al actualizar el hotel');
+    }
+
+    console.log(editableFields);
+  };
+
   useEffect(() => {
-
-    console.log(hotel)
-
-  }, [])
+    console.log(hotel);
+  }, []);
 
   return (
     <div className="bg-white">
@@ -80,26 +109,56 @@ export default function HotelDetail({hotel}) {
 
           {/* hotel info */}
           <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">{hotel.title}</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+              <input
+                name="title"
+                value={editableFields.title}
+                onChange={handleFieldChange}
+                className="w-full border-gray-300 rounded-md px-3 py-2"
+              />
+            </h1>
 
             <div className="mt-3">
-              <h2 className="text-3xl text-gray-900">Price per day: {hotel.price_per_day} </h2>
+              <h2 className="text-3xl text-gray-900">
+                Price per day:{' '}
+                <input
+                  name="price_per_day"
+                  value={editableFields.price_per_day}
+                  onChange={handleFieldChange}
+                  className="w-full border-gray-300 rounded-md px-3 py-2"
+                />
+              </h2>
             </div>
 
             <div className="mt-3">
-              <h2 className="text-3xl text-gray-900">Rooms: {hotel.rooms} </h2>
+              <h2 className="text-3xl text-gray-900">
+                Rooms:{' '}
+                <input
+                  name="rooms"
+                  value={editableFields.rooms}
+                  onChange={handleFieldChange}
+                  className="w-full border-gray-300 rounded-md px-3 py-2"
+                />
+              </h2>
             </div>
-
 
             <div className="mt-6">
               <h3 className="text-base text-gray-700 space-y-6">Description:</h3>
 
-              <div
-                className="text-base text-gray-700 space-y-6"
-                dangerouslySetInnerHTML={{ __html: hotel.description }}
+              <textarea
+                name="description"
+                value={editableFields.description}
+                onChange={handleFieldChange}
+                className="w-full border-gray-300 rounded-md px-3 py-2"
               />
             </div>
 
+            <button
+          className="mt-20 inline-block rounded-md border border-transparent bg-indigo-600 px-3 md:px-8 py-3 text-center font-medium text-white hover:bg-indigo-700 ml-auto"
+          onClick={handleEditClick}
+        >
+          Update Changes
+        </button>
 
             <section aria-labelledby="details-heading" className="mt-12">
               <h2 id="details-heading" className="text-3xl text-gray-900">
@@ -146,6 +205,6 @@ export default function HotelDetail({hotel}) {
         </div>
       </div>
     </div>
-  )
+  );
   // return (<div>hola</div>)
 }

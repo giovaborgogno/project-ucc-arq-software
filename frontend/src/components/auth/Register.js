@@ -1,28 +1,38 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+import { register } from "@/lib/api/auth";
+import { useEffect, useState } from "react";
+import { useContext } from 'react';
+import Banner from "./Banner";
+
+
 export default function Register() {
+        const [formData, setFormData] = useState({
+          first_name: '',
+          last_name: '',
+          email: '',
+          user_name: '',
+          password: '',
+          password_confirm: ''
+        })
+      
+        const {
+            first_name,
+            last_name,
+            email,
+            user_name,
+            password,
+            password_confirm
+        } = formData;
+      
+        const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+        const onSubmit = async e => {
+          e.preventDefault();
+          await register(first_name, last_name, email, user_name, password, password_confirm)
+          //setHotel(newHotel)
+        }
+
+
     return (
         <>
-            {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-white">
-          <body class="h-full">
-          ```
-        */}
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
@@ -36,7 +46,7 @@ export default function Register() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form onSubmit={e => onSubmit(e)} className="space-y-6" action="#" method="POST">
 
                         <div>
                             <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
@@ -46,6 +56,8 @@ export default function Register() {
                                 <input
                                     id="first_name"
                                     name="first_name"
+                                    value={first_name}
+                                    onChange={e => onChange(e)}
                                     type="text"
                                     autoComplete="first_name"
                                     required
@@ -62,6 +74,8 @@ export default function Register() {
                                 <input
                                     id="last_name"
                                     name="last_name"
+                                    value={last_name}
+                                    onChange={e => onChange(e)}
                                     type="text"
                                     autoComplete="last_name"
                                     required
@@ -78,6 +92,8 @@ export default function Register() {
                                 <input
                                     id="email"
                                     name="email"
+                                    value={email}
+                                    onChange={e => onChange(e)}
                                     type="email"
                                     autoComplete="email"
                                     required
@@ -94,6 +110,8 @@ export default function Register() {
                                 <input
                                     id="user_name"
                                     name="user_name"
+                                    value={user_name}
+                                    onChange={e => onChange(e)}
                                     type="username"
                                     autoComplete="user_name"
                                     required
@@ -112,6 +130,8 @@ export default function Register() {
                                 <input
                                     id="password"
                                     name="password"
+                                    value={password}
+                                    onChange={e => onChange(e)}
                                     type="password"
                                     autoComplete="current-password"
                                     required
@@ -128,8 +148,10 @@ export default function Register() {
                             </div>
                             <div className="mt-2">
                                 <input
-                                    id="confirm_password"
-                                    name="confirm_password"
+                                    id="password_confirm"
+                                    name="password_confirm"
+                                    value={password_confirm}
+                                    onChange={e => onChange(e)}
                                     type="password"
                                     autoComplete="current-password"
                                     required
