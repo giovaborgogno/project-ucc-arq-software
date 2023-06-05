@@ -317,3 +317,23 @@ export async function checkAvailability(rooms, date_in, date_out, hotel_id) {
     return true
 
 }
+
+export async function deletePhoto(photo_id) {
+    try {
+      const res = await axios.delete(`/api/hotel/photo/delete/${photo_id}`, { withCredentials: true });
+      if (res.status === 200) {
+        console.log('Photo deleted successfully');
+        alert('success', "Photo deleted successfully")
+        return true;
+      } else {
+        alert('error', "Failed to delete photo")
+        console.log('Failed to delete photo');
+        return false;
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+      alert('error', "Failed to delete photo")
+      console.log(errorMessage);
+      return false;
+    }
+  }
