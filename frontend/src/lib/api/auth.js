@@ -109,3 +109,22 @@ export async function register(first_name, last_name, email, user_name, password
 
 }
 
+export async function verifyemail(verificationCode) {
+    try {
+        const res = await axios.get(`/api/auth/${verificationCode}`)
+        if (res.status === 200) {
+            alert('success', 'Verification successfully')
+
+        }
+        else{
+            console.log("res: " + res)
+            alert('error', res.data.error.toString())
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        alert('error', String(errorMessage));
+    }
+
+}
+
+
