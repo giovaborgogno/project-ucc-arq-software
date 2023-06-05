@@ -41,6 +41,42 @@ export async function createHotel(title, description, price_per_day, rooms) {
 
 }
 
+export async function updateHotel(hotelID, title, description, price_per_day, rooms) {
+    rooms = parseInt(rooms);
+    price_per_day = parseFloat(price_per_day);
+  
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    };
+  
+    const body = JSON.stringify({
+      title,
+      description,
+      price_per_day,
+      rooms
+    });
+  
+    try {
+      const res = await axios.put(`/api/hotel/update/${hotelID}`, body, config);
+      if (res.status === 200) {
+        alert('success', 'Hotel Updated');
+        return res.data.hotel;
+      } else {
+        console.log("res: " + res);
+        alert('error', res.data.error.toString());
+        return null;
+      } 
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        console.log(error);
+        alert('error', String(errorMessage));
+        return null;
+      }
+    }
+
 export async function insertPhoto(hotelID, file) {
 
     const config = {
@@ -147,6 +183,44 @@ export async function associateAmenities(hotel_id, array_amenity_id) {
 
     try {
         const res = await axios.post(`/api/hotel/amenity/associate/${hotel_id}`, body, config)
+        if (res.status === 200) {
+            alert('success', 'Amenities associated successfully')
+
+        }
+        else {
+            console.log("res: " + res)
+            alert('error', res.data.error.toString())
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        console.log(error)
+        alert('error', String(errorMessage));
+    }
+
+}
+
+export async function dissociateAmenities(hotel_id, array_amenity_id) {
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    };
+
+    let amenities = []
+    array_amenity_id.forEach(amenity_id => {
+        let amenitie_id = {
+            amenitie_id: amenity_id
+        }
+
+        amenities.push(amenitie_id)
+    });
+
+    const body = JSON.stringify(amenities);
+
+    try {
+        const res = await axios.post(`/api/hotel/amenity/dissociate/${hotel_id}`, body, config)
         if (res.status === 200) {
             alert('success', 'Amenities associated successfully')
 

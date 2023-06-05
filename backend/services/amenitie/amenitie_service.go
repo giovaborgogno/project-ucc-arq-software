@@ -20,6 +20,7 @@ type amenitieServiceInterface interface {
 	InsertAmenitie(amenitieDto dto.Amenitie) (dto.Amenitie, e.ApiError)
 	UpdateAmenitie(amenitieDto dto.Amenitie) (dto.Amenitie, e.ApiError)
 	LoadAmenities(id uuid.UUID, amenitieDto dto.Amenities) e.ApiError
+	UnloadAmenities(id uuid.UUID, amenitieDto dto.Amenities) e.ApiError
 }
 
 var (
@@ -127,6 +128,28 @@ func (s *amenitieService) LoadAmenities(id uuid.UUID, amenitiesDto dto.Amenities
 	}
 
 	err := amenitieClient.AmenitieClient.LoadAmenities(idString, amenities)
+	if err != nil {
+		return e.NewInternalServerApiError("Something went wrong load amenities", nil)
+	}
+
+	return nil
+}
+
+func (s *amenitieService) UnloadAmenities(id uuid.UUID, amenitiesDto dto.Amenities) e.ApiError {
+	idString := id.String()
+
+	var amenities model.Amenities
+
+	for _, amenitie := range amenitiesDto {
+		var model model.Amenitie
+
+		model.AmenitieID = amenitie.AmenitieID
+		model.Title = amenitie.Title
+
+		amenities = append(amenities, model)
+	}
+
+	err := amenitieClient.AmenitieClient.UnloadAmenities(idString, amenities)
 	if err != nil {
 		return e.NewInternalServerApiError("Something went wrong load amenities", nil)
 	}
