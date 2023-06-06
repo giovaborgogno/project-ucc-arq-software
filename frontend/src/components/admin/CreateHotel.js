@@ -28,7 +28,7 @@ export default function CreateHotel() {
   }
   useEffect(() => {
     // Este efecto secundario se ejecutará cuando el valor de 'hotel' cambie
-    console.log("hotel", hotel);
+    //console.log("hotel", hotel);
   }, [hotel]);
 
   // Add File

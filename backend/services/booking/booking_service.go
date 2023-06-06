@@ -22,6 +22,7 @@ type bookingServiceInterface interface {
 	SearchBookings(hotel string, user string, dateIn time.Time, dateOut time.Time) (dto.Bookings, e.ApiError)
 	GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiError)
 	DeleteBooking(id uuid.UUID) e.ApiError
+	SetActiveBooking(dto.Booking) (dto.Booking, e.ApiError)
 }
 
 var (
@@ -40,6 +41,7 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 		DateOut: bookingDto.DateOut,
 		UserID:  bookingDto.UserID,
 		HotelID: bookingDto.HotelID,
+		Active:  true,
 	}
 
 	bookingData := dto.CheckAvailability{
@@ -90,6 +92,7 @@ func (s *bookingService) GetBookingById(booking_id uuid.UUID) (dto.Booking, e.Ap
 		HotelID:   booking.HotelID,
 		DateIn:    booking.DateIn,
 		DateOut:   booking.DateOut,
+		Active:    booking.Active,
 	}
 
 	return bookingDto, nil
@@ -112,6 +115,7 @@ func (s *bookingService) GetBookings() (dto.Bookings, e.ApiError) {
 		bookingDto.DateIn = booking.DateIn
 		bookingDto.DateOut = booking.DateOut
 		bookingDto.HotelID = booking.HotelID
+		bookingDto.Active = booking.Active
 
 		bookingsDto = append(bookingsDto, bookingDto)
 	}
@@ -138,6 +142,7 @@ func (s *bookingService) GetBookingsByUserId(id uuid.UUID) (dto.Bookings, e.ApiE
 		bookingDto.DateIn = booking.DateIn
 		bookingDto.DateOut = booking.DateOut
 		bookingDto.HotelID = booking.HotelID
+		bookingDto.Active = booking.Active
 
 		bookingsDto = append(bookingsDto, bookingDto)
 	}
@@ -168,6 +173,7 @@ func (s *bookingService) SearchBookings(hotel string, user string, dateIn time.T
 		bookingDto.DateIn = booking.DateIn
 		bookingDto.DateOut = booking.DateOut
 		bookingDto.HotelID = booking.HotelID
+		bookingDto.Active = booking.Active
 
 		bookingsDto = append(bookingsDto, bookingDto)
 	}
@@ -184,5 +190,26 @@ func (s *bookingService) DeleteBooking(id uuid.UUID) e.ApiError {
 	}
 
 	return nil
+
+}
+
+func (s *bookingService) SetActiveBooking(bookingDto dto.Booking) (dto.Booking, e.ApiError) {
+	booking := model.Booking{
+		BookingID: bookingDto.BookingID,
+		HotelID:   bookingDto.HotelID,
+		UserID:    bookingDto.UserID,
+		Rooms:     bookingDto.Rooms,
+		Total:     bookingDto.Total,
+		DateIn:    bookingDto.DateIn,
+		DateOut:   bookingDto.DateOut,
+		Active:    bookingDto.Active,
+	}
+
+	booking = bookingClient.BookingClient.UpdateBooking(booking)
+	if booking.BookingID == uuid.Nil {
+		return dto.Booking{}, e.NewInternalServerApiError("Something went wrong deleting booking", nil)
+	}
+
+	return bookingDto, nil
 
 }

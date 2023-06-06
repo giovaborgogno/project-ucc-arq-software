@@ -61,6 +61,7 @@ func (s *authService) RegisterUser(registerDto dto.Register) (dto.Register, e.Ap
 		UserName:         strings.ToLower(registerDto.UserName),
 		Password:         hashedPassword,
 		Role:             "user",
+		Active:           true,
 		VerificationCode: verification_code,
 		Verified:         false,
 		CreatedAt:        now,
@@ -130,6 +131,9 @@ func (s *authService) LoginUser(loginDto dto.Login) (string, e.ApiError) {
 			return "", e.NewUnauthorizedApiError("Invalid user name or Password")
 		}
 	}
+	if !user.Active {
+		return "", e.NewForbiddenApiError("Your account has been desactivated")
+	}
 
 	if !user.Verified {
 		return "", e.NewForbiddenApiError("Please verify your email")
@@ -191,9 +195,9 @@ func (s *authService) ResetPassword(dtoResetPass dto.ResetPassword) (dto.ResetPa
 		FirstName: firstName,
 		Subject:   "Your code to reset password",
 	}
+	log.Debug("Email debug: url to reset your password: ", emailData.URL)
 
 	email.EmailClient.SendEmail(dtoResetPass.Email, &emailData, "templates/resetPassword", "resetPasswordLink.html")
-
 	return dtoResetPass, nil
 }
 

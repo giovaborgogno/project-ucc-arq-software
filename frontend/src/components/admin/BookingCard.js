@@ -1,5 +1,6 @@
 
 
+import { setActiveBooking } from "@/lib/api/booking"
 import { getHotelById } from "@/lib/api/hotel"
 import { getUserById } from "@/lib/api/user"
 import { useEffect, useState } from "react"
@@ -9,10 +10,30 @@ import { useEffect, useState } from "react"
     return classes.filter(Boolean).join(' ')
   }
   
-  export default function BookingCard({booking}) {
+  export default function BookingCard({booking_data}) {
 
     const [hotel, setHotel] = useState(null)
     const [user, setUser] = useState(null)
+    const [active, setActive] = useState(booking_data.active)
+    const [booking, setBooking] = useState(booking_data)
+
+    const handleCancelBooking = async (e) => {
+      e.preventDefault()
+      await setActiveBooking(booking.booking_id, false)
+      const newBooking = booking
+      newBooking.active = false
+      setBooking(newBooking)
+      setActive(false)
+  }
+
+  const handleActiveBooking = async (e) => {
+      e.preventDefault()
+      await setActiveBooking(booking.booking_id, true)
+      const newBooking = booking
+      newBooking.active = true
+      setBooking(newBooking)
+      setActive(true)
+  }
 
     const get_hotel_by_id = async () => {
       const data = await getHotelById(booking.hotel_id)
@@ -39,6 +60,32 @@ import { useEffect, useState } from "react"
 
     return (
       <div className="bg-white rounded-md shadow-md p-4 mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <div className="text-sm font-bold">Booking Status</div>
+          <div className="text-sm">
+          <div className=" sm:flex sm:flex-col sm:items-center ">
+              <p className="text-sm leading-6 text-gray-900">Active</p>
+
+
+              {booking.active || active ?
+
+                <label class="relative inline-flex items-center cursor-pointer"
+                  onClick={e => handleCancelBooking(e)}>
+                  <input type="checkbox" checked={true} class="sr-only peer" />
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                  <span class=" text-sm font-medium text-gray-900 dark:text-gray-300"></span>
+                </label>
+                :
+                <label class="relative inline-flex items-center cursor-pointer"
+                  onClick={e => handleActiveBooking(e)}>
+                  <input type="checkbox" checked={false} class="sr-only peer" />
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                  <span class=" text-sm font-medium text-gray-900 dark:text-gray-300"></span>
+                </label>
+              }
+            </div>
+          </div>
+        </div>
         <div className="flex justify-between mb-4">
           <div className="text-sm font-bold">Booking ID:</div>
           <div className="text-sm">{booking.booking_id}</div>

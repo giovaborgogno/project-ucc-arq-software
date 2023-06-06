@@ -2,6 +2,7 @@ import { register } from "@/lib/api/auth";
 import { useEffect, useState } from "react";
 import { useContext } from 'react';
 import Banner from "./Banner";
+import {Oval} from 'react-loader-spinner'
 
 
 export default function Register() {
@@ -24,9 +25,13 @@ export default function Register() {
         } = formData;
       
         const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+        const [loading, setLoading] = useState(false)
         const onSubmit = async e => {
           e.preventDefault();
+          setLoading(true)
           await register(first_name, last_name, email, user_name, password, password_confirm)
+          setLoading(false)
           //setHotel(newHotel)
         }
 
@@ -41,7 +46,7 @@ export default function Register() {
                         alt="Your Company"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Sign Up
+                        Register Now
                     </h2>
                 </div>
 
@@ -161,12 +166,26 @@ export default function Register() {
                         </div>
 
                         <div>
+                            {loading ? 
+                              <button
+                              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                              <Oval
+                              type="Oval"
+                              color="#fff"
+                              width={20}
+                              height={20}
+                              />
+                            </button>
+                            :
                             <button
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Register
                             </button>
+                            }
+                            
                         </div>
                     </form>
 

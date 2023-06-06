@@ -8,7 +8,7 @@ export function generateFileName(file_name) {
     const newFileName = `images/hotels/${name}${fileExtension}`;
     return newFileName
     } catch (error) {
-        console.log("Error generating file name",error)
+        //console.log("Error generating file name",error)
     }
     
  

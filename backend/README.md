@@ -1,7 +1,7 @@
 
 # Ecommerce Go-API
 
-This is an API Rest for an ecommerce, developed by Giovanni Borgogno.
+This is an API Rest for an ecommerce, developed by Giovanni Borgogno, Felipe Cañas, Maximo Lucero Ruiz, Santiago Quesada.
 
 ### Steps:
 
