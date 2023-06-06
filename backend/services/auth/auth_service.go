@@ -195,9 +195,9 @@ func (s *authService) ResetPassword(dtoResetPass dto.ResetPassword) (dto.ResetPa
 		FirstName: firstName,
 		Subject:   "Your code to reset password",
 	}
+	log.Debug("Email debug: url to reset your password: ", emailData.URL)
 
 	email.EmailClient.SendEmail(dtoResetPass.Email, &emailData, "templates/resetPassword", "resetPasswordLink.html")
-
 	return dtoResetPass, nil
 }
 

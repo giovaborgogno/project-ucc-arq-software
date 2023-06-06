@@ -7,6 +7,9 @@ import { useContext } from 'react';
 import { UserContext } from '../../layouts/LayoutContext';
 import Banner from "./Banner";
 import { createBooking } from "@/lib/api/booking";
+import Link from "next/link";
+import {Oval} from 'react-loader-spinner'
+
 
 
 /*
@@ -24,6 +27,8 @@ import { createBooking } from "@/lib/api/booking";
   ```
 */
 export default function Login() {
+  const [loading, setLoading] = useState(false)
+
 
   const [booking, setBooking] = useState(null)
 
@@ -53,6 +58,7 @@ export default function Login() {
 
   const onSubmit = async e => {
     e.preventDefault();
+    setLoading(true)
     await login(email, password);
     const userMe = await getme()
 
@@ -67,6 +73,7 @@ export default function Login() {
   
     create_booking()
     }
+    setLoading(false)
     
   }
 
@@ -95,9 +102,18 @@ export default function Login() {
             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
             alt="Your Company"
           />
+          <div className="">
+            
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in to your account
           </h2>
+          <div className="text-sm flex justify-center"><p>or <span> </span>
+                  <Link href="/auth/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                    register now.
+                  </Link>
+                  </p>
+                </div>
+          </div>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -126,9 +142,9 @@ export default function Login() {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="/auth/reset-pass" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  <Link href="/auth/reset-pass" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="mt-2">
@@ -146,13 +162,25 @@ export default function Login() {
             </div>
 
             <div>
-              <button
-                type="submit"
-
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign in
-              </button>
+            {loading ? 
+                              <button
+                              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                              <Oval
+                              type="Oval"
+                              color="#fff"
+                              width={20}
+                              height={20}
+                              />
+                            </button>
+                            :
+                            <button
+                                type="submit"
+                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            >
+                                Sign in
+                            </button>
+                            }
             </div>
           </form>
 

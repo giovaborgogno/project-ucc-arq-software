@@ -203,25 +203,25 @@ export default function HotelDetail({ hotel, setHotel }) {
           </Tab.Group>
 
           {/* hotel info */}
-          <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+          <div className="mt-10  sm:px-0 sm:mt-16 lg:mt-0">
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
               <input
                 name="title"
                 value={editableFields.title}
                 onChange={handleFieldChange}
-                className="w-full border-gray-300 rounded-md px-3 py-2"
+                className="w-full border-gray-300 rounded-md  py-2"
               />
             </h1>
 
             <div className="mt-3">
-              <h2 className="text-base text-gray-700 space-y-6">
+              <h2 className="text-base text-gray-700  space-y-6">
                 Price per day:{' '}
                 <input
                 type="number"
                   name="price_per_day"
                   value={editableFields.price_per_day}
                   onChange={handleFieldChange}
-                  className="w-full border-gray-300 rounded-md px-3 py-2"
+                  className="w-full border-gray-300 rounded-md  py-2"
                 />
               </h2>
             </div>
@@ -234,7 +234,7 @@ export default function HotelDetail({ hotel, setHotel }) {
                   type="number"
                   value={editableFields.rooms}
                   onChange={handleFieldChange}
-                  className="w-full border-gray-300 rounded-md px-3 py-2"
+                  className="w-full border-gray-300 rounded-md py-2"
                 />
               </h2>
             </div>
@@ -246,7 +246,7 @@ export default function HotelDetail({ hotel, setHotel }) {
                 name="description"
                 value={editableFields.description}
                 onChange={handleFieldChange}
-                className="w-full border-gray-300 rounded-md px-3 py-2 text-gray-700"
+                className="w-full border-gray-300 rounded-md py-2 text-gray-700"
               />
             </div>
 
@@ -263,7 +263,7 @@ export default function HotelDetail({ hotel, setHotel }) {
               </h2>
               <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
                 <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {hotel.amenities && hotel.amenities.map((amenity) => (
                     <RadioGroup.Option
                       key={amenity.amenitie_id}
@@ -279,7 +279,7 @@ export default function HotelDetail({ hotel, setHotel }) {
                       }
                     >
                       <button className='flex items-center' onClick={e => handleRemoveAmenity(amenity.amenitie_id)}>
-
+                          
                         <TrashIcon className='h-5 w-5 text-red-400' />
                         <RadioGroup.Label as="span">{amenity.title.toUpperCase()}</RadioGroup.Label>
                       </button>
@@ -368,7 +368,7 @@ export default function HotelDetail({ hotel, setHotel }) {
               </h2>
               <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
                 <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {amenities && amenities.map((amenity) => (
                     <RadioGroup.Option
                       key={amenity.amenitie_id}

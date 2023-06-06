@@ -116,14 +116,12 @@ export default function HotelDetail({ open, setOpen, hotel, setHotel }) {
                                                         <div className="mt-10">
                                                             <div className="flex items-center justify-between">
                                                                 <h4 className="text-sm font-medium text-gray-900">Amenities</h4>
-                                                                <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                                                                    Size guide
-                                                                </a>
+                                                                
                                                             </div>
 
                                                             <RadioGroup className="mt-4">
                                                                 <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                                                                <div className="grid grid-cols-4 gap-4">
+                                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                                                     {hotel.amenities && hotel.amenities.map((amenity) => (
                                                                         <RadioGroup.Option
                                                                             key={amenity.amenitie_id}
