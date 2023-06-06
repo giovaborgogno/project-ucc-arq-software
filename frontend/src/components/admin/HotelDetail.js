@@ -195,7 +195,7 @@ export default function HotelDetail({ hotel, setHotel }) {
                 <Tab.Panel key={photo.photo_id}>
                   <img
                     src={`/${photo.url}`}
-                    className="w-full h-full object-center object-cover sm:rounded-lg"
+                    className="w-full object-center object-cover sm:rounded-lg h-96"
                   />
                 </Tab.Panel>
               ))}

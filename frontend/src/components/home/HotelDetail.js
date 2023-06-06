@@ -167,7 +167,7 @@ export default function HotelDetail({ open, setOpen, hotel, setHotel }) {
                                                                 <Image
                                                                     src={`/${photo.url}`}
                                                                     alt={photo.url}
-                                                                    className="w-full h-full object-center object-cover sm:rounded-lg"
+                                                                    className="w-full object-center object-cover sm:rounded-lg h-96"
                                                                     width={1000}
                                                                     height={1000}
                                                                     // style={{ height: "30rem" }}
