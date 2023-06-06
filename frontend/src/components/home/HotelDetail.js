@@ -145,7 +145,7 @@ export default function HotelDetail({ open, setOpen, hotel, setHotel }) {
                                                                         <>
                                                                             <span className="sr-only">{photo.url}</span>
                                                                             <span className="absolute inset-0 rounded-md overflow-hidden">
-                                                                                <Image src={`/${photo.url}`} alt="" className=" object-center object-cover" width={1000} height={1000}/>
+                                                                                <Image src={`/${photo.url}`} alt="" className=" object-center object-cover" fill/>
                                                                             </span>
                                                                             <span
                                                                                 className={classNames(
