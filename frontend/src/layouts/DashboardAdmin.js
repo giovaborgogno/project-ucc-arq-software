@@ -9,8 +9,8 @@ import { UserContext } from './LayoutContext'
 const userDefault = {
   name: 'Tom Cook',
   email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  imageUrl: 'https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg'
+    // 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
   { name: 'Users', href: '/admin/users', current: true },
@@ -31,8 +31,8 @@ export default function DashboardAdmin({children, title, current}) {
   const [user, setUser] = useContext(UserContext);
   const router = useRouter()
 
-  const logOut = ()=>{
-    logout()
+  const logOut = async ()=>{
+    await logout()
     setUser(null)
     router.push("/auth/login")
   }
@@ -150,10 +150,9 @@ export default function DashboardAdmin({children, title, current}) {
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                   {navigation.map((item) => (
+                    <Link href={item.href}>
                     <Disclosure.Button
                       key={item.name}
-                      as="a"
-                      href={item.href}
                       className={classNames(
                         item.href === current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'block rounded-md px-3 py-2 text-base font-medium'
@@ -162,6 +161,7 @@ export default function DashboardAdmin({children, title, current}) {
                     >
                       {item.name}
                     </Disclosure.Button>
+                    </Link>
                   ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">

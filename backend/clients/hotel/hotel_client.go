@@ -97,12 +97,12 @@ func (c *hotelClient) GetAvailableRooms(booking dto.CheckAvailability) float64 {
 	Db.Raw(`
 	SELECT (rooms - 
 		(SELECT COALESCE(SUM(rooms), 0) FROM bookings
-		WHERE ((date_in >= ? AND date_in < ?)
+		WHERE (active = 1) AND ((date_in >= ? AND date_in < ?)
 		OR (date_out > ? AND date_out <= ?)
 		OR (date_in < ? AND date_out > ?))
 		AND hotel_id = ?)) 
 	AS available_rooms
-	FROM hotels WHERE hotel_id = ?;
+	FROM hotels WHERE hotel_id = ? AND active = 1;
 `, dateIn, dateOut, dateIn, dateOut, dateIn, dateOut, hotelID, hotelID).Scan(&result)
 	log.Debug("available rooms: ", result)
 
@@ -119,12 +119,14 @@ func (c *hotelClient) GetAvailableHotels(booking dto.CheckAvailability) model.Ho
 	Db.Raw(`
 	SELECT h.*, h.rooms - COALESCE((
 		SELECT SUM(b.rooms) FROM bookings b
-		WHERE (b.date_in >= ? AND b.date_in < ?)
+		WHERE (b.active = 1) AND (h.active = 1) 
+			AND ((b.date_in >= ? AND b.date_in < ?)
 			OR (b.date_out > ? AND b.date_out <= ?)
-			OR (b.date_in < ? AND b.date_out > ?)
+			OR (b.date_in < ? AND b.date_out > ?))
 			AND h.hotel_id = b.hotel_id
 	), 0) AS available_rooms
 	FROM hotels h
+	WHERE h.active = 1
 	GROUP BY h.hotel_id
 	HAVING available_rooms >= ?
 `, dateIn, dateOut, dateIn, dateOut, dateIn, dateOut, rooms).Preload("Photos").Preload("Amenities").Find(&hotels)

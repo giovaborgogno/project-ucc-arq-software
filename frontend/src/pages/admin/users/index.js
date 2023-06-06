@@ -27,7 +27,7 @@ const Dashboard = () => {
     <DashboardAdmin title={"Users List"} current={"/admin/users"}>
 
       {/* Replace with your content */}
-      <UsersList users = {users}/>
+      <UsersList users = {users} setUsers={setUsers}/>
       {/* /End replace */}
 
     </DashboardAdmin>

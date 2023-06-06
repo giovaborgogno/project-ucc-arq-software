@@ -19,12 +19,12 @@ const Dashboard = () => {
     setAmenities(data);
   };
 
-  useEffect(() => { get_amenities(); }, []);
+  // useEffect(() => { get_amenities(); }, []);
   
   useEffect(() => { get_amenities(); }, [changed]);
 
   const handleDeleteAmenitie = async (amenitieID) => {
-    console.log('amenitieID:', amenitieID); // Verificar el valor de amenitieID
+    //console.log('amenitieID:', amenitieID); // Verificar el valor de amenitieID
     try {
       // Llama a la función deleteAmenitie para eliminar la amenitie
       await deleteAmenitie(amenitieID);

@@ -200,6 +200,7 @@ func TestLoginUserWithEmail(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         true,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}
@@ -237,6 +238,7 @@ func TestLoginUserWithUserName(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         true,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}
@@ -274,6 +276,7 @@ func TestLoginUserErrorUserRequired(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         true,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}
@@ -310,6 +313,7 @@ func TestLoginUserErrorNotVerified(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         false,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}
@@ -344,6 +348,7 @@ func TestLoginUserErrorInvalidEmail(t *testing.T) {
 		Role:             "",
 		VerificationCode: "",
 		Verified:         false,
+		Active:           true,
 		CreatedAt:        time_zero,
 		UpdatedAt:        time_zero,
 	}
@@ -378,6 +383,7 @@ func TestLoginUserErrorInvalidUserName(t *testing.T) {
 		Role:             "",
 		VerificationCode: "",
 		Verified:         false,
+		Active:           true,
 		CreatedAt:        time_zero,
 		UpdatedAt:        time_zero,
 	}
@@ -414,6 +420,7 @@ func TestLoginUserErrorInvalidPassword(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         true,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}
@@ -451,6 +458,7 @@ func TestLoginUserErrorGeneratingJWT(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         true,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}

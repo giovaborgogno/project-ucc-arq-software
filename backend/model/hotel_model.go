@@ -14,6 +14,7 @@ type Hotel struct {
 	Bookings    Bookings  `gorm:"foreignKey:HotelID"`
 	Photos      Photos    `gorm:"foreignKey:HotelID"`
 	Amenities   Amenities `gorm:"many2many:hotel_amenities;"`
+	Active      bool      `gorm:"not null"`
 }
 
 type Hotels []Hotel

@@ -28,20 +28,20 @@ export async function createHotel(title, description, price_per_day, rooms) {
 
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
             return null
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(error)
+        //console.log(error)
         alert('error', String(errorMessage));
         return null
     }
 
 }
 
-export async function updateHotel(hotelID, title, description, price_per_day, rooms) {
+export async function updateHotel(hotelID, title, description, price_per_day, rooms, active) {
     rooms = parseInt(rooms);
     price_per_day = parseFloat(price_per_day);
   
@@ -56,7 +56,8 @@ export async function updateHotel(hotelID, title, description, price_per_day, ro
       title,
       description,
       price_per_day,
-      rooms
+      rooms,
+      active
     });
   
     try {
@@ -65,13 +66,13 @@ export async function updateHotel(hotelID, title, description, price_per_day, ro
         alert('success', 'Hotel Updated');
         return res.data.hotel;
       } else {
-        console.log("res: " + res);
+        //console.log("res: " + res);
         alert('error', res.data.error.toString());
         return null;
       } 
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(error);
+        //console.log(error);
         alert('error', String(errorMessage));
         return null;
       }
@@ -101,12 +102,12 @@ export async function insertPhoto(hotelID, file) {
 
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(error)
+        //console.log(error)
         alert('error', String(errorMessage));
     }
 }
@@ -117,12 +118,12 @@ export async function insertAmenitie(amenitieData) {
       if (res.status === 201) {
         return res.data.amenitie;
       } else {
-        console.log("res: " + res);
+        //console.log("res: " + res);
         return null;
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-      console.log(errorMessage);
+      //console.log(errorMessage);
       return null;
     }
   }
@@ -134,12 +135,12 @@ export async function getAmenities() {
             return res.data.amenities
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             return null
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(errorMessage)
+        //console.log(errorMessage)
         return null
     }
 }
@@ -148,15 +149,15 @@ export async function deleteAmenitie(amenitieID) {
     try {
       const res = await axios.delete(`/api/hotel/amenity/${amenitieID}`, { withCredentials: true });
       if (res.status === 200) {
-        console.log('Amenitie deleted successfully');
+        //console.log('Amenitie deleted successfully');
         return true;
       } else {
-        console.log('Failed to delete amenitie');
+        //console.log('Failed to delete amenitie');
         return false;
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-      console.log(errorMessage);
+      //console.log(errorMessage);
       return false;
     }
   }
@@ -188,12 +189,12 @@ export async function associateAmenities(hotel_id, array_amenity_id) {
 
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(error)
+        //console.log(error)
         alert('error', String(errorMessage));
     }
 
@@ -226,12 +227,12 @@ export async function dissociateAmenities(hotel_id, array_amenity_id) {
 
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(error)
+        //console.log(error)
         alert('error', String(errorMessage));
     }
 
@@ -244,12 +245,12 @@ export async function getHotels(){
             return res.data.hotels
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             return null
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(errorMessage)
+        //console.log(errorMessage)
         return null
     }
 }
@@ -261,12 +262,12 @@ export async function getAvailableHotels(rooms, date_in, date_out){
             return res.data.hotels
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             return null
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(errorMessage)
+        //console.log(errorMessage)
         return null
     }
 }
@@ -278,12 +279,12 @@ export async function getHotelById(id){
             return res.data.hotel
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             return null
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(errorMessage)
+        //console.log(errorMessage)
         return null
     }
 }
@@ -304,11 +305,11 @@ export async function checkAvailability(rooms, date_in, date_out, hotel_id) {
             availableRooms = res.data.available_rooms
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(error)
+        //console.log(error)
     }
 
     if(availableRooms < rooms){
@@ -322,18 +323,18 @@ export async function deletePhoto(photo_id) {
     try {
       const res = await axios.delete(`/api/hotel/photo/delete/${photo_id}`, { withCredentials: true });
       if (res.status === 200) {
-        console.log('Photo deleted successfully');
+        //console.log('Photo deleted successfully');
         alert('success', "Photo deleted successfully")
         return true;
       } else {
         alert('error', "Failed to delete photo")
-        console.log('Failed to delete photo');
+        //console.log('Failed to delete photo');
         return false;
       }
     } catch (error) {
       const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
       alert('error', "Failed to delete photo")
-      console.log(errorMessage);
+      //console.log(errorMessage);
       return false;
     }
   }

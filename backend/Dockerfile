@@ -1,6 +1,7 @@
 FROM golang:alpine
 
 WORKDIR /api
+COPY .env.docker ./.env
 COPY . .
 
 RUN go mod tidy

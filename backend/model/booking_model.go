@@ -15,6 +15,7 @@ type Booking struct {
 	DateOut   time.Time `gorm:"not null"`
 	UserID    uuid.UUID `gorm:"type:char(36);not null"`
 	HotelID   uuid.UUID `gorm:"type:char(36);not null"`
+	Active    bool      `gorm:"default:true"`
 }
 
 type Bookings []Booking

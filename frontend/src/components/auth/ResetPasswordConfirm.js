@@ -1,3 +1,7 @@
+import { resetPasswordConfirm } from "@/lib/api/auth";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 /*
   This example requires some changes to your config:
   
@@ -13,6 +17,30 @@
   ```
 */
 export default function ResetPasswordConfirm() {
+    const router = useRouter();
+    const { verificationCode } = router.query; 
+
+    const [formData, setFormData] = useState({
+        password: '',
+        password_confirm: '',
+      })
+    
+      const {
+        password,
+        password_confirm,
+      } = formData;
+    
+      const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const onSubmit = e => {
+        e.preventDefault()
+        const reset_password_confirm = async () =>{
+            await resetPasswordConfirm(verificationCode, password, password_confirm)
+            router.push("/auth/login")
+        }
+         reset_password_confirm()
+    }
+
     return (
         <>
             {/*
@@ -36,7 +64,7 @@ export default function ResetPasswordConfirm() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={e => onSubmit(e)}>
 
 
                         <div>
@@ -50,6 +78,8 @@ export default function ResetPasswordConfirm() {
                                     id="password"
                                     name="password"
                                     type="password"
+                                    value={password}
+                                    onChange={onChange}
                                     autoComplete="current-password"
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -59,15 +89,17 @@ export default function ResetPasswordConfirm() {
 
                         <div>
                             <div className="flex items-center justify-between">
-                                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                                <label htmlFor="confirm_password" className="block text-sm font-medium leading-6 text-gray-900">
                                     Confirm Password
                                 </label>
                             </div>
                             <div className="mt-2">
                                 <input
                                     id="confirm_password"
-                                    name="confirm_password"
+                                    name="password_confirm"
                                     type="password"
+                                    value={password_confirm}
+                                    onChange={onChange}
                                     autoComplete="current-password"
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

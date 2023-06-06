@@ -54,7 +54,7 @@ export default function SuggestedHotels({ dataCheck, setHotel }) {
     let availableHotels = await getAvailableHotels(rooms, date_in, date_out)
     if (availableHotels !== null)
       availableHotels = availableHotels.filter(hotel => hotel.hotel_id !== currentHotelId)
-    console.log(availableHotels)
+    //console.log(availableHotels)
     setHotels(availableHotels)
   }
   useEffect(() => {

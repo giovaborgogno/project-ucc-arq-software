@@ -29,12 +29,12 @@ export async function createBooking(rooms, total, date_in, date_out, hotel_id, u
         
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
         const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
-        console.log(error)
+        //console.log(error)
         alert('error', String(errorMessage));
     }
 
@@ -77,5 +77,33 @@ export async function searchBookings(hotel,user, date_in, date_out){
         }
     } catch (error) {
         return null
+    }
+}
+
+export async function setActiveBooking(booking_id, active){
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        withCredentials: true
+    };
+
+    const body = JSON.stringify({
+        active
+    });
+
+    try {
+        const res = await axios.put(`/api/booking/update/${booking_id}`, body, config)
+        if (res.status === 200) {
+            alert('success', 'Booking updated successfully')
+
+        }
+        else {
+            //console.log("res: " + res)
+            alert('error', res.data.error.toString())
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        alert('error', String(errorMessage));
     }
 }

@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
             const file = req.file;
             const fileName = file.filename;
-            console.log(fileName)
+            //console.log(fileName)
 
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/api/hotel/photo/${hotelID}`, {
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
 
 
     } catch (error) {
-        console.log(error)
+        //console.log(error)
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }

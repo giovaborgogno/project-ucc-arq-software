@@ -12,14 +12,13 @@ export default function DashboardBookings() {
   const [bookings, setBookings] = useState(null)
 
   useEffect(()=>{
-    console.log(bookings)
   },[bookings])
 
   return (
     <>
       <SearchBar setBookings={setBookings} />
-      {bookings != null && bookings.map((booking) => (
-        <BookingCard booking={booking}/>
+      {bookings != null && bookings.map((booking, id) => (
+        <BookingCard booking_data={booking} key={id}/>
 
       ))}
     </>

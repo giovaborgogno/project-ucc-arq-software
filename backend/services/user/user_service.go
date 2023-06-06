@@ -46,6 +46,7 @@ func (s *userService) GetUserById(id uuid.UUID) (dto.UserResponse, e.ApiError) {
 		Role:      user.Role,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
+		Active:    user.Active,
 	}
 	return userDto, nil
 }
@@ -68,6 +69,7 @@ func (s *userService) GetUsers() (dto.UserResponses, e.ApiError) {
 		userDto.UpdatedAt = user.UpdatedAt
 		userDto.Email = user.Email
 		userDto.Role = user.Role
+		userDto.Active = user.Active
 
 		usersDto = append(usersDto, userDto)
 	}
@@ -110,6 +112,7 @@ func (s *userService) MakeAdminUser(id uuid.UUID) (dto.UserResponse, e.ApiError)
 		Role:      user.Role,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
+		Active:    user.Active,
 	}
 	return userDto, nil
 }
@@ -126,6 +129,7 @@ func (s *userService) UpdateUser(userDto dto.UserResponse) (dto.UserResponse, e.
 	user.UserName = userDto.UserName
 	user.Role = userDto.Role
 	user.UpdatedAt = time.Now()
+	user.Active = userDto.Active
 
 	user = userClient.UserClient.UpdateUser(user)
 	if user.UserID == uuid.Nil {
@@ -142,6 +146,7 @@ func (s *userService) UpdateUser(userDto dto.UserResponse) (dto.UserResponse, e.
 		Role:      user.Role,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
+		Active:    user.Active,
 	}
 	return userDto, nil
 }

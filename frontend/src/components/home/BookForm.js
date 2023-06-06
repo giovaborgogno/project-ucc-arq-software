@@ -27,7 +27,7 @@ const BookForm = ({ hotel, setDataCheck }) => {
         const end_date = dates.startDate !== null ? new Date(dates.endDate).toISOString() : ""
 
         const isAvailable = await checkAvailability(rooms, start_date, end_date, hotel.hotel_id)
-        console.log("isAvailable: ", isAvailable)
+        //console.log("isAvailable: ", isAvailable)
         setAvailable(isAvailable)
     }
 
@@ -80,7 +80,7 @@ const BookForm = ({ hotel, setDataCheck }) => {
         }
         const create_booking = async () => {
             await createBooking(rooms, total, start_date, end_date, hotel.hotel_id, user.user_id)
-            // console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", dates.startDate,"\ndate_out: ", dates.endDate,"\nhotel_id: ", hotel.hotel_id,"\nuser_id: ", user.user_id)
+            // //console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", dates.startDate,"\ndate_out: ", dates.endDate,"\nhotel_id: ", hotel.hotel_id,"\nuser_id: ", user.user_id)
         }
 
         create_booking()
@@ -119,6 +119,13 @@ const BookForm = ({ hotel, setDataCheck }) => {
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
                         </select>
                     </div>
                 </div>
