@@ -47,6 +47,7 @@ func TestDeserializeUserWithLocalStorage(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         true,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}
@@ -82,6 +83,7 @@ func TestDeserializeUserWithCookie(t *testing.T) {
 		Role:             "user",
 		VerificationCode: "codeExample",
 		Verified:         true,
+		Active:           true,
 		CreatedAt:        now,
 		UpdatedAt:        now,
 	}

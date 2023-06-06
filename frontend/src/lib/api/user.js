@@ -94,7 +94,7 @@ export async function updateUser(user_id, first_name, last_name, user_name, role
 
         }
         else {
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {

@@ -66,7 +66,7 @@ export default function Login() {
       const {rooms, total, start_date, end_date, hotel_id} = booking
       const create_booking = async () => {
         await createBooking(rooms, total, start_date, end_date, hotel_id, userMe.user_id)
-        // console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", start_date,"\ndate_out: ", end_date,"\nhotel_id: ", hotel_id,"\nuser_id: ", userMe.user_id)
+        // //console.log("\nrooms: ",rooms,"\ntotal: ", total,"\ndate_in: ", start_date,"\ndate_out: ", end_date,"\nhotel_id: ", hotel_id,"\nuser_id: ", userMe.user_id)
         sessionStorage.removeItem('booking');
 
     }

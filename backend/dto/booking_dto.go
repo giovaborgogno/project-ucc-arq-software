@@ -14,6 +14,11 @@ type Booking struct {
 	DateOut   time.Time `json:"date_out" binding:"required"`
 	UserID    uuid.UUID `json:"user_id" binding:"required"`
 	HotelID   uuid.UUID `json:"hotel_id" binding:"required"`
+	Active    bool      `json:"active"`
+}
+
+type SetActive struct {
+	Active bool `json:"active"`
 }
 
 type Bookings []Booking

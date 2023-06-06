@@ -19,24 +19,22 @@ export default function Home() {
 
   const [hotels, setHotels] = useState(null)
   const get_hotels = async () => {
-  const data = await getHotels()
-  const filtered_hotels = data.filter(hotel => hotel.active == true) 
-  setHotels(filtered_hotels)
+    const data = await getHotels()
+    const filtered_hotels = data?.filter(hotel => hotel.active == true)
+    setHotels(filtered_hotels)
   }
 
 
 
-  useEffect(()=>{
-    console.log(hotels)
-    
+  useEffect(() => {
     get_hotels()
-    },[])
+  }, [])
 
   return (
     <>
       <MainLayout title={"Home"}>
         <Banner />
-        {hotels != null && <HotelsList hotels={hotels}/>}
+        {hotels != null && <HotelsList hotels={hotels} />}
 
       </MainLayout>
     </>

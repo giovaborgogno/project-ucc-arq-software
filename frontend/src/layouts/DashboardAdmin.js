@@ -31,8 +31,8 @@ export default function DashboardAdmin({children, title, current}) {
   const [user, setUser] = useContext(UserContext);
   const router = useRouter()
 
-  const logOut = ()=>{
-    logout()
+  const logOut = async ()=>{
+    await logout()
     setUser(null)
     router.push("/auth/login")
   }

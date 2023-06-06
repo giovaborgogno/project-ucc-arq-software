@@ -12,7 +12,7 @@ func BookingRoute(booking *gin.RouterGroup) {
 	booking.GET("/me", bookingController.GetBookingsMe)
 	booking.GET("/search/me", bookingController.SearchBookingsMe)
 	booking.GET("/:bookingID", bookingController.GetBookingById)
-	booking.PUT("/:bookingID", bookingController.UpdateBooking)
+	booking.PUT("/:bookingID", bookingController.SetActiveBooking)
 	booking.DELETE("/:bookingID", bookingController.DeleteBooking)
 
 	// Only admin:

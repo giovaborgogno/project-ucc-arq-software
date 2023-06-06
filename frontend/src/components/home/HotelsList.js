@@ -18,6 +18,7 @@ import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XIcon } from '@heroicons/
 import HotelDetail from './HotelDetail'
 import { useEffect, useState } from 'react'
 import { getHotels } from '@/lib/api/hotel'
+import Image from 'next/image'
 
 const products = [
     {
@@ -64,7 +65,7 @@ export default function HotelsList({ hotels }) {
 
     const handleHotelDetail = (e, hotel) => {
         e.preventDefault()
-        console.log(e)
+        //console.log(e)
         setHotelDetail(hotel)
         setOpen(true)
 
@@ -83,13 +84,14 @@ export default function HotelsList({ hotels }) {
 
                             <ul role="list" className="border-t border-b border-gray-200 divide-y divide-gray-200">
                                 {hotels !== null && hotels !== undefined && hotels.map((hotel, hotelIdx) => (
-                                    <>
-
-                                        <li key={hotel.hotel_id} className="flex py-6 sm:py-10">
+                                    
+                                        <li key={hotelIdx} className="flex py-6 sm:py-10">
                                             <div className="flex-shrink-0">
-                                                <img
-                                                    src={`${hotel.photos != null ? hotel.photos[0].url : "/missing_hotel.png"}`}
+                                                <Image
+                                                    src={`/${hotel.photos != null ? hotel.photos[0].url : "missing_hotel.png"}`}
                                                     alt={hotel.title}
+                                                    width={1000}
+                                                    height={1000}
                                                     className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
                                                 />
                                             </div>
@@ -114,15 +116,6 @@ export default function HotelsList({ hotels }) {
 
                                                 </div>
 
-                                                {/* <p className="mt-4 flex text-sm text-gray-700 space-x-2">
-                                                {hotel.inStock ? (
-                                                    <CheckIcon className="flex-shrink-0 h-5 w-5 text-green-500" aria-hidden="true" />
-                                                ) : (
-                                                    <ClockIcon className="flex-shrink-0 h-5 w-5 text-gray-300" aria-hidden="true" />
-                                                )}
-
-                                                <span>{hotel.inStock ? 'In stock' : `Ships in ${hotel.leadTime}`}</span>
-                                            </p> */}
                                             </div>
 
                                             <div>
@@ -136,7 +129,7 @@ export default function HotelsList({ hotels }) {
                                             </div>
                                         </li>
 
-                                    </>
+                                    
                                 ))}
                             </ul>
                         </section>

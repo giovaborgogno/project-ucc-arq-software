@@ -68,9 +68,6 @@ export default function HotelDetail({ open, setOpen, hotel, setHotel }) {
                                             </button>
 
                                             <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-1 lg:gap-x-8 lg:grid-cols-2">
-                                                {/* <div className="aspect-h-3 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5">
-                                            <img src={product.imageSrc} alt={product.imageAlt} className="object-cover object-center" />
-                                        </div> */}
 
                                                 <div className="sm:col-span-8 lg:col-span-1 order-1">
                                                     <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{hotel.title.toUpperCase()}</h2>
@@ -82,28 +79,7 @@ export default function HotelDetail({ open, setOpen, hotel, setHotel }) {
 
                                                         <p className="text-2xl text-gray-900">$ {hotel.price_per_day}</p>
 
-                                                        {/* Reviews */}
-                                                        {/* <div className="mt-6">
-                                                    <h4 className="sr-only">Reviews</h4>
-                                                    <div className="flex items-center">
-                                                        <div className="flex items-center">
-                                                            {[0, 1, 2, 3, 4].map((rating) => (
-                                                                <StarIcon
-                                                                    key={rating}
-                                                                    className={classNames(
-                                                                        product.rating > rating ? 'text-gray-900' : 'text-gray-200',
-                                                                        'h-5 w-5 flex-shrink-0'
-                                                                    )}
-                                                                    aria-hidden="true"
-                                                                />
-                                                            ))}
-                                                        </div>
-                                                        <p className="sr-only">{product.rating} out of 5 stars</p>
-                                                        <a href="#" className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                                                            {product.reviewCount} reviews
-                                                        </a>
-                                                    </div>
-                                                </div> */}
+
                                                     </section>
 
                                                     <section aria-labelledby="options-heading" className="mt-10">
@@ -169,7 +145,7 @@ export default function HotelDetail({ open, setOpen, hotel, setHotel }) {
                                                                         <>
                                                                             <span className="sr-only">{photo.url}</span>
                                                                             <span className="absolute inset-0 rounded-md overflow-hidden">
-                                                                                <img src={`/${photo.url}`} alt="" className=" object-center object-cover" />
+                                                                                <Image src={`/${photo.url}`} alt="" className=" object-center object-cover" width={1000} height={1000}/>
                                                                             </span>
                                                                             <span
                                                                                 className={classNames(

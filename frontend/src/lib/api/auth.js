@@ -23,7 +23,7 @@ export async function login(email, password) {
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
             Cookies.remove("token");
         }
@@ -45,7 +45,7 @@ export async function logout() {
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
             Cookies.remove("token");
         }
@@ -65,7 +65,7 @@ export async function refresh() {
             Cookies.set("token", res.data.token.toString());
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             Cookies.remove("token");
         }
     } catch (error) {
@@ -99,7 +99,7 @@ export async function register(first_name, last_name, email, user_name, password
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
@@ -117,7 +117,7 @@ export async function verifyemail(verificationCode) {
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
@@ -145,7 +145,7 @@ export async function resetPassword(email){
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
@@ -173,7 +173,7 @@ export async function resetPasswordConfirm(verificationCode, password, password_
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {

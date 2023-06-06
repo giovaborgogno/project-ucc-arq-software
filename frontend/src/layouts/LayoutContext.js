@@ -17,15 +17,14 @@ export default function LayoutContext({ title, children }) {
     }
 
     useEffect(() => {
+        getUser()
       router.events.on('routeChangeStart', getUser);
   
       return () => {
         router.events.off('routeChangeStart', getUser);
       };
     }, []);
-    useEffect(() => {
-        getUser()
-    }, user)
+
     return (
         <UserContext.Provider value={[user, setUser]}>
             <div>

@@ -143,13 +143,13 @@ export default function HotelDetail({ hotel, setHotel }) {
 
     if (updatedHotel) {
       // Realizar acciones adicionales después de la actualización exitosa
-      console.log('Hotel actualizado:', updatedHotel);
+      //console.log('Hotel actualizado:', updatedHotel);
     } else {
       // Manejar el error de actualización
       console.error('Error al actualizar el hotel');
     }
 
-    console.log(editableFields);
+    //console.log(editableFields);
   };
 
 

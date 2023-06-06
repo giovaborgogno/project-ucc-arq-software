@@ -93,8 +93,8 @@ export default function Header() {
   const [user, setUser] = useContext(UserContext);
   const router = useRouter()
 
-  const logoutHandler = () => {
-    logout()
+  const logoutHandler = async () => {
+    await logout()
     setUser(null)
     router.push("/auth/login")
   }
