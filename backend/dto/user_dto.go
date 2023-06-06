@@ -15,6 +15,7 @@ type UserResponse struct {
 	Role      string    `json:"role,omitempty"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	Active    bool      `json:"active,omitempty"`
 }
 
 type UserResponses []UserResponse

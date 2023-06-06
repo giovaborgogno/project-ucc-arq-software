@@ -141,7 +141,43 @@ func GetBookingById(c *gin.Context) {
 
 }
 
-func UpdateBooking(c *gin.Context) {
+func SetActiveBooking(c *gin.Context) {
+	log.Debug("Booking id to set active: " + c.Param("bookingID"))
+	uuid, err := uuid.Parse(c.Param("bookingID"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bookingID must be an uuid"})
+		return
+	}
+
+	booking, er := bookingService.BookingService.GetBookingById(uuid)
+	if er != nil {
+		c.JSON(er.Status(), gin.H{"error": er.Message()})
+		return
+	}
+
+	currentUser := c.MustGet("currentUser").(model.User)
+	if currentUser.Role != "admin" && currentUser.UserID != booking.UserID {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "You don't have permissions to delete this booking"})
+		return
+	}
+
+	var payload dto.SetActive
+	err = c.BindJSON(&payload)
+	if err != nil {
+		log.Error(err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	booking.Active = payload.Active
+
+	booking, er = bookingService.BookingService.SetActiveBooking(booking)
+	if er != nil {
+		c.JSON(er.Status(), gin.H{"error": er.Message()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"booking": booking})
 
 }
 
@@ -154,6 +190,10 @@ func DeleteBooking(c *gin.Context) {
 	}
 
 	booking, er := bookingService.BookingService.GetBookingById(uuid)
+	if er != nil {
+		c.JSON(er.Status(), gin.H{"error": er.Message()})
+		return
+	}
 
 	currentUser := c.MustGet("currentUser").(model.User)
 	if currentUser.Role != "admin" && currentUser.UserID != booking.UserID {

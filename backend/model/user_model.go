@@ -17,6 +17,7 @@ type User struct {
 	Role             string    `gorm:"type:varchar(255);not null"`
 	VerificationCode string
 	Verified         bool      `gorm:"not null"`
+	Active           bool      `gorm:"not null"`
 	CreatedAt        time.Time `gorm:"not null"`
 	UpdatedAt        time.Time `gorm:"not null"`
 	Bookings         Bookings  `gorm:"foreignKey:UserID"`

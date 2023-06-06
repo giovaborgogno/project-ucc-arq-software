@@ -63,6 +63,10 @@ func (m *middlewareService) DeserializeUser() gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "the user belonging to this token no logger exists"})
 			return
 		}
+		if !user.Active {
+			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Your account has been desactivated"})
+			return
+		}
 
 		ctx.Set("currentUser", user)
 		ctx.Next()
@@ -103,6 +107,10 @@ func (m *middlewareService) CheckAdmin() gin.HandlerFunc {
 
 		if user.Role != "admin" {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Admin privileges required"})
+			return
+		}
+		if !user.Active {
+			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Your account has been desactivated"})
 			return
 		}
 

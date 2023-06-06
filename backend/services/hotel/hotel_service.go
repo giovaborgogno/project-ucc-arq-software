@@ -39,6 +39,7 @@ func (s *hotelService) InsertHotel(hotelDto dto.Hotel) (dto.Hotel, e.ApiError) {
 		Description: hotelDto.Description,
 		Rooms:       hotelDto.Rooms,
 		PricePerDay: hotelDto.PricePerDay,
+		Active:      true,
 	}
 
 	hotel = hotelClient.HotelClient.InsertHotel(hotel)
@@ -59,6 +60,7 @@ func (s *hotelService) UpdateHotel(hotelDto dto.Hotel) (dto.Hotel, e.ApiError) {
 		Description: hotelDto.Description,
 		Rooms:       hotelDto.Rooms,
 		PricePerDay: hotelDto.PricePerDay,
+		Active:      hotelDto.Active,
 	}
 
 	hotel = hotelClient.HotelClient.UpdateHotel(hotel)
@@ -98,6 +100,7 @@ func (s *hotelService) GetHotels() ([]dto.Hotel, e.ApiError) {
 		hotelDto.Description = hotel.Description
 		hotelDto.Rooms = hotel.Rooms
 		hotelDto.PricePerDay = hotel.PricePerDay
+		hotelDto.Active = hotel.Active
 		for _, photo := range hotel.Photos {
 			var dtoPhoto dto.Photo
 
@@ -137,6 +140,7 @@ func (s *hotelService) GetHotelById(id uuid.UUID) (dto.Hotel, e.ApiError) {
 		Description: hotel.Description,
 		Rooms:       hotel.Rooms,
 		PricePerDay: hotel.PricePerDay,
+		Active:      hotel.Active,
 	}
 	for _, photo := range hotel.Photos {
 		var dtoPhoto dto.Photo
@@ -197,6 +201,7 @@ func (s *hotelService) GetAvailableHotels(booking dto.CheckAvailability) (dto.Ho
 		hotelDto.Description = hotel.Description
 		hotelDto.Rooms = hotel.Rooms
 		hotelDto.PricePerDay = hotel.PricePerDay
+		hotelDto.Active = hotel.Active
 		for _, photo := range hotel.Photos {
 			var dtoPhoto dto.Photo
 

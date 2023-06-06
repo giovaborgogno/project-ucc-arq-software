@@ -23,7 +23,7 @@ export async function login(email, password) {
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
             Cookies.remove("token");
         }
@@ -45,7 +45,7 @@ export async function logout() {
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
             Cookies.remove("token");
         }
@@ -65,7 +65,7 @@ export async function refresh() {
             Cookies.set("token", res.data.token.toString());
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             Cookies.remove("token");
         }
     } catch (error) {
@@ -95,11 +95,11 @@ export async function register(first_name, last_name, email, user_name, password
     try {
         const res = await axios.post('/api/auth/register', body, config)
         if (res.status === 201) {
-            alert('success', 'Registration successfully')
+            alert('success', 'We sent you an email with a verification code')
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
@@ -117,7 +117,7 @@ export async function verifyemail(verificationCode) {
 
         }
         else{
-            console.log("res: " + res)
+            //console.log("res: " + res)
             alert('error', res.data.error.toString())
         }
     } catch (error) {
@@ -127,4 +127,57 @@ export async function verifyemail(verificationCode) {
 
 }
 
+export async function resetPassword(email){
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
 
+    const body = JSON.stringify({
+        email
+    });
+
+    try {
+        const res = await axios.post('/api/auth/reset', body, config)
+        if (res.status === 200) {
+            alert('success', 'We send you an email to recovery your password')
+
+        }
+        else{
+            //console.log("res: " + res)
+            alert('error', res.data.error.toString())
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        alert('error', String(errorMessage));
+    }
+}
+
+export async function resetPasswordConfirm(verificationCode, password, password_confirm){
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const body = JSON.stringify({
+        password,
+        password_confirm
+    });
+
+    try {
+        const res = await axios.post(`/api/auth/reset/${verificationCode}`, body, config)
+        if (res.status === 200) {
+            alert('success', 'Successful password recovery')
+
+        }
+        else{
+            //console.log("res: " + res)
+            alert('error', res.data.error.toString())
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.error ?? 'Unknown error occurred';
+        alert('error', String(errorMessage));
+    }
+}
