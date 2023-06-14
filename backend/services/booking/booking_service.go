@@ -51,20 +51,20 @@ func (s *bookingService) CreateBooking(bookingDto dto.Booking) (dto.Booking, e.A
 	}
 
 	if booking.Total <= 0 {
-		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You cannot have a zero or negative amount for Total value")
+		return dto.Booking{}, e.NewBadRequestApiError("You cannot have a zero or negative amount for Total value")
 	}
 
 	if booking.DateIn.Before(time.Now()) {
-		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn earlier than the current date")
+		return dto.Booking{}, e.NewBadRequestApiError("You should not have a DateIn earlier than the current date")
 	}
 
 	if booking.DateIn.After(booking.DateOut) || booking.DateIn.Equal(booking.DateOut) {
-		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You should not have a DateIn greater or equal than the DateOut")
+		return dto.Booking{}, e.NewBadRequestApiError("You should not have a DateIn greater or equal than the DateOut")
 	}
 
 	availableRooms := hotelClient.HotelClient.GetAvailableRooms(bookingData)
 	if booking.Rooms > uint(availableRooms) {
-		return dto.Booking{}, e.NewBadRequestApiError("Error trying to create new booking: You cannot book more rooms than the ones currently available")
+		return dto.Booking{}, e.NewBadRequestApiError("You cannot book more rooms than the ones currently available")
 	}
 
 	booking = bookingClient.BookingClient.InsertBooking(booking)
@@ -194,6 +194,11 @@ func (s *bookingService) DeleteBooking(id uuid.UUID) e.ApiError {
 }
 
 func (s *bookingService) SetActiveBooking(bookingDto dto.Booking) (dto.Booking, e.ApiError) {
+
+	if bookingDto.DateIn.Before(time.Now()) {
+		return dto.Booking{}, e.NewBadRequestApiError("You cannot modify bookings of past dates")
+	}
+
 	booking := model.Booking{
 		BookingID: bookingDto.BookingID,
 		HotelID:   bookingDto.HotelID,
