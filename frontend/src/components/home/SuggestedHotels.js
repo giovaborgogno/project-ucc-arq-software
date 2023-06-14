@@ -81,7 +81,7 @@ export default function SuggestedHotels({ dataCheck, setHotel }) {
                 <img
                   src={`/${hotel.photos !== null ? hotel.photos[0].url : "missing_hotel.png"}`}
                   alt={hotel.title}
-                  className="w-full h-full object-center object-cover"
+                  className="w-full object-center object-cover h-32"
                 />
               </div>
               <h3 className="mt-4 text-base font-semibold text-gray-900">

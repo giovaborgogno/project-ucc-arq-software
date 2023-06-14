@@ -11,19 +11,11 @@ This is a hotel reservation project that allows users to search and book rooms i
 
 ## Environment Setup
 
-1. In the `backend` folder, create a `.env` file using the `.env.example` file as a reference. This file will contain the configuration for your environment, such as the database connection configuration and SMTP configuration.
+1. In the `backend` folder, create a `.env.docker` file using the `.env.example` file as a reference. This file will contain the configuration for your environment, such as the database connection configuration and SMTP configuration.
 
 2. If you want to run tests, create a `test.env` file in the `backend/utils/initializers` folder using the `test.env.example` file as a reference.
 
-3. Configure the `.env` file in the `frontend` folder with the URL of the docker backend server.
-
-```bash
-# frontend/.env file
-
-NEXT_PUBLIC_URL_API='backend:8080'
-```
-
-4. Ensure that the database is created and properly configured with the necessary permissions.
+3. Configure the `.env.docker` file in the `frontend` folder with the URL of the docker backend server.
 
 ## Running the Project
 
@@ -32,6 +24,7 @@ NEXT_PUBLIC_URL_API='backend:8080'
 ```bash
 # docker
 
+docker-compose build
 docker-compose up
 ```
 
@@ -41,6 +34,10 @@ docker-compose up
 
 4. Access the database and manually set your user as an "admin". This can be done by directly modifying the corresponding column in the user table:
 ```bash
+docker exec -it hotels_mysql bash
+
+mysql -u root -p hotels_booking
+
 # MYSQL
 
 UPDATE users 
