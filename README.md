@@ -13,13 +13,13 @@ This is a hotel reservation project that allows users to search and book rooms i
 
 1. In the `backend` folder, create a `.env.docker` file using the `.env.example` file as a reference. This file will contain the configuration for your environment, such as the database connection configuration and SMTP configuration.
 
-2. If you want to run tests, create a `test.env` file in the `backend/utils/initializers` folder using the `test.env.example` file as a reference.
+2. If you want to run tests, create a `test.env.docker` file in the `backend/utils/initializers` folder using the `test.env.example` file as a reference.
 
 3. Configure the `.env.docker` file in the `frontend` folder with the URL of the docker backend server.
 
 ## Running the Project
 
-1. Run the project using Docker Compose for easy setup and execution. In the project root, run the following command:
+1. Run the project using Docker Compose for easy setup and execution. In the project root, run the following commands:
 
 ```bash
 # docker
@@ -46,6 +46,14 @@ WHERE email = "youremail@email.com";
 ```
 
 Congratulations! You can now use the hotel reservation project.
+
+If you want to test the api, while running the project with docker, run the following commands:
+```bash
+docker exec -it hotels_backend sh
+
+# /api
+go test ./...
+```
 
 ## Contribution
 
