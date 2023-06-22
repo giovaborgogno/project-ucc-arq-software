@@ -14,12 +14,11 @@ var (
 
 func init() {
 	router = gin.Default()
-	// config := cors.DefaultConfig()
-	// config.AllowCredentials = true
-	// config.AllowOrigins = []string{"http://localhost:3000"}
-	// config.AllowHeaders = []string{"Authorization", "Content-Type"}
-	// router.Use(cors.New(config))
-	router.Use(cors.Default())
+	config := cors.DefaultConfig()
+	config.AllowHeaders = []string{"Authorization", "Content-Type"}
+	config.AllowCredentials = true
+	config.AllowOrigins = []string{"http://localhost:3000", os.Getenv("CLIENT_URL")}
+	router.Use(cors.New(config))
 }
 
 func StartRoute() {

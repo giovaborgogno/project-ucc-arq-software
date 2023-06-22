@@ -6,3 +6,4 @@ node_modules
 /.next
 /node_modules
 .env
+utils/initilizers/.test.env
