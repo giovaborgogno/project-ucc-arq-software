@@ -2,8 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // domains: ['localhost'],
-    domains: ['backend'],
+    domains: [process.env.NEXT_PUBLIC_DOMAIN_API],
   },
 
   // Configuración para servir archivos estáticos desde la carpeta public

@@ -103,7 +103,7 @@ export async function insertPhoto(hotelID, file) {
     // });
 
     try {
-        const res = await axios.post(`http://172.19.0.4:8080/api/hotel/photo/upload/${hotelID}`, formData, config)
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_IP_API}/api/hotel/photo/upload/${hotelID}`, formData, config)
         // const res = await axios.post(`${process.env.NEXT_PUBLIC_URL_API}/api/hotel/photo/upload/${hotelID}`, formData, config)
         // const res = await axios.post(`/api/hotel/photo/${hotelID}`, formData, config)
         if (res.status === 201) {
