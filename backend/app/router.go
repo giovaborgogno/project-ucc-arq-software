@@ -17,11 +17,8 @@ func init() {
 	config := cors.DefaultConfig()
 	config.AllowHeaders = []string{"Authorization", "Content-Type"}
 	config.AllowCredentials = true
-	// config.AllowAllOrigins = true
-	config.AllowOrigins = []string{"http://localhost:3000", os.Getenv("CLIENT_IP")}
-	// config.AllowHeaders = []string{"Authorization", "Content-Type"}
+	config.AllowOrigins = []string{"http://localhost:3000", os.Getenv("CLIENT_URL")}
 	router.Use(cors.New(config))
-	// router.Use(cors.Default())
 }
 
 func StartRoute() {
