@@ -24,6 +24,7 @@ func HotelRoute(hotel *gin.RouterGroup) {
 	// Only admin:
 	photo.POST("/:hotelID", middlewareController.CheckAdmin(), hotelController.InsertPhoto)
 	photo.DELETE("/:photoID", middlewareController.CheckAdmin(), hotelController.DeletePhoto)
+	photo.POST("/upload/:hotelID", middlewareController.CheckAdmin(), hotelController.UploadPhoto)
 
 	amenitie := hotel.Group("/amenitie")
 	amenitie.GET("/", hotelController.GetAmenities)

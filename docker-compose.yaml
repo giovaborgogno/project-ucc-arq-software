@@ -3,9 +3,7 @@ services:
   backend:
     container_name: hotels_backend
     restart: always
-    links:
-      - db
-    build: 
+    build:
       context: ./backend
     ports:
       - 8080:8080
@@ -13,19 +11,21 @@ services:
       - db
     volumes:
       - go_modules:/go/pkg/mod
+      - public:/api/static
+      - image_files:/api/static/images/hotels
+    networks:
+      - app-network
 
   frontend:
     container_name: hotels_frontend
-    links:
-      - backend
-    build: 
+    build:
       context: ./frontend
     ports:
       - 3000:3000
     volumes:
       - node_modules:/app/node_modules
-      - public:/app/public
-      - image_files:/app/public/images/hotels
+    networks:
+      - app-network
 
   db:
     image: mysql
@@ -38,6 +38,12 @@ services:
       - 3307:3306
     volumes:
       - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   dbdata:

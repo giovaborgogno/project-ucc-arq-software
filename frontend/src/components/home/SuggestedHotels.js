@@ -1,4 +1,5 @@
 import { getAvailableHotels } from "@/lib/api/hotel"
+import Image from "next/image"
 import { useEffect, useState } from "react"
 
 /*
@@ -78,10 +79,11 @@ export default function SuggestedHotels({ dataCheck, setHotel }) {
            {hotels.slice(0,3).map((hotel) => (
             <div key={hotel.hotel_id} className="group relative">
               <div className="w-full h-96 rounded-lg overflow-hidden group-hover:opacity-75 sm:h-auto sm:aspect-w-2 sm:aspect-h-3">
-                <img
-                  src={`/${hotel.photos !== null ? hotel.photos[0].url : "missing_hotel.png"}`}
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_URL_API}/api/public${hotel.photos !== null ? hotel.photos[0].url : "missing_hotel.png"}`}
                   alt={hotel.title}
                   className="w-full object-center object-cover h-32"
+                  width={1000} height={1000}
                 />
               </div>
               <h3 className="mt-4 text-base font-semibold text-gray-900">

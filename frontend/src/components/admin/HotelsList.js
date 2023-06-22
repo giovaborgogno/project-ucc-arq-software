@@ -1,4 +1,5 @@
 import { getHotels, updateHotel } from "@/lib/api/hotel"
+import Image from "next/image";
 import Link from "next/link"
 import { useEffect, useState } from "react";
 
@@ -46,10 +47,12 @@ export default function HotelsList() {
                                             <div className=" flex ">
                                                 
                                             <div className="ml-4 sm:ml-0 flex-shrink-0">
-                                                <img
-                                                    src={`/${hotel.photos != null ? hotel.photos[0].url : ""}`}
+                                                <Image
+                                                    src={`${process.env.NEXT_PUBLIC_URL_API}/api/public${hotel.photos != null ? hotel.photos[0].url : ""}`}
                                                     alt={hotel.title}
                                                     className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
+                                                    width={1000}
+                                                    height={1000}
                                                 />
                                             </div>
 
