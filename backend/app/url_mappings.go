@@ -2,6 +2,7 @@ package app
 
 import (
 	middlewareController "mvc-go/controllers/middleware"
+	"net/http"
 
 	"mvc-go/app/urls"
 
@@ -9,9 +10,12 @@ import (
 )
 
 func mapUrls() {
+	router.MaxMultipartMemory = 8 << 20
 
 	// Users Mapping
 	api := router.Group("/api")
+
+	api.StaticFS("/public", http.Dir("static"))
 
 	auth := api.Group("/auth")
 	urls.AuthRoute(auth)

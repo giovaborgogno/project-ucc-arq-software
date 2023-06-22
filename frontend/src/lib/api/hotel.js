@@ -1,5 +1,6 @@
 import { alert } from "../utils/alert";
 const { default: axios } = require("axios");
+import Cookies from "js-cookie";
 
 export async function createHotel(title, description, price_per_day, rooms) {
 
@@ -80,11 +81,17 @@ export async function updateHotel(hotelID, title, description, price_per_day, ro
 
 export async function insertPhoto(hotelID, file) {
 
+    const token = Cookies.get("token")
+
     const config = {
+        // headers: {
+        //     'Content-Type': "multipart/form-data"
+        // },
+        
+        withCredentials: true,
         headers: {
-            'Content-Type': "multipart/form-data"
-        },
-        withCredentials: true
+            "Authorization": `Bearer ${token}`, // Agrega la cookie en el encabezado
+          },
     };
 
     const formData = new FormData();
@@ -96,7 +103,9 @@ export async function insertPhoto(hotelID, file) {
     // });
 
     try {
-        const res = await axios.post(`/api/hotel/photo/${hotelID}`, formData, config)
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_URL_API_CLIENT}/api/hotel/photo/upload/${hotelID}`, formData, config)
+        // const res = await axios.post(`${process.env.NEXT_PUBLIC_URL_API}/api/hotel/photo/upload/${hotelID}`, formData, config)
+        // const res = await axios.post(`/api/hotel/photo/${hotelID}`, formData, config)
         if (res.status === 201) {
             alert('success', 'Photo added successfully')
 

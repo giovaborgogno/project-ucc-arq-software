@@ -19,3 +19,6 @@ vendor/
 *.env
 **/*.env
 **/.env
+
+static/images/hotels/*
+!static/images/hotels/.gitKeep
