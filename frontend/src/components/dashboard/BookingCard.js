@@ -24,12 +24,13 @@ import { useEffect, useState } from "react"
     }, [])
 
     useEffect(() => {
+      setBooking(booking_data)
       const get_hotel_by_id = async () => {
         const data = await getHotelById(booking.hotel_id)
         setHotel(data)
       }
       get_hotel_by_id()
-    }, [booking])
+    }, [booking, booking_data])
 
     const handleCancelBooking = async (e) => {
       e.preventDefault()

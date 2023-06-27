@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
     return classes.filter(Boolean).join(' ')
   }
   
-  export default function BookingCard({booking_data}) {
+  export default function BookingCard({booking_data, bookings}) {
 
     const [hotel, setHotel] = useState(null)
     const [user, setUser] = useState(null)
@@ -35,28 +35,28 @@ import { useEffect, useState } from "react"
       setActive(true)
   }
 
-    const get_hotel_by_id = async () => {
-      const data = await getHotelById(booking.hotel_id)
+    const get_hotel_by_id = async (booking_d) => {
+      const data = await getHotelById(booking_d.hotel_id)
       setHotel(data)
     }
 
-    const get_user_by_id = async () => {
-      const data = await getUserById(booking.user_id)
+    const get_user_by_id = async (booking_d) => {
+      const data = await getUserById(booking_d.user_id)
       setUser(data)
     }
 
     useEffect(() => {
       
-      get_hotel_by_id()
-      get_user_by_id()
+      get_hotel_by_id(booking)
+      get_user_by_id(booking)
     }, [])
 
     useEffect(() => {
 
-    
-      get_hotel_by_id()
-      get_user_by_id()
-    }, [booking])
+      setBooking(booking_data)
+      get_hotel_by_id(booking_data)
+      get_user_by_id(booking_data)
+    }, [booking, bookings, booking_data])
 
     return (
       <div className="bg-white rounded-md shadow-md p-4 mb-4">
